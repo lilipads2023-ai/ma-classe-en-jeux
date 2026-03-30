@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths 4e année – Littéracie financière, Multiplication & Division</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef6ee;--card:#fff;--primary:#2d7a4f;--pl:#3da065;--accent:#e8873d;--a2:#f5c26b;--green:#22c55e;--gl:#dcfce7;--red:#ef4444;--rl:#fde8e8;--text:#1a2e1a;--muted:#6a7a6a;--shadow:0 4px 20px rgba(45,122,79,.12);--r:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{text-align:center;padding:1.8rem 1rem .8rem;border-bottom:2px solid rgba(45,122,79,.1);background:linear-gradient(135deg,rgba(45,122,79,.05),rgba(232,135,61,.03))}
+header h1{font-family:'Fredoka',sans-serif;font-size:clamp(1.4rem,5vw,2.2rem);color:var(--primary);font-weight:700}
+header p{color:var(--muted);font-size:.85rem;margin-top:.2rem;font-weight:600}
+.screen{max-width:700px;margin:1.5rem auto;padding:0 1.2rem}
+.screen h2{font-family:'Fredoka',sans-serif;font-size:1.3rem;color:var(--primary);text-align:center;margin-bottom:1rem}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.9rem}
+.cat-btn{background:var(--card);border:2.5px solid rgba(45,122,79,.15);border-radius:var(--r);padding:1.1rem .7rem;cursor:pointer;text-align:center;transition:all .2s;box-shadow:var(--shadow);font-family:'Nunito',sans-serif}
+.cat-btn:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 28px rgba(45,122,79,.18)}
+.cat-btn .icon{font-size:1.6rem;display:block;margin-bottom:.2rem}
+.cat-btn .label{font-weight:800;color:var(--primary);font-size:.78rem;line-height:1.3}
+#game-screen{display:none;max-width:700px;margin:0 auto;padding:1.2rem 1.2rem 3rem}
+.pbar{background:rgba(45,122,79,.1);border-radius:99px;height:8px;margin-bottom:.8rem;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--primary),var(--pl));border-radius:99px;transition:width .4s}
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;font-weight:700;font-size:.85rem;color:var(--muted)}
+.hud .sc{color:var(--accent);font-size:1rem}
+.qcard{background:var(--card);border-radius:var(--r);padding:1.4rem 1.2rem;box-shadow:var(--shadow);border:2px solid rgba(45,122,79,.08);margin-bottom:.8rem;animation:fu .35s ease}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.qlbl{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--pl);margin-bottom:.4rem}
+.qtxt{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.8rem;line-height:1.5}
+.awrap{display:flex;gap:.7rem;align-items:center}
+.ainput{flex:1;padding:.75rem .9rem;border:2.5px solid rgba(45,122,79,.2);border-radius:12px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);outline:none;transition:border-color .2s}
+.ainput:focus{border-color:var(--primary)}
+.ainput.ok{border-color:var(--green);background:var(--gl)}
+.ainput.err{border-color:var(--red);background:var(--rl)}
+.sbtn{padding:.75rem 1.3rem;border-radius:12px;border:none;background:var(--primary);color:#fff;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .18s;box-shadow:0 4px 14px rgba(45,122,79,.3)}
+.sbtn:hover{background:var(--pl);transform:translateY(-2px)}
+.sbtn:disabled{opacity:.4;cursor:default;transform:none}
+.fb{min-height:1.8rem;font-weight:700;font-size:.95rem;text-align:center;margin:.5rem 0 .2rem}
+.fb.ok{color:var(--green)}.fb.err{color:var(--red)}
+.expl{display:none;background:#fff8f0;border:2px solid var(--a2);border-radius:12px;padding:1rem;margin-top:.5rem;font-size:.9rem;animation:fu .3s;line-height:1.6}
+.expl h4{color:var(--accent);font-family:'Fredoka',sans-serif;margin-bottom:.4rem;font-size:.95rem}
+.expl .step{margin:.3rem 0}
+.expl .hl{background:#ffe8cc;padding:2px 6px;border-radius:6px;font-weight:700}
+.expl .col-math{font-family:'Courier New',monospace;font-size:1.15rem;font-weight:700;background:#f8f9fc;border-radius:10px;padding:.8rem;display:inline-block;line-height:1.7;margin:.4rem 0;text-align:right;border:1px solid #e0e4ee;white-space:pre}
+.expl .res-line{border-top:2.5px solid var(--text);padding-top:.2rem;margin-top:.1rem}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.mc-btn{background:#f0f8f0;border:2.5px solid rgba(45,122,79,.14);border-radius:12px;padding:.7rem .8rem;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .18s;text-align:center}
+.mc-btn:hover:not(:disabled){background:#d8f0d8;border-color:var(--primary);transform:translateY(-2px)}
+.mc-btn.ok{background:var(--gl);border-color:var(--green);color:var(--green)}
+.mc-btn.err{background:var(--rl);border-color:var(--red);color:var(--red)}
+.mc-btn:disabled{cursor:default}
+.nav-row{display:flex;justify-content:space-between;gap:.8rem;margin-top:.6rem}
+.nbtn{flex:1;padding:.75rem .8rem;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .18s}
+#btn-next{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(45,122,79,.3)}
+#btn-next:hover{background:var(--pl);transform:translateY(-2px)}
+#btn-next:disabled{opacity:.4;cursor:default;transform:none}
+#btn-home{background:transparent;color:var(--muted);border:2px solid rgba(45,122,79,.2)}
+#btn-home:hover{border-color:var(--primary);color:var(--primary)}
+#result-screen{display:none;max-width:500px;margin:2rem auto;padding:0 1.2rem;text-align:center;animation:fu .4s}
+.rcard{background:var(--card);border-radius:var(--r);padding:2rem 1.5rem;box-shadow:var(--shadow);border:2px solid rgba(45,122,79,.1)}
+.remoji{font-size:3rem;display:block;margin-bottom:.5rem}
+.rcard h2{font-family:'Fredoka',sans-serif;font-size:1.5rem;color:var(--primary);margin-bottom:.3rem}
+.rscore{font-size:2.5rem;font-weight:900;color:var(--accent);line-height:1;margin:.4rem 0}
+.rcard p{color:var(--muted);font-size:.9rem;margin-bottom:.8rem}
+.rbtns{display:flex;flex-direction:column;gap:.5rem}
+.rbtns button{padding:.75rem;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:all .18s}
+.bp{background:var(--primary);color:#fff}.bp:hover{background:var(--pl)}
+.bs{background:transparent;border:2px solid rgba(45,122,79,.25)!important;color:var(--muted)}.bs:hover{border-color:var(--primary)!important;color:var(--primary)}
+.blink{text-align:center;margin-top:.8rem}
+.blink button{background:transparent;color:var(--muted);border:2px solid rgba(45,122,79,.2);border-radius:12px;padding:.5rem 1rem;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer}
+</style>
+</head>
+<body>
+<header><h1>🧮 Maths – 4e année</h1><p>Littéracie financière · Multiplication · Division</p></header>
+
+<div id="cat-screen" class="screen">
+<h2>Choisis une section</h2>
+<div class="cat-grid">
+<button class="cat-btn" onclick="startGame('coins')"><span class="icon">🪙</span><span class="label">Pièces et billets</span></button>
+<button class="cat-btn" onclick="startGame('count')"><span class="icon">💰</span><span class="label">Compter l'argent</span></button>
+<button class="cat-btn" onclick="startGame('change')"><span class="icon">🛒</span><span class="label">Rendre la monnaie</span></button>
+<button class="cat-btn" onclick="startGame('estimate')"><span class="icon">🏷️</span><span class="label">Estimer les coûts</span></button>
+<button class="cat-btn" onclick="startGame('mult')"><span class="icon">✖️</span><span class="label">Multiplication</span></button>
+<button class="cat-btn" onclick="startGame('div')"><span class="icon">➗</span><span class="label">Division</span></button>
+<button class="cat-btn" onclick="startGame('all')"><span class="icon">🌟</span><span class="label">Tout mélanger !</span></button>
+</div>
+</div>
+
+<div id="game-screen">
+<div class="pbar"><div class="pfill" id="pfill"></div></div>
+<div class="hud"><span id="qctr">Question 1 / 20</span><span class="sc">⭐ <span id="scr">0</span></span></div>
+<div class="qcard">
+<div class="qlbl" id="qcat"></div>
+<div class="qtxt" id="qtxt"></div>
+<div class="awrap" id="awrap"><input type="text" class="ainput" id="ainp" autocomplete="off" placeholder="Ta réponse..."><button class="sbtn" id="sbtn" onclick="check()">OK</button></div>
+</div>
+<div class="fb" id="fb"></div>
+<div class="expl" id="expl"></div>
+<div class="nav-row"><button class="nbtn" id="btn-home" onclick="goHome()">🏠 Menu</button><button class="nbtn" id="btn-next" onclick="next()" disabled>Question suivante →</button></div>
+</div>
+
+<div id="result-screen">
+<div class="rcard">
+<span class="remoji" id="remoji">🎉</span><h2>Terminé !</h2>
+<div class="rscore" id="rscore"></div><p id="rmsg"></p>
+<div class="rbtns"><button class="bp" onclick="startGame(lastCat)">🔄 Rejouer</button><button class="bs" onclick="goHome()">🏠 Menu</button></div>
+</div></div>
+
+<script>
+function sh(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pk(a,n){return sh([...a]).slice(0,Math.min(n,a.length));}
+function nr(s){return String(s).toLowerCase().trim().replace(/\s+/g,' ').replace(/[$,]/g,'');}
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+
+// ════════════════════════════════════════
+// FINANCIAL LITERACY
+// ════════════════════════════════════════
+const COINS={
+  '5¢':{val:0.05,name:'5 cents (cinq cents)'},
+  '10¢':{val:0.10,name:'10 cents (dix cents)'},
+  '25¢':{val:0.25,name:'25 cents (vingt-cinq cents)'},
+  '1$':{val:1.00,name:'1 dollar (huard)'},
+  '2$':{val:2.00,name:'2 dollars (toonie)'},
+};
+const BILLS={
+  '5$':{val:5,name:'billet de 5 dollars',color:'bleu'},
+  '10$':{val:10,name:'billet de 10 dollars',color:'violet'},
+  '20$':{val:20,name:'billet de 20 dollars',color:'vert'},
+  '50$':{val:50,name:'billet de 50 dollars',color:'rouge'},
+  '100$':{val:100,name:'billet de 100 dollars',color:'brun'},
+};
+
+function genCoinsQ(){
+  const qs=[];
+  // Images on coins
+  qs.push({t:'Quel animal se trouve sur la pièce de 5 cents ?',c:'le castor',mc:['Le castor','Le caribou','Le huard','L\'ours polaire'],cat:'🪙 Pièces'});
+  qs.push({t:'Que voit-on sur la pièce de 10 cents ?',c:'la goélette bluenose',mc:['La goélette Bluenose','Le castor','Le caribou','La feuille d\'érable'],cat:'🪙 Pièces'});
+  qs.push({t:'Quel animal se trouve sur la pièce de 25 cents ?',c:'le caribou',mc:['Le caribou','Le castor','Le huard','L\'ours polaire'],cat:'🪙 Pièces'});
+  qs.push({t:'Quel animal se trouve sur la pièce de 1 dollar ?',c:'le huard',mc:['Le huard','Le castor','Le caribou','L\'ours polaire'],cat:'🪙 Pièces'});
+  qs.push({t:'Quel animal se trouve sur la pièce de 2 dollars ?',c:'l\'ours polaire',mc:['L\'ours polaire','Le huard','Le caribou','Le castor'],cat:'🪙 Pièces'});
+  qs.push({t:'Sur quelle pièce trouve-t-on le castor ?',c:'5 cents',mc:['5 cents','10 cents','25 cents','1 dollar'],cat:'🪙 Pièces'});
+  qs.push({t:'Sur quelle pièce trouve-t-on le caribou ?',c:'25 cents',mc:['25 cents','5 cents','10 cents','1 dollar'],cat:'🪙 Pièces'});
+  qs.push({t:'Sur quelle pièce trouve-t-on le huard ?',c:'1 dollar',mc:['1 dollar','2 dollars','25 cents','5 cents'],cat:'🪙 Pièces'});
+  qs.push({t:'Sur quelle pièce trouve-t-on l\'ours polaire ?',c:'2 dollars',mc:['2 dollars','1 dollar','25 cents','10 cents'],cat:'🪙 Pièces'});
+  // Bill colours
+  qs.push({t:'Quelle est la couleur du billet de 5 $ ?',c:'bleu',mc:['Bleu','Vert','Rouge','Violet'],cat:'💵 Billets'});
+  qs.push({t:'Quelle est la couleur du billet de 10 $ ?',c:'violet',mc:['Violet','Bleu','Vert','Rouge'],cat:'💵 Billets'});
+  qs.push({t:'Quelle est la couleur du billet de 20 $ ?',c:'vert',mc:['Vert','Bleu','Rouge','Brun'],cat:'💵 Billets'});
+  qs.push({t:'Quelle est la couleur du billet de 50 $ ?',c:'rouge',mc:['Rouge','Vert','Violet','Brun'],cat:'💵 Billets'});
+  qs.push({t:'Quelle est la couleur du billet de 100 $ ?',c:'brun',mc:['Brun','Rouge','Vert','Bleu'],cat:'💵 Billets'});
+  qs.push({t:'Quel est le plus gros billet canadien ?',c:'100 $',mc:['100 $','50 $','500 $','200 $'],cat:'💵 Billets'});
+  qs.push({t:'Quel est le plus petit billet canadien ?',c:'5 $',mc:['5 $','1 $','10 $','2 $'],cat:'💵 Billets'});
+  // Equivalences
+  qs.push({t:'Combien de pièces de 25¢ font 1$ ?',c:'4',cat:'🪙 Pièces'});
+  qs.push({t:'Combien de pièces de 10¢ font 1$ ?',c:'10',cat:'🪙 Pièces'});
+  qs.push({t:'Combien de pièces de 5¢ font 1$ ?',c:'20',cat:'🪙 Pièces'});
+  qs.push({t:'Combien de pièces de 1$ font 20$ ?',c:'20',cat:'🪙 Pièces'});
+  qs.push({t:'Combien de pièces de 2$ font 10$ ?',c:'5',cat:'🪙 Pièces'});
+  qs.push({t:'Est-ce que la pièce de 1 cent existe encore au Canada ?',c:'non',mc:['Non','Oui'],cat:'🪙 Pièces'});
+  // Vocab
+  qs.push({t:'Comment appelle-t-on l\'argent que tu mets de côté pour plus tard ?',c:'l\'épargne',mc:['L\'épargne','La dépense','Le revenu','L\'emprunt'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Comment appelle-t-on l\'argent que tu dépenses pour acheter quelque chose ?',c:'une dépense',mc:['Une dépense','Un revenu','Une épargne','Un emprunt'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Comment appelle-t-on un plan qui organise ton argent (combien tu gagnes et combien tu dépenses) ?',c:'un budget',mc:['Un budget','Un emprunt','Une facture','Un reçu'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Comment appelle-t-on l\'argent que tu gagnes (par exemple avec un travail) ?',c:'un revenu',mc:['Un revenu','Une dépense','Un emprunt','Un budget'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Comment appelle-t-on le fait d\'emprunter de l\'argent à quelqu\'un ou à une banque ?',c:'un emprunt',mc:['Un emprunt','Un revenu','Une épargne','Un budget'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Qu\'est-ce qu\'un besoin ? (par exemple : nourriture, logement)',c:'quelque chose de nécessaire pour vivre',mc:['Quelque chose de nécessaire pour vivre','Quelque chose qu\'on aimerait avoir','Un cadeau','Un jouet'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Qu\'est-ce qu\'un désir ? (par exemple : un jeu vidéo)',c:'quelque chose qu\'on aimerait avoir',mc:['Quelque chose qu\'on aimerait avoir','Quelque chose de nécessaire pour vivre','De la nourriture','Un logement'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Un manteau d\'hiver, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Un nouveau jeu vidéo, c\'est un besoin ou un désir ?',c:'un désir',mc:['Un désir','Un besoin'],cat:'📖 Vocabulaire'});
+  qs.push({t:'De la nourriture, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Des bonbons, c\'est un besoin ou un désir ?',c:'un désir',mc:['Un désir','Un besoin'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Comment appelle-t-on l\'argent supplémentaire qu\'on doit payer quand on emprunte de l\'argent ?',c:'l\'intérêt',mc:['L\'intérêt','Le budget','La taxe','Le revenu'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Comment appelle-t-on le papier qu\'on reçoit après un achat qui montre le prix payé ?',c:'un reçu',mc:['Un reçu','Un budget','Un emprunt','Un billet'],cat:'📖 Vocabulaire'});
+  // Problem solving with money
+  qs.push({t:'Tu as 5 $ et tu veux acheter un livre à 3,50 $. As-tu assez d\'argent ?',c:'oui',mc:['Oui','Non'],cat:'🧩 Problème'});
+  qs.push({t:'Tu as 2 $ et tu veux acheter un jus à 2,75 $. As-tu assez d\'argent ?',c:'non',mc:['Non','Oui'],cat:'🧩 Problème'});
+  qs.push({t:'Tu as 10 $. Tu achètes un cahier à 3 $ et un crayon à 2 $. Combien te reste-t-il ?',c:'5',a:['5','5 $','5$','5.00'],cat:'🧩 Problème',
+    ex:()=>`<h4>💡 Résolution</h4><div class="step">10 $ − 3 $ − 2 $ = <span class="hl">5 $</span></div>`});
+  qs.push({t:'Tu épargnes 3 $ par semaine. Après 4 semaines, combien as-tu épargné ?',c:'12',a:['12','12 $','12$'],cat:'🧩 Problème',
+    ex:()=>`<h4>💡 Résolution</h4><div class="step">3 $ × 4 semaines = <span class="hl">12 $</span></div>`});
+  qs.push({t:'Un jouet coûte 15 $. Tu as déjà 9 $. Combien d\'argent te manque-t-il ?',c:'6',a:['6','6 $','6$'],cat:'🧩 Problème',
+    ex:()=>`<h4>💡 Résolution</h4><div class="step">15 $ − 9 $ = <span class="hl">6 $</span></div>`});
+  qs.push({t:'Tu veux acheter 3 pommes à 0,75 $ chacune. Combien ça coûte au total ?',c:'2.25',a:['2.25','2,25','2.25 $','2,25 $'],cat:'🧩 Problème',
+    ex:()=>`<h4>💡 Résolution</h4><div class="step">3 × 0,75 $ = <span class="hl">2,25 $</span></div>`});
+  qs.push({t:'Tu as un billet de 20 $. Tu achètes un livre à 8 $ et un jus à 2 $. Combien de monnaie reçois-tu ?',c:'10',a:['10','10 $','10$','10.00'],cat:'🧩 Problème',
+    ex:()=>`<h4>💡 Résolution</h4><div class="step">8 $ + 2 $ = 10 $</div><div class="step">20 $ − 10 $ = <span class="hl">10 $</span></div>`});
+  qs.push({t:'Marie a 50 $. Elle dépense 18 $ pour un chandail et 7 $ pour un repas. Combien lui reste-t-il ?',c:'25',a:['25','25 $','25$'],cat:'🧩 Problème',
+    ex:()=>`<h4>💡 Résolution</h4><div class="step">18 $ + 7 $ = 25 $</div><div class="step">50 $ − 25 $ = <span class="hl">25 $</span></div>`});
+  // More vocab
+  qs.push({t:'Des souliers pour l\'école, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Un skateboard, c\'est un besoin ou un désir ?',c:'un désir',mc:['Un désir','Un besoin'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Un toit au-dessus de ta tête, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Un téléphone cellulaire, c\'est un besoin ou un désir ?',c:'un désir',mc:['Un désir','Un besoin'],cat:'📖 Vocabulaire'});
+  qs.push({t:'De l\'eau potable, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Un billet de cinéma, c\'est un besoin ou un désir ?',c:'un désir',mc:['Un désir','Un besoin'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Qu\'est-ce qu\'une taxe ?',c:'un montant d\'argent ajouté au prix par le gouvernement',mc:['Un montant ajouté au prix par le gouvernement','De l\'argent qu\'on épargne','Un cadeau du magasin','Un rabais'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Qu\'est-ce qu\'un rabais ?',c:'une réduction du prix',mc:['Une réduction du prix','Un ajout au prix','Un emprunt','Une taxe'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Que veut dire « être endetté » ?',c:'devoir de l\'argent à quelqu\'un',mc:['Devoir de l\'argent à quelqu\'un','Avoir beaucoup d\'argent','Épargner son argent','Recevoir un cadeau'],cat:'📖 Vocabulaire'});
+  qs.push({t:'Qu\'est-ce qu\'un don ?',c:'de l\'argent donné gratuitement',mc:['De l\'argent donné gratuitement','Un emprunt','Un achat','Une taxe'],cat:'📖 Vocabulaire'});
+  // Randomly generated problems
+  for(let i=0;i<40;i++){
+    const type=ri(0,6);
+    if(type===0){
+      const have=ri(5,50),cost=ri(1,have);
+      const left=have-cost;
+      qs.push({t:`Tu as ${have} $. Tu achètes un article à ${cost} $. Combien te reste-t-il ?`,c:String(left),a:[String(left),left+' $',left+'$'],cat:'🧩 Problème',
+        ex:()=>`<h4>💡 Résolution</h4><div class="step">${have} $ − ${cost} $ = <span class="hl">${left} $</span></div>`});
+    } else if(type===1){
+      const perWeek=ri(1,10),weeks=ri(2,8);
+      const total=perWeek*weeks;
+      qs.push({t:`Tu épargnes ${perWeek} $ par semaine pendant ${weeks} semaines. Combien as-tu au total ?`,c:String(total),a:[String(total),total+' $',total+'$'],cat:'🧩 Problème',
+        ex:()=>`<h4>💡 Résolution</h4><div class="step">${perWeek} $ × ${weeks} = <span class="hl">${total} $</span></div>`});
+    } else if(type===2){
+      const goal=ri(10,50),have=ri(1,goal-1);
+      const need=goal-have;
+      qs.push({t:`Un objet coûte ${goal} $. Tu as ${have} $. Combien te manque-t-il ?`,c:String(need),a:[String(need),need+' $',need+'$'],cat:'🧩 Problème',
+        ex:()=>`<h4>💡 Résolution</h4><div class="step">${goal} $ − ${have} $ = <span class="hl">${need} $</span></div>`});
+    } else if(type===3){
+      const price1=ri(1,15),price2=ri(1,10);
+      const total=price1+price2;
+      const names=[['un cahier','un crayon'],['un livre','un jus'],['une gomme','un stylo'],['un sandwich','un lait'],['des autocollants','une règle']];
+      const [n1,n2]=names[ri(0,names.length-1)];
+      qs.push({t:`${n1[0].toUpperCase()+n1.slice(1)} coûte ${price1} $ et ${n2} coûte ${price2} $. Combien coûtent les deux ensemble ?`,c:String(total),a:[String(total),total+' $',total+'$'],cat:'🧩 Problème',
+        ex:()=>`<h4>💡 Résolution</h4><div class="step">${price1} $ + ${price2} $ = <span class="hl">${total} $</span></div>`});
+    } else if(type===4){
+      const qty=ri(2,5),unit=ri(1,5);
+      const total=qty*unit;
+      const items=['crayon','pomme','cahier','autocollant','biscuit'];
+      const item=items[ri(0,items.length-1)];
+      qs.push({t:`Tu achètes ${qty} ${item}s à ${unit} $ chacun. Combien ça coûte ?`,c:String(total),a:[String(total),total+' $',total+'$'],cat:'🧩 Problème',
+        ex:()=>`<h4>💡 Résolution</h4><div class="step">${qty} × ${unit} $ = <span class="hl">${total} $</span></div>`});
+    } else if(type===5){
+      const have=ri(10,100),spend=ri(1,have-1);
+      const left=have-spend;
+      const names=['Luc','Emma','Noah','Sofia','Léo','Mia','Olivier','Camille'];
+      const name=names[ri(0,names.length-1)];
+      qs.push({t:`${name} avait ${have} $. Il/Elle a dépensé ${spend} $. Combien lui reste-t-il ?`,c:String(left),a:[String(left),left+' $',left+'$'],cat:'🧩 Problème',
+        ex:()=>`<h4>💡 Résolution</h4><div class="step">${have} $ − ${spend} $ = <span class="hl">${left} $</span></div>`});
+    } else {
+      const a=ri(5,40),b=ri(5,40);
+      const total=a+b;
+      if(total>100) {i--;continue;}
+      qs.push({t:`Tu as ${a} $ dans ta tirelire. Tu reçois ${b} $ pour ton anniversaire. Combien as-tu maintenant ?`,c:String(total),a:[String(total),total+' $',total+'$'],cat:'🧩 Problème',
+        ex:()=>`<h4>💡 Résolution</h4><div class="step">${a} $ + ${b} $ = <span class="hl">${total} $</span></div>`});
+    }
+  }
+  return qs;
+}
+
+function genCountQ(){
+  const qs=[];
+  for(let i=0;i<100;i++){
+    const n25=ri(0,4),n10=ri(0,5),n5=ri(0,4),n1=ri(0,3),n2=ri(0,2);
+    const total=n25*25+n10*10+n5*5+n1*100+n2*200;
+    if(total===0||total>2000) {i--;continue;}
+    let parts=[];
+    if(n2>0)parts.push(`${n2} pièce${n2>1?'s':''} de 2$`);
+    if(n1>0)parts.push(`${n1} pièce${n1>1?'s':''} de 1$`);    if(n25>0)parts.push(`${n25} pièce${n25>1?'s':''} de 25¢`);
+    if(n10>0)parts.push(`${n10} pièce${n10>1?'s':''} de 10¢`);
+    if(n5>0)parts.push(`${n5} pièce${n5>1?'s':''} de 5¢`);
+    const dollars=Math.floor(total/100);
+    const cents=total%100;
+    let ans;
+    if(cents===0) ans=`${dollars}`;
+    else if(dollars===0) ans=`${cents}`;
+    else ans=`${dollars}.${String(cents).padStart(2,'0')}`;
+    const altAns=[ans];
+    if(cents===0){altAns.push(`${dollars}.00`);altAns.push(`${dollars} $`);altAns.push(`${dollars}$`);}
+    if(dollars===0){altAns.push(`0.${String(cents).padStart(2,'0')}`);altAns.push(`${cents}¢`);altAns.push(`${cents} ¢`);}
+    if(dollars>0&&cents>0){altAns.push(`${dollars},${String(cents).padStart(2,'0')}`);altAns.push(`${dollars}.${String(cents).padStart(2,'0')} $`);}
+    qs.push({t:`Tu as ${parts.join(', ')}. Combien d'argent as-tu au total ?`,c:ans,a:altAns,cat:'💰 Compter',
+      ex:()=>{let h=`<h4>💡 Comment compter ?</h4>`;
+        if(n2>0)h+=`<div class="step">${n2} pièce${n2>1?'s':''} de 2$ = <span class="hl">${n2*2},00 $</span></div>`;
+        if(n1>0)h+=`<div class="step">${n1} pièce${n1>1?'s':''} de 1$ = <span class="hl">${n1},00 $</span></div>`;
+        if(n25>0)h+=`<div class="step">${n25} × 25¢ = <span class="hl">${n25*25} ¢</span></div>`;
+        if(n10>0)h+=`<div class="step">${n10} × 10¢ = <span class="hl">${n10*10} ¢</span></div>`;
+        if(n5>0)h+=`<div class="step">${n5} × 5¢ = <span class="hl">${n5*5} ¢</span></div>`;
+        h+=`<div class="step" style="text-align:center;margin-top:.4rem">Total = <span class="hl">${ans}${cents>0&&dollars>0?' $':cents>0?' ¢':' $'}</span></div>`;
+        return h;}
+    });
+  }
+  return qs;
+}
+
+function genChangeQ(){
+  const qs=[];
+  const items=[
+    {name:'un crayon',price:0.75},{name:'une gomme',price:0.50},{name:'un cahier',price:2.50},
+    {name:'un jus',price:1.75},{name:'une barre de chocolat',price:1.25},{name:'un livre',price:5.50},
+    {name:'un sandwich',price:3.75},{name:'une pomme',price:0.85},{name:'un yogourt',price:1.50},
+    {name:'un sac de chips',price:2.25},{name:'une bouteille d\'eau',price:1.00},{name:'un marqueur',price:3.00},
+    {name:'un paquet de gommes',price:1.50},{name:'un muffin',price:2.75},{name:'une règle',price:1.25},
+    {name:'un stylo',price:2.00},{name:'une efface',price:0.65},{name:'un autocollant',price:0.35},
+  ];
+  const payments=[1,2,5,10,20];
+  for(let i=0;i<100;i++){
+    const item=items[ri(0,items.length-1)];
+    const possiblePay=payments.filter(p=>p>=item.price);
+    if(possiblePay.length===0){i--;continue;}
+    const pay=possiblePay[ri(0,possiblePay.length-1)];
+    const change=pay-item.price;
+    const changeStr=change.toFixed(2).replace(/\.?0+$/,'');
+    const altAns=[changeStr,change.toFixed(2),change.toFixed(2)+' $',change.toFixed(2)+'$'];
+    if(change===Math.floor(change))altAns.push(String(Math.floor(change)));
+    qs.push({t:`${item.name[0].toUpperCase()+item.name.slice(1)} coûte ${item.price.toFixed(2)} $. Tu payes avec ${pay} $. Combien de monnaie vas-tu recevoir ?`,
+      c:changeStr,a:altAns,cat:'🛒 Monnaie',
+      ex:()=>`<h4>💡 Comment calculer la monnaie ?</h4><div class="step">${pay},00 $ − ${item.price.toFixed(2)} $ = <span class="hl">${change.toFixed(2)} $</span></div><div class="step">Tu reçois <span class="hl">${change.toFixed(2)} $</span> de monnaie.</div>`
+    });
+  }
+  return qs;
+}
+
+function genEstimateQ(){
+  const qs=[];
+  const items=[
+    ['un crayon',0.89],['une gomme',0.45],['un cahier',2.37],['un jus',1.79],
+    ['une barre de chocolat',1.29],['un livre',5.49],['un sandwich',3.67],
+    ['une pomme',0.92],['un yogourt',1.53],['un sac de chips',2.19],
+    ['un marqueur',2.99],['un muffin',2.75],['une bouteille d\'eau',1.09],
+  ];
+  // Estimate to nearest dollar
+  for(let i=0;i<15;i++){
+    const [name,price]=items[ri(0,items.length-1)];
+    const rounded=Math.round(price);
+    qs.push({t:`${name[0].toUpperCase()+name.slice(1)} coûte ${price.toFixed(2)} $. Arrondis le prix au dollar près.`,c:String(rounded),a:[String(rounded),rounded+' $',rounded+'$',rounded+'.00',''+rounded+'.00 $'],cat:'🏷️ Estimer',
+      ex:()=>`<h4>💡 Arrondir au dollar près</h4><div class="step">${price.toFixed(2)} $ → le chiffre après la virgule est ${Math.floor((price%1)*10)}</div><div class="step">${Math.floor((price%1)*10)>=5?'≥ 5, on arrondit vers le haut':'< 5, on arrondit vers le bas'} → <span class="hl">${rounded} $</span></div>`
+    });
+  }
+  // Compare prices
+  for(let i=0;i<15;i++){
+    const i1=ri(0,items.length-1);let i2=ri(0,items.length-1);while(i2===i1)i2=ri(0,items.length-1);
+    const [n1,p1]=items[i1],[n2,p2]=items[i2];
+    const cheaper=p1<p2?n1:n2;
+    const cheaperPrice=Math.min(p1,p2);
+    qs.push({t:`${n1[0].toUpperCase()+n1.slice(1)} coûte ${p1.toFixed(2)} $ et ${n2} coûte ${p2.toFixed(2)} $. Lequel coûte le moins cher ?`,c:cheaper,a:[cheaper],cat:'🏷️ Comparer',mc:[n1,n2],
+      ex:()=>`<h4>💡 Comparer les prix</h4><div class="step">${p1.toFixed(2)} $ vs ${p2.toFixed(2)} $ → <span class="hl">${cheaper}</span> est moins cher (${cheaperPrice.toFixed(2)} $)</div>`
+    });
+  }
+  return qs;
+}
+
+// ════════════════════════════════════════
+// MULTIPLICATION (with cross technique)
+// ════════════════════════════════════════
+function genMultQ(){
+  const qs=[];
+  for(let i=0;i<100;i++){
+    const a=ri(2,12),b=ri(2,12);
+    const ans=a*b;
+    qs.push({t:`${a} × ${b} = ?`,c:String(ans),cat:'✖️ Multiplication',
+      ex:()=>{
+        // Show cross/grid technique for multi-digit or just the fact
+        if(a<=12&&b<=12){
+          let h=`<h4>💡 ${a} × ${b}</h4>`;
+          // Decomposition approach
+          if(b>5){
+            const b1=Math.floor(b/2),b2=b-b1;
+            h+=`<div class="step">On peut décomposer : ${a} × ${b} = ${a} × ${b1} + ${a} × ${b2}</div>`;
+            h+=`<div class="step">${a} × ${b1} = <span class="hl">${a*b1}</span></div>`;
+            h+=`<div class="step">${a} × ${b2} = <span class="hl">${a*b2}</span></div>`;
+            h+=`<div class="step">${a*b1} + ${a*b2} = <span class="hl">${ans}</span></div>`;
+          } else {
+            h+=`<div class="step">On peut compter par bonds de ${a} :</div><div class="step">`;
+            for(let k=1;k<=b;k++){h+=`${a*k}${k<b?' → ':''}`;}
+            h+=`</div>`;
+          }
+          h+=`<div class="step" style="text-align:center;margin-top:.3rem">${a} × ${b} = <span class="hl">${ans}</span></div>`;
+          return h;
+        }
+      }
+    });
+  }
+  return qs;
+}
+
+// ════════════════════════════════════════
+// DIVISION (with long division)
+// ════════════════════════════════════════
+function genDivQ(){
+  const qs=[];
+  for(let i=0;i<100;i++){
+    const b=ri(2,12);
+    const ans=ri(2,12);
+    const a=b*ans; // ensure clean division
+    qs.push({t:`${a} ÷ ${b} = ?`,c:String(ans),cat:'➗ Division',
+      ex:()=>{
+        let h=`<h4>💡 ${a} ÷ ${b} (longue division)</h4>`;
+        h+=`<div class="step">On cherche : combien de fois ${b} entre dans ${a} ?</div>`;
+        h+=`<div class="step">${b} × <span class="hl">${ans}</span> = ${a}</div>`;
+        h+=`<div class="step">Donc ${a} ÷ ${b} = <span class="hl">${ans}</span></div>`;
+        // Show the long division visually
+        const aStr=String(a),ansStr=String(ans);
+        h+=`<div class="col-math">`;
+        h+=`    ${ansStr}\n`;
+        h+=`   ┌${'─'.repeat(aStr.length+1)}\n`;
+        h+=` ${b} │ ${aStr}\n`;
+        h+=`   └${'─'.repeat(aStr.length+1)}\n`;
+        h+=`  - ${a}\n`;
+        h+=`   ──\n`;
+        h+=`    0`;
+        h+=`</div>`;
+        return h;
+      }
+    });
+  }
+  return qs;
+}
+
+// ═══ GAME ENGINE ═══
+let questions=[],current=0,score=0,answered=false,lastCat='all';
+
+function startGame(cat){
+  lastCat=cat;current=0;score=0;answered=false;
+  if(cat==='coins') questions=pk(genCoinsQ(),20);
+  else if(cat==='count') questions=pk(genCountQ(),20);
+  else if(cat==='change') questions=pk(genChangeQ(),20);
+  else if(cat==='estimate') questions=pk(genEstimateQ(),20);
+  else if(cat==='mult') questions=pk(genMultQ(),20);
+  else if(cat==='div') questions=pk(genDivQ(),20);
+  else questions=sh([...pk(genCoinsQ(),4),...pk(genCountQ(),4),...pk(genChangeQ(),4),...pk(genEstimateQ(),4),...pk(genMultQ(),5),...pk(genDivQ(),5)]);
+
+  document.getElementById('cat-screen').style.display='none';
+  document.getElementById('result-screen').style.display='none';
+  document.getElementById('game-screen').style.display='block';
+  showQ();
+}
+
+function showQ(){
+  answered=false;const q=questions[current],tot=questions.length;
+  document.getElementById('pfill').style.width=`${(current/tot)*100}%`;
+  document.getElementById('qctr').textContent=`Question ${current+1} / ${tot}`;
+  document.getElementById('scr').textContent=score;
+  document.getElementById('qcat').textContent=q.cat||'';
+  document.getElementById('qtxt').textContent=q.t;
+  document.getElementById('fb').textContent='';document.getElementById('fb').className='fb';
+  document.getElementById('expl').style.display='none';document.getElementById('btn-next').disabled=true;
+  const w=document.getElementById('awrap');
+  if(q.mc){
+    let html='<div class="mc-grid">';
+    sh([...q.mc]).forEach(ch=>{html+=`<button class="mc-btn" onclick="checkMC(this,'${String(ch).replace(/'/g,"\\'")}')">${ch}</button>`;});
+    html+='</div>';w.innerHTML=html;
+  } else {
+    w.innerHTML=`<input type="text" class="ainput" id="ainp" autocomplete="off" placeholder="Ta réponse..."><button class="sbtn" id="sbtn" onclick="check()">OK</button>`;
+    document.getElementById('ainp').focus();
+  }
+}
+
+function checkMC(btn,choice){
+  if(answered)return;answered=true;
+  const q=questions[current],fb=document.getElementById('fb');
+  document.querySelectorAll('.mc-btn').forEach(b=>{b.disabled=true;if(nr(b.textContent)===nr(q.c))b.classList.add('ok');});
+  if(nr(choice)===nr(q.c)){score++;btn.classList.add('ok');fb.textContent='✅ Bravo !';fb.className='fb ok';}
+  else{btn.classList.add('err');fb.textContent='❌ Ce n\'est pas la bonne réponse.';fb.className='fb err';
+    if(q.ex){document.getElementById('expl').innerHTML=q.ex();document.getElementById('expl').style.display='block';}
+    else{const co=document.getElementById('expl');co.innerHTML=`<strong>La bonne réponse :</strong> ${q.c}`;co.style.display='block';}
+  }
+  document.getElementById('scr').textContent=score;document.getElementById('btn-next').disabled=false;
+  if(current===questions.length-1)document.getElementById('btn-next').textContent='Voir les résultats 🎉';
+}
+
+function check(){
+  if(answered)return;const inp=document.getElementById('ainp'),ua=inp.value.trim();if(!ua)return;
+  answered=true;inp.disabled=true;if(document.getElementById('sbtn'))document.getElementById('sbtn').disabled=true;
+  const q=questions[current],fb=document.getElementById('fb');
+  const allC=[nr(q.c)];if(q.a)q.a.forEach(x=>allC.push(nr(x)));
+  if(allC.some(c=>nr(ua)===c)){score++;inp.className='ainput ok';fb.textContent='✅ Bravo ! Bonne réponse !';fb.className='fb ok';}
+  else{inp.className='ainput err';fb.textContent='❌ Ce n\'est pas la bonne réponse.';fb.className='fb err';
+    if(q.ex){document.getElementById('expl').innerHTML=q.ex();document.getElementById('expl').style.display='block';}
+    else{document.getElementById('expl').innerHTML=`<strong>La bonne réponse :</strong> ${q.c}`;document.getElementById('expl').style.display='block';}
+  }
+  document.getElementById('scr').textContent=score;document.getElementById('btn-next').disabled=false;
+  if(current===questions.length-1)document.getElementById('btn-next').textContent='Voir les résultats 🎉';
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(!answered&&document.getElementById('ainp'))check();else if(!document.getElementById('btn-next').disabled)next();}});
+
+function next(){current++;if(current>=questions.length)showRes();else showQ();}
+
+function showRes(){
+  document.getElementById('game-screen').style.display='none';
+  document.getElementById('result-screen').style.display='block';
+  const tot=questions.length,pct=Math.round((score/tot)*100);
+  document.getElementById('rscore').textContent=`${score} / ${tot}`;
+  let e,m;
+  if(pct===100){e='🏆';m='Score parfait ! Tu es un·e champion·ne !';}
+  else if(pct>=80){e='🌟';m='Excellent travail !';}
+  else if(pct>=60){e='😊';m='Bon travail ! Continue !';}
+  else if(pct>=40){e='💪';m='Continue à pratiquer !';}
+  else{e='📚';m='La pratique rend parfait !';}
+  document.getElementById('remoji').textContent=e;document.getElementById('rmsg').textContent=m;
+  try{window.parent.postMessage({type:'gameScore',score:score,total:tot,pct:pct},'*');}catch(e){}
+}
+
+function goHome(){
+  document.getElementById('game-screen').style.display='none';
+  document.getElementById('result-screen').style.display='none';
+  document.getElementById('cat-screen').style.display='block';
+}
+</script>
+</body>
+</html>

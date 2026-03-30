@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma Classe en Jeux</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --coral:#FF6B6B;--sky:#4ECDC4;--lavender:#A78BFA;--mint:#6BCB77;
+  --ocean:#3B82F6;--sun:#FFD93D;--peach:#FB923C;--rose:#F472B6;
+  --teal:#14B8A6;--indigo:#6366F1;
+  --night:#1E293B;--slate:#64748B;--cloud:#F8FAFC;--mist:#F1F5F9;
+}
+body{font-family:'Nunito',sans-serif;background:var(--cloud);color:var(--night);min-height:100vh;overflow-x:hidden}
+
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg i{position:absolute;border-radius:50%;opacity:.06;animation:drift 25s infinite ease-in-out}
+.bg i:nth-child(1){width:350px;height:350px;background:var(--coral);top:-80px;left:-60px}
+.bg i:nth-child(2){width:250px;height:250px;background:var(--sky);top:25%;right:-50px;animation-delay:-7s}
+.bg i:nth-child(3){width:300px;height:300px;background:var(--lavender);bottom:-60px;left:25%;animation-delay:-14s}
+.bg i:nth-child(4){width:200px;height:200px;background:var(--mint);top:55%;left:-30px;animation-delay:-4s}
+.bg i:nth-child(5){width:280px;height:280px;background:var(--sun);bottom:5%;right:8%;animation-delay:-11s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(25px,-18px) scale(1.04)}66%{transform:translate(-18px,12px) scale(.96)}}
+
+header{position:relative;z-index:10;text-align:center;padding:2.5rem 1.5rem 1.5rem}
+.logo{font-family:'Fredoka',sans-serif;font-size:clamp(2rem,5.5vw,3.2rem);font-weight:700;
+  background:linear-gradient(135deg,var(--coral),var(--lavender),var(--sky));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-1px}
+.logo-row{font-size:clamp(1.8rem,4.5vw,2.8rem);margin-bottom:.2rem}
+header .sub{font-size:1.05rem;color:var(--slate);font-weight:700;margin-top:.3rem}
+
+.toolbar{position:relative;z-index:10;max-width:960px;margin:0 auto 1.5rem;padding:0 1.5rem}
+.filter-group{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;justify-content:center;margin-bottom:.6rem}
+.filter-group .label{font-family:'Fredoka',sans-serif;font-size:.78rem;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-right:.2rem}
+.chip{font-family:'Fredoka',sans-serif;font-size:.85rem;font-weight:600;padding:.45rem 1rem;border-radius:50px;border:none;cursor:pointer;
+  transition:all .25s cubic-bezier(.4,0,.2,1);background:white;color:var(--slate);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.chip:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.chip.on{color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.15)}
+.chip.grade-chip.on{background:linear-gradient(135deg,var(--ocean),var(--lavender))}
+.chip.sub-chip.on[data-s="maths"]{background:linear-gradient(135deg,var(--sky),var(--mint))}
+.chip.sub-chip.on[data-s="sciences"]{background:linear-gradient(135deg,var(--teal),var(--mint))}
+.chip.sub-chip.on[data-s="francais"]{background:linear-gradient(135deg,var(--coral),var(--peach))}
+.chip.sub-chip.on[data-s="anglais"]{background:linear-gradient(135deg,var(--lavender),var(--ocean))}
+.chip.sub-chip.on[data-s="musique"]{background:linear-gradient(135deg,var(--rose),var(--lavender))}
+.chip.sub-chip.on[data-s="all"]{background:linear-gradient(135deg,var(--ocean),var(--lavender))}
+
+main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5rem 4rem}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.1rem}
+.card{background:#fff;border-radius:20px;padding:1.6rem;box-shadow:0 6px 24px rgba(0,0,0,.06);cursor:pointer;
+  transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;border:3px solid transparent}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:5px}
+.card.c-sky::before{background:linear-gradient(90deg,var(--sky),var(--mint))}
+.card.c-coral::before{background:linear-gradient(90deg,var(--coral),var(--peach))}
+.card.c-lavender::before{background:linear-gradient(90deg,var(--lavender),var(--ocean))}
+.card.c-rose::before{background:linear-gradient(90deg,var(--rose),var(--lavender))}
+.card.c-mint::before{background:linear-gradient(90deg,var(--mint),var(--sky))}
+.card.c-sun::before{background:linear-gradient(90deg,var(--sun),var(--coral))}
+.card.c-peach::before{background:linear-gradient(90deg,var(--peach),var(--sun))}
+.card.c-teal::before{background:linear-gradient(90deg,var(--teal),var(--mint))}
+.card.c-indigo::before{background:linear-gradient(90deg,var(--indigo),var(--lavender))}
+.card:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,.12);border-color:#E2E8F0}
+.card .ico{font-size:2.2rem;margin-bottom:.6rem}
+.card h3{font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.25rem;line-height:1.3}
+.card p{font-size:.85rem;color:#94A3B8;line-height:1.4}
+.tags{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.7rem}
+.tag{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:.18rem .55rem;border-radius:50px}
+.tag-maths{background:#DBEAFE;color:var(--ocean)}
+.tag-sciences{background:#CCFBF1;color:#0F766E}
+.tag-francais{background:#FEE2E2;color:var(--coral)}
+.tag-anglais{background:#EDE9FE;color:var(--lavender)}
+.tag-musique{background:#FCE7F3;color:var(--rose)}
+.tag-grade{background:var(--mist);color:var(--slate)}
+.tag-topic{background:#FFF7ED;color:#9A3412;border:1px solid #FDBA74}
+.card.hidden{display:none}
+
+.empty-msg{text-align:center;padding:3rem;color:#94A3B8;display:none}
+.empty-msg.show{display:block}
+
+.teacher-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:50;width:52px;height:52px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--ocean),var(--lavender));color:#fff;font-size:1.4rem;cursor:pointer;
+  box-shadow:0 6px 24px rgba(59,130,246,.35);transition:transform .2s}
+.teacher-fab:hover{transform:scale(1.1)}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(30,41,59,.45);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:24px;padding:2.2rem;max-width:440px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.15);animation:pop .3s cubic-bezier(.34,1.56,.64,1);position:relative}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.modal h2{font-family:'Fredoka',sans-serif;font-size:1.4rem;text-align:center;margin-bottom:.4rem}
+.modal .hint{text-align:center;color:var(--slate);margin-bottom:1.2rem;font-size:.95rem}
+.modal input{width:100%;padding:.85rem 1rem;border:3px solid #E2E8F0;border-radius:14px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;text-align:center;outline:none;transition:border-color .2s}
+.modal input:focus{border-color:var(--lavender)}
+.mbtn{width:100%;margin-top:.8rem;padding:.85rem;border:none;border-radius:14px;font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.mbtn:hover{transform:translateY(-2px)}
+.mbtn.primary{background:linear-gradient(135deg,var(--coral),var(--lavender));box-shadow:0 4px 18px rgba(255,107,107,.3)}
+.mbtn.blue{background:linear-gradient(135deg,var(--ocean),var(--lavender));box-shadow:0 4px 18px rgba(59,130,246,.3)}
+.modal .err{color:var(--coral);font-weight:700;text-align:center;margin-top:.6rem;display:none;font-size:.9rem}
+.modal .close-x{position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94A3B8}
+.modal .close-x:hover{color:var(--night)}
+
+#game-view{display:none;position:fixed;inset:0;z-index:80;background:var(--cloud);flex-direction:column}
+#game-view.show{display:flex}
+.gv-bar{display:flex;align-items:center;gap:.8rem;padding:.6rem 1rem;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06);z-index:2}
+.gv-bar h3{font-family:'Fredoka',sans-serif;font-size:1rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gv-bar .who{font-size:.85rem;font-weight:700;color:var(--slate);background:var(--mist);padding:.3rem .8rem;border-radius:50px}
+.gv-back{padding:.45rem 1rem;border:2px solid #E2E8F0;background:#fff;border-radius:50px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer}
+.gv-back:hover{background:var(--mist)}
+#game-frame{flex:1;border:none;width:100%}
+
+#teacher-panel{display:none;position:fixed;inset:0;z-index:90;background:var(--cloud);flex-direction:column}
+#teacher-panel.show{display:flex}
+.tp-bar{display:flex;align-items:center;gap:.8rem;padding:.8rem 1.2rem;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.tp-bar h3{font-family:'Fredoka',sans-serif;font-size:1.1rem;flex:1}
+.tp-body{flex:1;overflow-y:auto;padding:1.5rem;max-width:100%;margin:0 auto;width:100%}
+.filter-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.filter-row input{padding:.5rem .8rem;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;outline:none;min-width:200px}
+.filter-row input:focus{border-color:var(--lavender)}
+.fbtn{padding:.5rem 1rem;border-radius:10px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;border:2px solid}
+.fbtn-export{border-color:var(--mint);background:#ECFDF5;color:#065F46}.fbtn-export:hover{background:var(--mint);color:#fff}
+.fbtn-clear{border-color:var(--coral);background:#FEF2F2;color:#991B1B}.fbtn-clear:hover{background:var(--coral);color:#fff}
+
+.score-tbl{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.score-tbl th{font-family:'Fredoka',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);background:var(--cloud);padding:.8rem;text-align:left;border-bottom:2px solid #E2E8F0}
+.score-tbl td{padding:.7rem .8rem;border-bottom:1px solid var(--mist);font-weight:600;font-size:.9rem}
+.score-tbl tr:last-child td{border-bottom:none}
+.score-tbl tr:hover td{background:#FAFBFE}
+
+.pill{display:inline-block;padding:.15rem .55rem;border-radius:50px;font-size:.78rem;font-weight:800}
+.pill-hi{background:#ECFDF5;color:#065F46}.pill-mid{background:#FEF9C3;color:#854D0E}.pill-lo{background:#FEF2F2;color:#991B1B}
+.pill-none{background:var(--mist);color:#94A3B8}
+
+.grid-tbl{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.grid-tbl th{font-family:'Fredoka',sans-serif;font-size:.65rem;font-weight:700;color:var(--slate);background:var(--cloud);padding:.55rem .35rem;text-align:center;border-bottom:2px solid #E2E8F0;writing-mode:vertical-lr;transform:rotate(180deg);height:120px;white-space:nowrap}
+.grid-tbl th:first-child{writing-mode:horizontal-tb;transform:none;text-align:left;padding-left:1rem;position:sticky;left:0;background:var(--cloud);z-index:2;min-width:110px;height:auto}
+.grid-tbl td{padding:.4rem .3rem;text-align:center;border-bottom:1px solid var(--mist);font-size:.82rem;font-weight:700}
+.grid-tbl td:first-child{text-align:left;padding-left:1rem;font-weight:800;position:sticky;left:0;background:#fff;z-index:1;white-space:nowrap}
+.grid-tbl tr:hover td{background:#FAFBFE}
+.grid-tbl tr:hover td:first-child{background:#FAFBFE}
+
+.view-toggle{display:flex;gap:.4rem;margin-bottom:1rem}
+.view-btn{padding:.45rem .9rem;border-radius:50px;border:2px solid #E2E8F0;background:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;color:var(--slate)}
+.view-btn.on{background:linear-gradient(135deg,var(--ocean),var(--lavender));color:#fff;border-color:transparent}
+.grid-scroll{overflow-x:auto;margin-top:.5rem}
+
+.tp-pass-info{font-size:.82rem;color:#94A3B8;text-align:right;margin-bottom:.8rem}
+.tp-pass-info code{background:var(--mist);padding:.15rem .5rem;border-radius:6px;font-weight:800;color:var(--slate)}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+  header{padding:1.8rem 1rem 1rem}
+  .filter-group{gap:.3rem}
+  .gv-bar h3{font-size:.88rem}
+  .grid-tbl th{font-size:.6rem;height:90px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"><i></i><i></i><i></i><i></i><i></i></div>
+
+<header>
+  <div class="logo-row">🎮📚✨</div>
+  <h1 class="logo">Ma Classe en Jeux</h1>
+  <p class="sub">Apprends en t'amusant !</p>
+</header>
+
+<div class="toolbar">
+  <div class="filter-group" id="grade-filters"></div>
+  <div class="filter-group" id="subject-filters"></div>
+</div>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty-msg" id="empty"><p style="font-size:2.5rem">🔍</p><p>Aucun jeu ne correspond à ces filtres.</p></div>
+</main>
+
+<button class="teacher-fab" onclick="openTeacherModal()" title="Espace enseignant">🔑</button>
+
+<div class="overlay" id="name-modal">
+  <div class="modal">
+    <button class="close-x" onclick="closeModal('name-modal')">✕</button>
+    <h2>👋 Comment t'appelles-tu ?</h2>
+    <p class="hint">Entre ton prénom pour commencer !</p>
+    <input type="text" id="inp-name" placeholder="Ton prénom..." maxlength="30" onkeydown="if(event.key==='Enter')launchGame()">
+    <button class="mbtn primary" onclick="launchGame()">🚀 C'est parti !</button>
+  </div>
+</div>
+
+<div class="overlay" id="teacher-modal">
+  <div class="modal">
+    <button class="close-x" onclick="closeModal('teacher-modal')">✕</button>
+    <h2>🔑 Espace enseignant</h2>
+    <p class="hint">Entrez le mot de passe pour accéder aux résultats.</p>
+    <input type="password" id="inp-pass" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')teacherLogin()">
+    <button class="mbtn blue" onclick="teacherLogin()">🔓 Accéder</button>
+    <p class="err" id="pass-err">Mot de passe incorrect</p>
+  </div>
+</div>
+
+<div id="game-view">
+  <div class="gv-bar">
+    <button class="gv-back" onclick="closeGame()">← Retour</button>
+    <h3 id="gv-title"></h3>
+    <span class="who" id="gv-who"></span>
+  </div>
+  <iframe id="game-frame" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+</div>
+
+<div id="teacher-panel">
+  <div class="tp-bar">
+    <button class="gv-back" onclick="closeTeacher()">← Retour</button>
+    <h3>📊 Tableau de bord</h3>
+  </div>
+  <div class="tp-body">
+    <p class="tp-pass-info">Mot de passe : <code id="show-pass"></code></p>
+    <div class="view-toggle">
+      <button class="view-btn on" onclick="setView('grid',this)">📊 Grille élèves × jeux</button>
+      <button class="view-btn" onclick="setView('list',this)">📋 Liste chronologique</button>
+    </div>
+    <div class="filter-row">
+      <input type="text" id="f-name" placeholder="🔍 Chercher un élève..." oninput="renderDashboard()">
+      <button class="fbtn fbtn-export" onclick="exportCSV()">📥 Exporter CSV</button>
+      <button class="fbtn fbtn-clear" onclick="clearScores()">🗑️ Effacer tout</button>
+    </div>
+    <div class="grid-scroll" id="scores-wrap"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//
+//  ╔═══════════════════════════════════════════════════════════╗
+//  ║  SECTION ÉDITABLE — Modifie ces parties sur GitHub!      ║
+//  ║  Clique sur le crayon (✏️) pour éditer ce fichier.       ║
+//  ╚═══════════════════════════════════════════════════════════╝
+//
+// ═══════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────
+// 🔑 MOT DE PASSE ENSEIGNANT
+//    Change-le ici :
+// ─────────────────────────────────────
+const TEACHER_PASSWORD = "classe2026";
+
+// ─────────────────────────────────────
+// 📚 MATIÈRES
+//    Ajoute de nouvelles matières ici.
+//    Les filtres apparaissent
+//    automatiquement!
+// ─────────────────────────────────────
+const SUBJECTS = {
+  maths:    { emoji: "🔢", label: "Maths" },
+  sciences: { emoji: "🔬", label: "Sciences" },
+  francais: { emoji: "📖", label: "Français" },
+  anglais:  { emoji: "🇬🇧", label: "Anglais" },
+  musique:  { emoji: "🎵", label: "Musique" },
+  // arts:     { emoji: "🎨", label: "Arts" },
+  // histoire: { emoji: "🏛️", label: "Histoire" },
+  // geo:      { emoji: "🌍", label: "Géographie" },
+};
+
+// ─────────────────────────────────────
+// 🎓 NIVEAUX / ANNÉES
+//    Ajoute des niveaux ici.
+// ─────────────────────────────────────
+const GRADES = {
+  "mat": "Maternelle",
+  "jar": "Jardin",
+  "1":   "1re année",
+  "2":   "2e année",
+  "3":   "3e année",
+  "4":   "4e année",
+  "5":   "5e année",
+  "6":   "6e année",
+  "7":   "7e année",
+  "8":   "8e année",
+};
+
+// ─────────────────────────────────────
+// 🎮 LISTE DES JEUX
+//
+//  Pour AJOUTER un jeu :
+//    1. Mets le fichier .html dans /games/
+//    2. Copie-colle un bloc ci-dessous
+//    3. Change les valeurs
+//
+//  Champs :
+//    id      → identifiant unique (pas d'espaces)
+//    title   → nom affiché sur la carte
+//    desc    → description courte
+//    icon    → emoji
+//    file    → chemin vers le fichier HTML
+//    subject → clé de SUBJECTS (ex: "maths")
+//    grades  → tableau de clés de GRADES (ex: ["4"])
+//    color   → couleur d'accent de la carte :
+//              sky, coral, lavender, rose, mint,
+//              sun, peach, teal, indigo
+//    topics  → tableau de sous-thèmes (OPTIONNEL)
+//              ex: ["Littéracie financière", "Multiplication"]
+//
+// ─────────────────────────────────────
+
+const GAMES = [
+  {
+    id: "musique-5",
+    title: "Théorie musicale — 5e",
+    desc: "Notes, durées, silences et chiffres indicateurs.",
+    icon: "🎵",
+    file: "games/musique-5-6.html",
+    subject: "musique",
+    grades: ["5"],
+    topics: ["Notes", "Durées", "Silences", "Chiffres indicateurs"],
+    color: "rose"
+  },
+  {
+    id: "musique-6",
+    title: "Théorie musicale — 6e",
+    desc: "Notes, durées, silences et chiffres indicateurs.",
+    icon: "🎶",
+    file: "games/musique-5-6.html",
+    subject: "musique",
+    grades: ["6"],
+    topics: ["Notes", "Durées", "Silences", "Chiffres indicateurs"],
+    color: "rose"
+  },
+  {
+    id: "maths-4e-jeu1",
+    title: "Maths 4e — Littéracie financière",
+    desc: "Pièces, billets, monnaie, multiplication et division.",
+    icon: "🪙",
+    file: "games/maths-4e-jeu1.html",
+    subject: "maths",
+    grades: ["4"],
+    topics: ["Littéracie financière", "Multiplication", "Division"],
+    color: "sky"
+  },
+  {
+    id: "maths-4e-jeu2",
+    title: "Maths 4e — Niveau 2",
+    desc: "Diagrammes, suites, multiplication et division avancées.",
+    icon: "📊",
+    file: "games/maths-4e-jeu2.html",
+    subject: "maths",
+    grades: ["4"],
+    topics: ["Diagrammes", "Suites", "Multiplication", "Division"],
+    color: "mint"
+  },
+  {
+    id: "maths-pei",
+    title: "Maths PEI — Pratique",
+    desc: "Arrondissement, additions, soustractions et problèmes.",
+    icon: "🧮",
+    file: "games/maths-pei.html",
+    subject: "maths",
+    grades: ["3"],
+    topics: ["Arrondissement", "Additions", "Soustractions", "Résolution de problèmes"],
+    color: "sun"
+  },
+  {
+    id: "maths-pei3",
+    title: "Maths PEI — 3e année",
+    desc: "Contenu combiné et simplifié pour le niveau PEI.",
+    icon: "⚡",
+    file: "games/maths-pei3.html",
+    subject: "maths",
+    grades: ["3"],
+    topics: ["Littéracie financière", "Multiplication", "Division", "Diagrammes", "Suites"],
+    color: "coral"
+  },
+  {
+    id: "english-3-4",
+    title: "English Practice",
+    desc: "3 niveaux : débutant, intermédiaire et avancé.",
+    icon: "🇬🇧",
+    file: "games/english-3-4.html",
+    subject: "anglais",
+    grades: ["3", "4"],
+    topics: ["Vocabulaire", "Grammaire", "Lecture"],
+    color: "lavender"
+  },
+
+  // ──────────────────────────────────────────
+  //  ✏️ COPIE CE MODÈLE POUR AJOUTER UN JEU :
+  //
+  //  {
+  //    id: "unique-id",
+  //    title: "Titre du jeu",
+  //    desc: "Description courte.",
+  //    icon: "🎯",
+  //    file: "games/nom-du-fichier.html",
+  //    subject: "maths",
+  //    grades: ["4"],
+  //    topics: ["Fractions", "Décimaux"],
+  //    color: "sky"
+  //  },
+  //
+  // ──────────────────────────────────────────
+];
+
+// ═══════════════════════════════════════════════════════════════
+//
+//  ╔═══════════════════════════════════════════════════════════╗
+//  ║  FIN DE LA SECTION ÉDITABLE                              ║
+//  ║  Le reste fonctionne automatiquement!                    ║
+//  ╚═══════════════════════════════════════════════════════════╝
+//
+// ═══════════════════════════════════════════════════════════════
+
+let activeG="all", activeS="all", pendingId=null, playerName="";
+
+function buildFilters(){
+  const usedGrades=[...new Set(GAMES.flatMap(g=>g.grades))];
+  const gradeOrder=Object.keys(GRADES);
+  const sorted=usedGrades.sort((a,b)=>gradeOrder.indexOf(a)-gradeOrder.indexOf(b));
+  const gDiv=document.getElementById('grade-filters');
+  gDiv.innerHTML='<span class="label">Année :</span><button class="chip grade-chip on" data-g="all" onclick="tog(this,\'g\')">Toutes</button>';
+  sorted.forEach(g=>{
+    const lbl=GRADES[g]||g;
+    gDiv.innerHTML+=`<button class="chip grade-chip" data-g="${g}" onclick="tog(this,'g')">${lbl}</button>`;
+  });
+
+  const usedSubs=[...new Set(GAMES.map(g=>g.subject))];
+  const subOrder=Object.keys(SUBJECTS);
+  const sortedS=usedSubs.sort((a,b)=>subOrder.indexOf(a)-subOrder.indexOf(b));
+  const sDiv=document.getElementById('subject-filters');
+  sDiv.innerHTML='<span class="label">Matière :</span><button class="chip sub-chip on" data-s="all" onclick="tog(this,\'s\')">Toutes</button>';
+  sortedS.forEach(s=>{
+    const info=SUBJECTS[s]||{emoji:"📚",label:s};
+    sDiv.innerHTML+=`<button class="chip sub-chip" data-s="${s}" onclick="tog(this,'s')">${info.emoji} ${info.label}</button>`;
+  });
+}
+
+function render(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';let vis=0;
+  GAMES.forEach(g=>{
+    const mG=activeG==='all'||g.grades.includes(activeG);
+    const mS=activeS==='all'||g.subject===activeS;
+    const show=mG&&mS;if(show)vis++;
+    const gl=g.grades.map(x=>GRADES[x]||x).join(', ');
+    const subInfo=SUBJECTS[g.subject]||{emoji:"📚",label:g.subject};
+    const topicTags=(g.topics||[]).map(t=>`<span class="tag tag-topic">${t}</span>`).join('');
+    grid.innerHTML+=`<div class="card c-${g.color} ${show?'':'hidden'}" onclick="openGame('${g.id}')">
+      <div class="ico">${g.icon}</div><h3>${g.title}</h3><p>${g.desc}</p>
+      <div class="tags"><span class="tag tag-${g.subject}">${subInfo.emoji} ${subInfo.label}</span><span class="tag tag-grade">${gl}</span>${topicTags}</div>
+    </div>`;
+  });
+  document.getElementById('empty').classList.toggle('show',vis===0);
+}
+
+function tog(btn,type){
+  const v=type==='g'?btn.dataset.g:btn.dataset.s;
+  if(type==='g')activeG=v;else activeS=v;
+  document.querySelectorAll(type==='g'?'.grade-chip':'.sub-chip').forEach(c=>c.classList.remove('on'));
+  btn.classList.add('on');render();
+}
+
+function openGame(id){
+  pendingId=id;
+  document.getElementById('inp-name').value=playerName||'';
+  document.getElementById('inp-name').style.borderColor='#E2E8F0';
+  document.getElementById('name-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('inp-name').focus(),120);
+}
+
+function launchGame(){
+  const name=document.getElementById('inp-name').value.trim();
+  if(!name){document.getElementById('inp-name').style.borderColor='var(--coral)';return;}
+  playerName=name;closeModal('name-modal');
+  const game=GAMES.find(g=>g.id===pendingId);
+  document.getElementById('gv-title').textContent=game.icon+' '+game.title;
+  document.getElementById('gv-who').textContent='👤 '+playerName;
+  document.getElementById('game-frame').src=game.file;
+  document.getElementById('game-view').classList.add('show');
+  document.body.style.overflow='hidden';
+  savePlay(playerName,game.title,game.subject,game.grades.join('/'));
+}
+
+function closeGame(){
+  document.getElementById('game-view').classList.remove('show');
+  document.getElementById('game-frame').src='about:blank';
+  document.body.style.overflow='';
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+
+function savePlay(name,game,subject,grade){
+  const s=JSON.parse(localStorage.getItem('hub_scores')||'[]');
+  s.unshift({name,game,subject,grade,date:new Date().toLocaleString('fr-CA')});
+  localStorage.setItem('hub_scores',JSON.stringify(s));
+}
+
+window.addEventListener('message',function(e){
+  if(e.data&&e.data.type==='gameScore'){
+    const s=JSON.parse(localStorage.getItem('hub_scores')||'[]');
+    if(s.length){s[0].score=e.data.score;s[0].total=e.data.total;s[0].pct=e.data.pct;localStorage.setItem('hub_scores',JSON.stringify(s));}
+  }
+});
+
+// ── Teacher ──
+function openTeacherModal(){
+  document.getElementById('inp-pass').value='';
+  document.getElementById('pass-err').style.display='none';
+  document.getElementById('teacher-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('inp-pass').focus(),120);
+}
+function teacherLogin(){
+  if(document.getElementById('inp-pass').value===TEACHER_PASSWORD){closeModal('teacher-modal');openTeacher();}
+  else document.getElementById('pass-err').style.display='block';
+}
+function openTeacher(){
+  document.getElementById('show-pass').textContent=TEACHER_PASSWORD;
+  renderDashboard();
+  document.getElementById('teacher-panel').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeTeacher(){document.getElementById('teacher-panel').classList.remove('show');document.body.style.overflow='';}
+
+let dashView='grid';
+function setView(v,btn){
+  dashView=v;
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderDashboard();
+}
+function renderDashboard(){if(dashView==='grid')renderGrid();else renderList();}
+
+function renderGrid(){
+  const scores=JSON.parse(localStorage.getItem('hub_scores')||'[]');
+  const fn=document.getElementById('f-name').value.toLowerCase();
+  const w=document.getElementById('scores-wrap');
+
+  if(!scores.length){
+    w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem;margin-bottom:.8rem">📭</p><p>Les scores apparaîtront ici quand les élèves joueront !</p></div>';
+    return;
+  }
+
+  const gameOrder=GAMES.map(g=>g.title);
+  const uniqueGames=[...new Set(gameOrder)];
+
+  const allStudents=[...new Set(scores.map(s=>s.name))];
+  const students=fn?allStudents.filter(n=>n.toLowerCase().includes(fn)):allStudents;
+  students.sort((a,b)=>a.localeCompare(b,'fr'));
+
+  if(!students.length){
+    w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem">🔍</p><p>Aucun élève trouvé.</p></div>';
+    return;
+  }
+
+  const map={};
+  students.forEach(s=>{map[s]={};});
+  scores.forEach(s=>{
+    if(!map[s.name])return;
+    const key=s.game;
+    const existing=map[s.name][key];
+    const pct=s.pct||null;
+    if(!existing){map[s.name][key]={score:s.score,total:s.total,pct:pct,date:s.date};}
+    else if(pct!==null&&(existing.pct===null||pct>existing.pct)){map[s.name][key]={score:s.score,total:s.total,pct:pct,date:s.date};}
+  });
+
+  let html='<table class="grid-tbl"><thead><tr><th>Élève</th>';
+  uniqueGames.forEach(g=>{html+=`<th title="${g}">${g}</th>`;});
+  html+='</tr></thead><tbody>';
+
+  students.forEach(name=>{
+    html+=`<tr><td>${name}</td>`;
+    uniqueGames.forEach(game=>{
+      const d=map[name][game];
+      if(!d){html+='<td><span class="pill pill-none">—</span></td>';}
+      else if(d.pct!==null&&d.pct!==undefined){
+        const cls=d.pct>=80?'pill-hi':d.pct>=50?'pill-mid':'pill-lo';
+        html+=`<td><span class="pill ${cls}" title="${d.score}/${d.total} — ${d.date}">${d.pct}%</span></td>`;
+      } else{html+=`<td><span class="pill pill-none" title="${d.date}">✓</span></td>`;}
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  w.innerHTML=html;
+}
+
+function renderList(){
+  const scores=JSON.parse(localStorage.getItem('hub_scores')||'[]');
+  const fn=document.getElementById('f-name').value.toLowerCase();
+  const f=scores.filter(s=>!fn||s.name.toLowerCase().includes(fn));
+  const w=document.getElementById('scores-wrap');
+  if(!f.length){w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem;margin-bottom:.8rem">📭</p><p>Aucun résultat.</p></div>';return;}
+  w.innerHTML=`<table class="score-tbl"><thead><tr><th>Élève</th><th>Jeu</th><th>Score</th><th>Date</th></tr></thead>
+  <tbody>${f.map(s=>{
+    let sc='—';
+    if(s.pct!==undefined&&s.pct!==null){const cls=s.pct>=80?'pill-hi':s.pct>=50?'pill-mid':'pill-lo';sc=`${s.score}/${s.total} <span class="pill ${cls}">${s.pct}%</span>`;}
+    return `<tr><td>${s.name}</td><td>${s.game}</td><td>${sc}</td><td>${s.date}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function exportCSV(){
+  const s=JSON.parse(localStorage.getItem('hub_scores')||'[]');
+  if(!s.length)return alert('Aucun résultat.');
+  const csv='Élève,Jeu,Matière,Score,Pourcentage,Date\n'+s.map(r=>{
+    const sc=r.score!==undefined?r.score+'/'+r.total:'';
+    const pct=r.pct!==undefined?r.pct+'%':'';
+    return `"${r.name}","${r.game}","${r.subject}","${sc}","${pct}","${r.date}"`;
+  }).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`resultats_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+}
+
+function clearScores(){
+  if(confirm('⚠️ Effacer tous les résultats ?')){localStorage.removeItem('hub_scores');renderDashboard();}
+}
+
+buildFilters();render();
+</script>
+</body>
+</html>

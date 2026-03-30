@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths – PEI 3e année</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fef9f0;--card:#fff;--primary:#d4760a;--pl:#e8943a;--accent:#c0541f;--a2:#f5c26b;--green:#22c55e;--gl:#dcfce7;--red:#ef4444;--rl:#fde8e8;--text:#2a1a0a;--muted:#8a7a6a;--shadow:0 4px 20px rgba(212,118,10,.12);--r:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{text-align:center;padding:1.8rem 1rem .8rem;border-bottom:2px solid rgba(212,118,10,.15);background:linear-gradient(135deg,rgba(212,118,10,.06),rgba(192,84,31,.03))}
+header h1{font-family:'Fredoka',sans-serif;font-size:clamp(1.3rem,5vw,2rem);color:var(--primary);font-weight:700}
+header p{color:var(--muted);font-size:.85rem;margin-top:.2rem;font-weight:600}
+.screen{max-width:700px;margin:1.5rem auto;padding:0 1.2rem}
+.screen h2{font-family:'Fredoka',sans-serif;font-size:1.2rem;color:var(--primary);text-align:center;margin-bottom:1rem}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.8rem}
+.cat-btn{background:var(--card);border:2.5px solid rgba(212,118,10,.15);border-radius:var(--r);padding:1rem .7rem;cursor:pointer;text-align:center;transition:all .2s;box-shadow:var(--shadow);font-family:'Nunito',sans-serif}
+.cat-btn:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 28px rgba(212,118,10,.18)}
+.cat-btn .icon{font-size:1.5rem;display:block;margin-bottom:.2rem}
+.cat-btn .label{font-weight:800;color:var(--primary);font-size:.75rem;line-height:1.3}
+.cat-btn.learn{border-color:var(--a2);background:#fffaf0}
+#game{display:none;max-width:700px;margin:0 auto;padding:1.2rem 1.2rem 3rem}
+.pbar{background:rgba(212,118,10,.1);border-radius:99px;height:8px;margin-bottom:.8rem;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--primary),var(--pl));border-radius:99px;transition:width .4s}
+.hud{display:flex;justify-content:space-between;margin-bottom:.8rem;font-weight:700;font-size:.85rem;color:var(--muted)}
+.hud .sc{color:var(--accent);font-size:1rem}
+.qcard{background:var(--card);border-radius:var(--r);padding:1.4rem 1.2rem;box-shadow:var(--shadow);border:2px solid rgba(212,118,10,.08);margin-bottom:.8rem;animation:fu .3s}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.qlbl{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--pl);margin-bottom:.4rem}
+.qtxt{font-size:1.05rem;font-weight:700;margin-bottom:.6rem;line-height:1.5}
+.hint-btn{background:transparent;border:2px solid var(--a2);color:var(--accent);border-radius:10px;padding:.4rem .9rem;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;display:inline-block}
+.hint-btn:hover{background:var(--a2);color:#fff}.hint-btn:disabled{opacity:.5;cursor:default}
+.hint-box{display:none;background:#fffaf0;border:1.5px solid var(--a2);border-radius:10px;padding:.6rem .9rem;margin-bottom:.6rem;font-size:.85rem;color:var(--accent);line-height:1.5;animation:fu .3s}
+.chart-area{margin:.6rem 0}
+.chart-area svg{max-width:100%;height:auto}
+.awrap{display:flex;gap:.7rem;align-items:center}
+.ainput{flex:1;padding:.75rem .9rem;border:2.5px solid rgba(212,118,10,.2);border-radius:12px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);outline:none}
+.ainput:focus{border-color:var(--primary)}.ainput.ok{border-color:var(--green);background:var(--gl)}.ainput.err{border-color:var(--red);background:var(--rl)}
+.sbtn{padding:.75rem 1.3rem;border-radius:12px;border:none;background:var(--primary);color:#fff;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(212,118,10,.3)}
+.sbtn:hover{background:var(--pl)}.sbtn:disabled{opacity:.4;cursor:default}
+.fb{min-height:1.8rem;font-weight:700;font-size:.95rem;text-align:center;margin:.5rem 0 .2rem}
+.fb.ok{color:var(--green)}.fb.err{color:var(--red)}
+.expl{display:none;background:#fff8f0;border:2px solid var(--a2);border-radius:12px;padding:1rem;margin-top:.5rem;font-size:.88rem;animation:fu .3s;line-height:1.6}
+.expl h4{color:var(--accent);font-family:'Fredoka',sans-serif;margin-bottom:.4rem;font-size:.92rem}
+.expl .hl{background:#ffe8cc;padding:2px 6px;border-radius:6px;font-weight:700}
+.expl .col-math{font-family:'Courier New',monospace;font-size:1.1rem;font-weight:700;background:#f8f5f0;border-radius:10px;padding:.8rem;display:inline-block;line-height:1.8;margin:.4rem 0;text-align:right;border:1px solid #e0dbd0;white-space:pre}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.mc-btn{background:#fef9f0;border:2.5px solid rgba(212,118,10,.14);border-radius:12px;padding:.7rem;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;text-align:center;transition:all .18s}
+.mc-btn:hover:not(:disabled){background:#ffeedd;border-color:var(--primary)}.mc-btn.ok{background:var(--gl);border-color:var(--green);color:var(--green)}.mc-btn.err{background:var(--rl);border-color:var(--red);color:var(--red)}.mc-btn:disabled{cursor:default}
+.nav-row{display:flex;gap:.8rem;margin-top:.6rem}
+.nbtn{flex:1;padding:.75rem;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer}
+#bnxt{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(212,118,10,.3)}
+#bnxt:hover{background:var(--pl)}#bnxt:disabled{opacity:.4;cursor:default}
+#bhome{background:transparent;color:var(--muted);border:2px solid rgba(212,118,10,.2)}
+#res{display:none;max-width:500px;margin:2rem auto;padding:0 1.2rem;text-align:center;animation:fu .4s}
+.rc{background:var(--card);border-radius:var(--r);padding:2rem 1.5rem;box-shadow:var(--shadow)}
+.re{font-size:3rem;display:block;margin-bottom:.5rem}
+.rc h2{font-family:'Fredoka',sans-serif;font-size:1.5rem;color:var(--primary)}
+.rs{font-size:2.5rem;font-weight:900;color:var(--accent);margin:.4rem 0}
+.rc p{color:var(--muted);font-size:.9rem;margin-bottom:.8rem}
+.rbs{display:flex;flex-direction:column;gap:.5rem}
+.rbs button{padding:.75rem;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer}
+.bp{background:var(--primary);color:#fff}.bs2{background:transparent;border:2px solid rgba(212,118,10,.25)!important;color:var(--muted)}
+.tuto{display:none;max-width:700px;margin:1.5rem auto;padding:0 1.2rem}
+</style>
+</head>
+<body>
+<header><h1>🧡 Maths – PEI 3e année</h1><p>Adapté · Nombres jusqu'à 1000 · Tables simples</p></header>
+
+<div id="menu" class="screen">
+<h2>Choisis une section</h2>
+<div style="text-align:center;margin-bottom:.6rem;font-size:.82rem;color:var(--accent);font-weight:700">📖 Apprends d'abord, pratique ensuite !</div>
+<div class="cat-grid">
+<button class="cat-btn learn" onclick="showTuto('mult')"><span class="icon">📖</span><span class="label">Apprendre × et ÷</span></button>
+<button class="cat-btn" onclick="go('money')"><span class="icon">🪙</span><span class="label">Argent et pièces</span></button>
+<button class="cat-btn" onclick="go('count')"><span class="icon">💰</span><span class="label">Compter l'argent</span></button>
+<button class="cat-btn" onclick="go('change')"><span class="icon">🛒</span><span class="label">Rendre la monnaie</span></button>
+<button class="cat-btn" onclick="go('add')"><span class="icon">➕</span><span class="label">Additions</span></button>
+<button class="cat-btn" onclick="go('sub')"><span class="icon">➖</span><span class="label">Soustractions</span></button>
+<button class="cat-btn" onclick="go('mult')"><span class="icon">✖️</span><span class="label">Multiplication (1-10)</span></button>
+<button class="cat-btn" onclick="go('div')"><span class="icon">➗</span><span class="label">Division simple</span></button>
+<button class="cat-btn" onclick="go('round')"><span class="icon">🎯</span><span class="label">Arrondissement</span></button>
+<button class="cat-btn" onclick="go('bar')"><span class="icon">📊</span><span class="label">Diagrammes</span></button>
+<button class="cat-btn" onclick="go('suite')"><span class="icon">🔢</span><span class="label">Suites</span></button>
+<button class="cat-btn" onclick="go('prob')"><span class="icon">🧩</span><span class="label">Problèmes</span></button>
+<button class="cat-btn" onclick="go('all')"><span class="icon">🌟</span><span class="label">Tout mélanger !</span></button>
+</div></div>
+
+<!-- Tutorial -->
+<div id="tuto" class="tuto">
+<div class="qcard" style="border-color:var(--a2)">
+<h2 style="color:var(--accent);font-family:'Fredoka',sans-serif;font-size:1.2rem;margin-bottom:.8rem">📖 Multiplication et Division — Comment faire ?</h2>
+
+<div style="margin-bottom:1.5rem">
+<h3 style="color:var(--primary);font-family:'Fredoka',sans-serif;font-size:1.05rem;margin-bottom:.5rem">✖️ La multiplication, c'est quoi ?</h3>
+<p style="font-size:.92rem;line-height:1.8">C'est une <strong>addition répétée</strong> ! Au lieu d'additionner plusieurs fois le même nombre, on multiplie.</p>
+<div style="background:#fef9f0;border-radius:12px;padding:1rem;margin:.6rem 0;font-size:.95rem;line-height:2;border:1.5px solid var(--a2)">
+<strong>3 × 4</strong> veut dire : 4 + 4 + 4 = <span style="background:#dcfce7;padding:3px 8px;border-radius:6px;font-weight:800">12</span><br>
+<strong>5 × 2</strong> veut dire : 2 + 2 + 2 + 2 + 2 = <span style="background:#dcfce7;padding:3px 8px;border-radius:6px;font-weight:800">10</span><br>
+<strong>4 × 6</strong> → on peut compter par bonds de 6 : 6, 12, 18, <span style="background:#dcfce7;padding:3px 8px;border-radius:6px;font-weight:800">24</span>
+</div>
+</div>
+
+<div style="margin-bottom:1.5rem;border-top:2px solid #f0e8d8;padding-top:1rem">
+<h3 style="color:var(--primary);font-family:'Fredoka',sans-serif;font-size:1.05rem;margin-bottom:.5rem">➗ La division, c'est quoi ?</h3>
+<p style="font-size:.92rem;line-height:1.8">C'est le <strong>contraire de la multiplication</strong> ! On partage en parts égales.</p>
+<div style="background:#fef9f0;border-radius:12px;padding:1rem;margin:.6rem 0;font-size:.95rem;line-height:2;border:1.5px solid var(--a2)">
+<strong>12 ÷ 3 = ?</strong> → Si tu as 12 bonbons et 3 amis, chacun reçoit <span style="background:#dcfce7;padding:3px 8px;border-radius:6px;font-weight:800">4</span> bonbons<br>
+<strong>Truc :</strong> Pense à la multiplication à l'envers !<br>
+3 × <strong>?</strong> = 12 → 3 × <span style="background:#ffe8cc;padding:3px 8px;border-radius:6px;font-weight:800">4</span> = 12 ✅<br>
+Donc 12 ÷ 3 = <span style="background:#dcfce7;padding:3px 8px;border-radius:6px;font-weight:800">4</span>
+</div>
+</div>
+
+<div style="margin-bottom:1.5rem;border-top:2px solid #f0e8d8;padding-top:1rem">
+<h3 style="color:var(--red);font-family:'Fredoka',sans-serif;font-size:1.05rem;margin-bottom:.5rem">⚠️ Division avec reste</h3>
+<p style="font-size:.92rem;line-height:1.8;margin-bottom:.6rem">Parfois ça ne tombe pas pile !</p>
+
+<svg viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg" style="max-width:360px;display:block;margin:0 auto .6rem">
+<rect x="0" y="0" width="380" height="200" rx="14" fill="#fff8f0" stroke="#f5c26b" stroke-width="1.5"/>
+<text x="190" y="25" font-family="Fredoka,sans-serif" font-size="15" font-weight="700" fill="#c0541f" text-anchor="middle">13 ÷ 4 = ?</text>
+<text x="55" y="80" font-family="Nunito,sans-serif" font-size="30" font-weight="800" fill="#d4760a">4</text>
+<line x1="85" y1="85" x2="85" y2="50" stroke="#2a1a0a" stroke-width="3"/>
+<line x1="85" y1="50" x2="220" y2="50" stroke="#2a1a0a" stroke-width="3"/>
+<text x="105" y="80" font-family="Nunito,sans-serif" font-size="30" font-weight="800" fill="#2a1a0a">1</text>
+<text x="145" y="80" font-family="Nunito,sans-serif" font-size="30" font-weight="800" fill="#2a1a0a">3</text>
+<text x="145" y="44" font-family="Nunito,sans-serif" font-size="28" font-weight="800" fill="#22c55e">3</text>
+<text x="95" y="115" font-family="Nunito,sans-serif" font-size="24" font-weight="700" fill="#c0541f">−12</text>
+<line x1="90" y1="122" x2="185" y2="122" stroke="#2a1a0a" stroke-width="2.5"/>
+<rect x="130" y="130" width="42" height="35" rx="8" fill="#fde8e8" stroke="#ef4444" stroke-width="2"/>
+<text x="143" y="158" font-family="Nunito,sans-serif" font-size="26" font-weight="800" fill="#ef4444">1</text>
+<text x="185" y="155" font-family="Nunito,sans-serif" font-size="13" font-weight="800" fill="#ef4444">← RESTE</text>
+<text x="185" y="44" font-family="Nunito,sans-serif" font-size="13" font-weight="700" fill="#22c55e">← Réponse</text>
+<rect x="55" y="172" width="250" height="24" rx="6" fill="#dcfce7"/>
+<text x="180" y="190" font-family="Nunito,sans-serif" font-size="14" font-weight="800" fill="#22c55e" text-anchor="middle">13 ÷ 4 = 3 reste 1</text>
+</svg>
+
+<div style="background:#fff5f0;border-radius:12px;padding:.8rem;font-size:.9rem;line-height:2;border:1.5px solid #f5c26b">
+<strong>4 × 1 = 4</strong>, 4 × 2 = 8, 4 × <span style="background:#ffe8cc;padding:2px 6px;border-radius:6px;font-weight:800">3 = 12</span>, 4 × 4 = 16 ❌ trop grand !<br>
+Le plus proche de 13 sans dépasser = <strong>12</strong><br>
+13 − 12 = <span style="background:#fde8e8;padding:2px 6px;border-radius:6px;font-weight:800;color:#ef4444">1</span> ← le reste<br>
+<strong style="color:#22c55e">✅ Réponse : 3 reste 1</strong>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:1rem">
+<button class="sbtn" onclick="hideTuto()" style="margin-right:.5rem;background:var(--muted)">← Menu</button>
+<button class="sbtn" onclick="hideTuto();go('mult')">Pratiquer ✖️</button>
+<button class="sbtn" onclick="hideTuto();go('div')" style="margin-left:.5rem">Pratiquer ➗</button>
+</div>
+</div></div>
+
+<div id="game">
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+<div class="hud"><span id="qc">Question 1/20</span><span class="sc">⭐ <span id="sc2">0</span></span></div>
+<div class="qcard">
+<div class="qlbl" id="ql"></div>
+<div class="qtxt" id="qt"></div>
+<button class="hint-btn" id="hb" onclick="hint()">💡 Indice</button>
+<div class="hint-box" id="hx"></div>
+<div class="chart-area" id="ch" style="display:none"></div>
+<div class="awrap" id="aw"><input type="text" class="ainput" id="ai" autocomplete="off" placeholder="Ta réponse..."><button class="sbtn" id="sb" onclick="chk()">OK</button></div>
+</div>
+<div class="fb" id="fb"></div>
+<div class="expl" id="ex"></div>
+<div class="nav-row"><button class="nbtn" id="bhome" onclick="home()">🏠 Menu</button><button class="nbtn" id="bnxt" onclick="nxt()" disabled>Question suivante →</button></div>
+</div>
+
+<div id="res">
+<div class="rc"><span class="re" id="rem">🎉</span><h2>Terminé !</h2>
+<div class="rs" id="rsc"></div><p id="rmg"></p>
+<div class="rbs"><button class="bp" onclick="go(lc)">🔄 Rejouer</button><button class="bs2" onclick="home()">🏠 Menu</button></div>
+</div></div>
+
+<script>
+const sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pk=(a,n)=>sh([...a]).slice(0,Math.min(n,a.length));
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const nr=s=>String(s).toLowerCase().trim().replace(/\s+/g,' ').replace(/[$,]/g,'');
+
+// ═══ MONEY — simplified ═══
+function gMoney(){const qs=[];
+qs.push({t:'Quel animal est sur la pièce de 5¢ ?',c:'le castor',mc:['Le castor','Le caribou','Le huard','L\'ours polaire'],cat:'🪙'});
+qs.push({t:'Quel animal est sur la pièce de 25¢ ?',c:'le caribou',mc:['Le caribou','Le castor','Le huard','L\'ours polaire'],cat:'🪙'});
+qs.push({t:'Quel animal est sur la pièce de 1$ ?',c:'le huard',mc:['Le huard','Le castor','Le caribou','L\'ours polaire'],cat:'🪙'});
+qs.push({t:'Quel animal est sur la pièce de 2$ ?',c:'l\'ours polaire',mc:['L\'ours polaire','Le huard','Le caribou','Le castor'],cat:'🪙'});
+qs.push({t:'Quelle est la couleur du billet de 5$ ?',c:'bleu',mc:['Bleu','Vert','Rouge','Violet'],cat:'💵'});
+qs.push({t:'Quelle est la couleur du billet de 20$ ?',c:'vert',mc:['Vert','Bleu','Rouge','Brun'],cat:'💵'});
+qs.push({t:'Combien de pièces de 25¢ font 1$ ?',c:'4',hint:'Compte : 25, 50, 75...',cat:'🪙'});
+qs.push({t:'Combien de pièces de 10¢ font 1$ ?',c:'10',hint:'Compte par 10 !',cat:'🪙'});
+qs.push({t:'Un manteau d\'hiver, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖'});
+qs.push({t:'Des bonbons, c\'est un besoin ou un désir ?',c:'un désir',mc:['Un désir','Un besoin'],cat:'📖'});
+qs.push({t:'De la nourriture, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖'});
+qs.push({t:'Un jeu vidéo, c\'est un besoin ou un désir ?',c:'un désir',mc:['Un désir','Un besoin'],cat:'📖'});
+qs.push({t:'De l\'eau, c\'est un besoin ou un désir ?',c:'un besoin',mc:['Un besoin','Un désir'],cat:'📖'});
+qs.push({t:'Comment appelle-t-on l\'argent que tu mets de côté ?',c:'l\'épargne',mc:['L\'épargne','La dépense','Le revenu','L\'emprunt'],cat:'📖'});
+qs.push({t:'Comment appelle-t-on un plan pour organiser ton argent ?',c:'un budget',mc:['Un budget','Un emprunt','Un reçu','Une facture'],cat:'📖'});
+// Random money problems
+for(let i=0;i<20;i++){
+  const have=ri(5,20),cost=ri(1,have-1),left=have-cost;
+  qs.push({t:`Tu as ${have}$. Tu achètes quelque chose à ${cost}$. Combien te reste-t-il ?`,c:String(left),a:[String(left),left+'$',left+' $'],cat:'🧩',hint:`${have} − ${cost} = ?`,
+    ex:()=>`<h4>💡</h4><div>${have}$ − ${cost}$ = <span class="hl">${left}$</span></div>`});
+}
+return qs;}
+
+// ═══ COUNT MONEY ═══
+function gCount(){const qs=[];
+for(let i=0;i<100;i++){
+  const n25=ri(0,3),n10=ri(0,4),n5=ri(0,3),n1=ri(0,2),n2=ri(0,1);
+  const total=n25*25+n10*10+n5*5+n1*100+n2*200;
+  if(total===0||total>1000){i--;continue;}
+  let parts=[];
+  if(n2>0)parts.push(`${n2} pièce${n2>1?'s':''} de 2$`);
+  if(n1>0)parts.push(`${n1} pièce${n1>1?'s':''} de 1$`);
+  if(n25>0)parts.push(`${n25} pièce${n25>1?'s':''} de 25¢`);
+  if(n10>0)parts.push(`${n10} pièce${n10>1?'s':''} de 10¢`);
+  if(n5>0)parts.push(`${n5} pièce${n5>1?'s':''} de 5¢`);
+  const d=Math.floor(total/100),c=total%100;
+  let ans=c===0?`${d}`:d===0?`${c}`:`${d}.${String(c).padStart(2,'0')}`;
+  const alt=[ans];if(c===0)alt.push(d+'.00',d+' $');if(d>0&&c>0)alt.push(`${d},${String(c).padStart(2,'0')}`);
+  qs.push({t:`Tu as ${parts.join(', ')}. Combien as-tu ?`,c:ans,a:alt,cat:'💰',hint:'Commence par les plus grosses pièces et additionne.',
+    ex:()=>{let h='<h4>💡</h4>';parts.forEach(p=>h+=`<div>${p}</div>`);h+=`<div>Total = <span class="hl">${ans}${c>0&&d>0?' $':c>0?' ¢':' $'}</span></div>`;return h;}});
+}return qs;}
+
+// ═══ CHANGE — simple ═══
+function gChange(){const qs=[];
+const items=[{n:'un crayon',p:1},{n:'une gomme',p:0.50},{n:'un jus',p:2},{n:'un cahier',p:3},{n:'une pomme',p:1},{n:'un biscuit',p:0.50},{n:'un yogourt',p:1.50},{n:'un lait',p:2},{n:'une banane',p:0.75}];
+const pays=[2,5,10,20];
+for(let i=0;i<100;i++){
+  const it=items[ri(0,items.length-1)];const pp=pays.filter(p=>p>it.p);if(!pp.length){i--;continue;}
+  const pay=pp[ri(0,pp.length-1)];const ch=(pay-it.p).toFixed(2).replace(/\.?0+$/,'');
+  const alt=[ch,(pay-it.p).toFixed(2),(pay-it.p).toFixed(2)+' $'];if(pay-it.p===Math.floor(pay-it.p))alt.push(String(Math.floor(pay-it.p)));
+  qs.push({t:`${it.n[0].toUpperCase()+it.n.slice(1)} coûte ${it.p.toFixed(2)}$. Tu payes avec ${pay}$. Combien de monnaie ?`,c:ch,a:alt,cat:'🛒',hint:`${pay}$ − ${it.p.toFixed(2)}$ = ?`,
+    ex:()=>`<h4>💡</h4><div>${pay}$ − ${it.p.toFixed(2)}$ = <span class="hl">${(pay-it.p).toFixed(2)}$</span></div>`});
+}return qs;}
+
+// ═══ ADDITION (≤1000) ═══
+function gAdd(){const qs=[];
+for(let i=0;i<100;i++){const a=ri(10,500),b=ri(10,999-a),ans=a+b;
+  qs.push({t:`${a} + ${b} = ?`,c:String(ans),cat:'➕',hint:`Commence par les unités, puis les dizaines, puis les centaines.`,
+    ex:()=>`<h4>💡</h4><div class="col-math">  ${a}\n+ ${b}\n────\n ${ans}</div>`});}return qs;}
+
+// ═══ SUBTRACTION (≤1000) ═══
+function gSub(){const qs=[];
+for(let i=0;i<100;i++){const a=ri(50,999),b=ri(10,a-1),ans=a-b;
+  qs.push({t:`${a} − ${b} = ?`,c:String(ans),cat:'➖',hint:`Commence par les unités. Si le chiffre du haut est plus petit, emprunte !`,
+    ex:()=>`<h4>💡</h4><div class="col-math">  ${a}\n− ${b}\n────\n ${ans}</div>`});}return qs;}
+
+// ═══ MULTIPLICATION (tables 1-10) ═══
+function gMult(){const qs=[];
+for(let i=0;i<100;i++){const a=ri(1,10),b=ri(1,10),ans=a*b;
+  qs.push({t:`${a} × ${b} = ?`,c:String(ans),cat:'✖️',hint:`Compte par bonds de ${b} : ${Array.from({length:a},(_, k)=>(k+1)*b).join(', ')}`,
+    ex:()=>{let h=`<h4>💡 ${a} × ${b}</h4><div>`;for(let k=1;k<=a;k++)h+=`${k*b}${k<a?' → ':''}`;h+=`</div><div>${a} × ${b} = <span class="hl">${ans}</span></div>`;return h;}});}return qs;}
+
+// ═══ DIVISION (simple, tables 1-10) ═══
+function gDiv(){const qs=[];
+// Sans reste
+for(let i=0;i<60;i++){const b=ri(2,10),ans=ri(1,10),a=b*ans;
+  qs.push({t:`${a} ÷ ${b} = ?`,c:String(ans),cat:'➗',hint:`Pense : ${b} × ? = ${a}`,
+    ex:()=>`<h4>💡</h4><div>${b} × <span class="hl">${ans}</span> = ${a}</div><div>Donc ${a} ÷ ${b} = <span class="hl">${ans}</span></div>`});}
+// Avec reste (petits nombres)
+for(let i=0;i<40;i++){const b=ri(2,6),q=ri(1,8),r=ri(1,b-1),a=b*q+r;
+  const as=`${q} reste ${r}`;
+  qs.push({t:`${a} ÷ ${b} = ? (écris : quotient reste X)`,c:as,a:[as,`${q} r ${r}`,`${q}r${r}`,`${q} R ${r}`],cat:'➗ (reste)',
+    hint:`${b} × ${q} = ${b*q} et ${b} × ${q+1} = ${b*(q+1)} (trop grand). Le reste = ${a} − ${b*q}`,
+    ex:()=>`<h4>💡</h4><div>${b} × ${q} = ${b*q}</div><div>${a} − ${b*q} = <span class="hl">${r}</span> (reste)</div><div>${a} ÷ ${b} = <span class="hl">${q} reste ${r}</span></div>`});}
+return qs;}
+
+// ═══ ARRONDISSEMENT ═══
+function gRound(){const qs=[];
+for(let i=0;i<50;i++){const n=ri(11,999),ans10=Math.round(n/10)*10,d=n%10;
+  qs.push({t:`Arrondis ${n} à la dizaine.`,c:String(ans10),cat:'🎯',hint:`Le chiffre des unités est ${d}. Si c'est 5 ou plus, on monte. Sinon, on descend.`,
+    ex:()=>`<h4>💡</h4><div>Unités = ${d} → ${d>=5?'≥ 5, on monte':'< 5, on descend'} → <span class="hl">${ans10}</span></div>`});}
+for(let i=0;i<50;i++){const n=ri(51,999),ans100=Math.round(n/100)*100,td=Math.floor(n/10)%10;
+  qs.push({t:`Arrondis ${n} à la centaine.`,c:String(ans100),cat:'🎯',hint:`Le chiffre des dizaines est ${td}. Si c'est 5 ou plus, on monte.`,
+    ex:()=>`<h4>💡</h4><div>Dizaines = ${td} → ${td>=5?'≥ 5, on monte':'< 5, on descend'} → <span class="hl">${ans100}</span></div>`});}
+return qs;}
+
+// ═══ DIAGRAMMES simples ═══
+function gBar(){const qs=[];
+const themes=[
+  {title:'Fruits préférés',cats:['Pommes','Bananes','Oranges'],unit:'élèves'},
+  {title:'Animaux préférés',cats:['Chiens','Chats','Poissons'],unit:'élèves'},
+  {title:'Couleurs préférées',cats:['Rouge','Bleu','Vert','Jaune'],unit:'élèves'},
+  {title:'Sports préférés',cats:['Soccer','Hockey','Natation'],unit:'élèves'},
+];
+for(const theme of themes){
+  const vals=theme.cats.map(()=>ri(2,12));
+  const maxV=Math.max(...vals),minV=Math.min(...vals),maxI=vals.indexOf(maxV),minI=vals.indexOf(minV);
+  const total=vals.reduce((s,v)=>s+v,0);
+  const W=350,H=180,ml=60,mr=15,mt=25,mb=40,cw=(W-ml-mr)/vals.length,ch=H-mt-mb;
+  const colors=['#d4760a','#c0541f','#22c55e','#e8943a','#f5c26b'];
+  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:Nunito,sans-serif">`;
+  svg+=`<text x="${W/2}" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="#d4760a">${theme.title}</text>`;
+  for(let y=0;y<=3;y++){const val=Math.round(maxV/3*y),yy=mt+ch-ch*(y/3);svg+=`<line x1="${ml-5}" y1="${yy}" x2="${W-mr}" y2="${yy}" stroke="#e8e0d0" stroke-width="1"/><text x="${ml-8}" y="${yy+4}" text-anchor="end" font-size="9" fill="#8a7a6a">${val}</text>`;}
+  vals.forEach((v,i)=>{const bw=cw*0.6,bx=ml+i*cw+(cw-bw)/2,bh=ch*(v/maxV),by=mt+ch-bh;
+    svg+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="4" fill="${colors[i%5]}"/><text x="${bx+bw/2}" y="${by-4}" text-anchor="middle" font-size="10" font-weight="700" fill="#2a1a0a">${v}</text><text x="${bx+bw/2}" y="${H-mb+13}" text-anchor="middle" font-size="8" fill="#8a7a6a">${theme.cats[i]}</text>`;});
+  svg+=`</svg>`;
+  qs.push({t:`Combien de ${theme.unit} pour ${theme.cats[0]} ?`,c:String(vals[0]),svg,cat:'📊',hint:'Regarde le nombre au-dessus de la barre.'});
+  qs.push({t:`Quelle catégorie a le plus de ${theme.unit} ?`,c:theme.cats[maxI],svg,cat:'📊',hint:'La barre la plus haute !'});
+  qs.push({t:`Combien de ${theme.unit} au total ?`,c:String(total),svg,cat:'📊',hint:'Additionne tous les nombres.'});
+  qs.push({t:`Quelle est la différence entre ${theme.cats[maxI]} et ${theme.cats[minI]} ?`,c:String(maxV-minV),svg,cat:'📊',hint:`${maxV} − ${minV} = ?`});
+}return qs;}
+
+// ═══ SUITES simples ═══
+function gSuite(){const qs=[];
+const steps=[2,3,5,10,4];
+for(const step of steps){
+  for(let i=0;i<10;i++){const start=ri(0,20);const seq=[];for(let j=0;j<5;j++)seq.push(start+step*j);
+    qs.push({t:`Quelle est la règle ? ${seq.join(', ')}, ...`,c:`+${step}`,a:[`+${step}`,`+ ${step}`,`ajouter ${step}`],cat:'🔢',
+      hint:`${seq[1]} − ${seq[0]} = ? La suite monte ou descend ?`,
+      ex:()=>`<h4>💡</h4><div>${seq[1]} − ${seq[0]} = <span class="hl">${step}</span></div><div>Règle : <span class="hl">+${step}</span></div>`});}
+  for(let i=0;i<5;i++){const start=ri(step*5,80);const seq=[];for(let j=0;j<5;j++)seq.push(start-step*j);if(seq[4]<0){i--;continue;}
+    qs.push({t:`Quelle est la règle ? ${seq.join(', ')}, ...`,c:`-${step}`,a:[`-${step}`,`- ${step}`,`soustraire ${step}`],cat:'🔢',
+      hint:`${seq[0]} − ${seq[1]} = ? La suite descend !`,
+      ex:()=>`<h4>💡</h4><div>${seq[0]} − ${seq[1]} = <span class="hl">${step}</span></div><div>Règle : <span class="hl">−${step}</span></div>`});}
+}return qs;}
+
+// ═══ PROBLÈMES ═══
+function gProb(){const qs=[];
+for(let i=0;i<100;i++){const type=ri(0,5);
+if(type===0){const a=ri(10,200),b=ri(10,200);if(a+b>999){i--;continue;}
+  qs.push({t:`Il y a ${a} filles et ${b} garçons à l'école. Combien d'élèves y a-t-il en tout ?`,c:String(a+b),cat:'🧩',hint:`${a} + ${b} = ?`,
+    ex:()=>`<h4>💡</h4><div>${a} + ${b} = <span class="hl">${a+b}</span></div>`});
+}else if(type===1){const a=ri(50,500),b=ri(10,a-1);
+  qs.push({t:`Thomas avait ${a} billes. Il en donne ${b}. Combien lui en reste-t-il ?`,c:String(a-b),cat:'🧩',hint:`${a} − ${b} = ?`,
+    ex:()=>`<h4>💡</h4><div>${a} − ${b} = <span class="hl">${a-b}</span></div>`});
+}else if(type===2){const a=ri(2,10),b=ri(2,8);
+  qs.push({t:`Il y a ${a} sacs avec ${b} pommes chacun. Combien de pommes en tout ?`,c:String(a*b),cat:'🧩',hint:`${a} × ${b} = ?`,
+    ex:()=>`<h4>💡</h4><div>${a} × ${b} = <span class="hl">${a*b}</span></div>`});
+}else if(type===3){const b=ri(2,6),ans=ri(2,8),a=b*ans;
+  qs.push({t:`${a} élèves se placent en ${b} rangées égales. Combien d'élèves par rangée ?`,c:String(ans),cat:'🧩',hint:`${a} ÷ ${b} = ?`,
+    ex:()=>`<h4>💡</h4><div>${a} ÷ ${b} = <span class="hl">${ans}</span></div>`});
+}else if(type===4){const perW=ri(2,8),weeks=ri(2,5);
+  qs.push({t:`Tu épargnes ${perW}$ par semaine pendant ${weeks} semaines. Combien as-tu ?`,c:String(perW*weeks),a:[String(perW*weeks),perW*weeks+'$'],cat:'🧩',hint:`${perW} × ${weeks} = ?`,
+    ex:()=>`<h4>💡</h4><div>${perW} × ${weeks} = <span class="hl">${perW*weeks}$</span></div>`});
+}else{const goal=ri(10,30),have=ri(1,goal-1);
+  qs.push({t:`Un jouet coûte ${goal}$. Tu as ${have}$. Combien te manque-t-il ?`,c:String(goal-have),a:[String(goal-have),(goal-have)+'$'],cat:'🧩',hint:`${goal} − ${have} = ?`,
+    ex:()=>`<h4>💡</h4><div>${goal} − ${have} = <span class="hl">${goal-have}$</span></div>`});
+}}return qs;}
+
+// ═══ ENGINE ═══
+let Q=[],ci=0,sc=0,ans=false,lc='all';
+
+function go(cat){
+  lc=cat;ci=0;sc=0;ans=false;
+  const m={money:()=>pk(gMoney(),20),count:()=>pk(gCount(),20),change:()=>pk(gChange(),20),
+    add:()=>pk(gAdd(),20),sub:()=>pk(gSub(),20),mult:()=>pk(gMult(),20),div:()=>pk(gDiv(),20),
+    round:()=>pk(gRound(),20),bar:()=>pk(gBar(),16),suite:()=>pk(gSuite(),20),prob:()=>pk(gProb(),20),
+    all:()=>sh([...pk(gMoney(),3),...pk(gAdd(),3),...pk(gSub(),2),...pk(gMult(),3),...pk(gDiv(),3),...pk(gRound(),2),...pk(gBar(),2),...pk(gSuite(),2),...pk(gProb(),2)])};
+  Q=(m[cat]||m.all)();
+  document.getElementById('menu').style.display='none';document.getElementById('tuto').style.display='none';
+  document.getElementById('res').style.display='none';document.getElementById('game').style.display='block';
+  show();
+}
+
+function show(){
+  ans=false;const q=Q[ci],tot=Q.length;
+  document.getElementById('pf').style.width=`${(ci/tot)*100}%`;
+  document.getElementById('qc').textContent=`Question ${ci+1} / ${tot}`;
+  document.getElementById('sc2').textContent=sc;
+  document.getElementById('ql').textContent=q.cat||'';
+  document.getElementById('qt').textContent=q.t;
+  document.getElementById('fb').textContent='';document.getElementById('fb').className='fb';
+  document.getElementById('ex').style.display='none';document.getElementById('bnxt').disabled=true;
+  const hb=document.getElementById('hb'),hx=document.getElementById('hx');
+  if(q.hint){hb.style.display='inline-block';hb.disabled=false;hx.style.display='none';}else{hb.style.display='none';hx.style.display='none';}
+  const ch=document.getElementById('ch');
+  if(q.svg){ch.innerHTML=q.svg;ch.style.display='block';}else{ch.style.display='none';}
+  const w=document.getElementById('aw');
+  if(q.mc){let h='<div class="mc-grid">';sh([...q.mc]).forEach(c=>{h+=`<button class="mc-btn" onclick="chkMC(this,'${String(c).replace(/'/g,"\\'")}')">${c}</button>`;});h+='</div>';w.innerHTML=h;
+  }else{w.innerHTML=`<input type="text" class="ainput" id="ai" autocomplete="off" placeholder="Ta réponse..."><button class="sbtn" id="sb" onclick="chk()">OK</button>`;document.getElementById('ai').focus();}
+  document.getElementById('bnxt').textContent='Question suivante →';
+}
+
+function hint(){const q=Q[ci];if(!q.hint)return;document.getElementById('hx').textContent=q.hint;document.getElementById('hx').style.display='block';document.getElementById('hb').disabled=true;}
+
+function chkMC(btn,choice){if(ans)return;ans=true;const q=Q[ci],fb=document.getElementById('fb');
+document.querySelectorAll('.mc-btn').forEach(b=>{b.disabled=true;if(nr(b.textContent)===nr(q.c))b.classList.add('ok');});
+if(nr(choice)===nr(q.c)){sc++;btn.classList.add('ok');fb.textContent='✅ Bravo !';fb.className='fb ok';}
+else{btn.classList.add('err');fb.textContent='❌ Pas tout à fait.';fb.className='fb err';
+  if(q.ex){document.getElementById('ex').innerHTML=q.ex();document.getElementById('ex').style.display='block';}
+  else{document.getElementById('ex').innerHTML=`<strong>Réponse :</strong> ${q.c}`;document.getElementById('ex').style.display='block';}}
+document.getElementById('sc2').textContent=sc;document.getElementById('bnxt').disabled=false;
+if(ci===Q.length-1)document.getElementById('bnxt').textContent='Voir les résultats 🎉';}
+
+function chk(){if(ans)return;const inp=document.getElementById('ai'),ua=inp.value.trim();if(!ua)return;
+ans=true;inp.disabled=true;if(document.getElementById('sb'))document.getElementById('sb').disabled=true;
+const q=Q[ci],fb=document.getElementById('fb');
+const all=[nr(q.c)];if(q.a)q.a.forEach(x=>all.push(nr(x)));
+if(all.some(c=>nr(ua)===c)){sc++;inp.className='ainput ok';fb.textContent='✅ Bravo !';fb.className='fb ok';}
+else{inp.className='ainput err';fb.textContent='❌ Pas tout à fait.';fb.className='fb err';
+  if(q.ex){document.getElementById('ex').innerHTML=q.ex();document.getElementById('ex').style.display='block';}
+  else{document.getElementById('ex').innerHTML=`<strong>Réponse :</strong> ${q.c}`;document.getElementById('ex').style.display='block';}}
+document.getElementById('sc2').textContent=sc;document.getElementById('bnxt').disabled=false;
+if(ci===Q.length-1)document.getElementById('bnxt').textContent='Voir les résultats 🎉';}
+
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(!ans&&document.getElementById('ai'))chk();else if(!document.getElementById('bnxt').disabled)nxt();}});
+function nxt(){ci++;if(ci>=Q.length)showRes();else show();}
+
+function showRes(){document.getElementById('game').style.display='none';document.getElementById('res').style.display='block';
+const tot=Q.length,pct=Math.round((sc/tot)*100);document.getElementById('rsc').textContent=`${sc} / ${tot}`;
+let e,m;if(pct===100){e='🏆';m='Score parfait !';}else if(pct>=80){e='🌟';m='Excellent !';}else if(pct>=60){e='😊';m='Bon travail !';}else if(pct>=40){e='💪';m='Continue !';}else{e='📚';m='La pratique rend parfait !';}
+document.getElementById('rem').textContent=e;document.getElementById('rmg').textContent=m;
+try{window.parent.postMessage({type:'gameScore',score:sc,total:tot,pct:pct},'*');}catch(x){}}
+
+function showTuto(){document.getElementById('menu').style.display='none';document.getElementById('tuto').style.display='block';}
+function hideTuto(){document.getElementById('tuto').style.display='none';document.getElementById('menu').style.display='block';}
+function home(){document.getElementById('game').style.display='none';document.getElementById('res').style.display='none';document.getElementById('tuto').style.display='none';document.getElementById('menu').style.display='block';}
+</script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Practice – Grades 3 & 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f0ff;--card:#fff;--primary:#6c3fc5;--pl:#8b5cf6;--accent:#e85d75;--a2:#f59e6c;--green:#22c55e;--gl:#dcfce7;--red:#ef4444;--rl:#fde8e8;--text:#1e1b2e;--muted:#7c7a8a;--shadow:0 4px 20px rgba(108,63,197,.12);--r:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;background-image:radial-gradient(ellipse at 10% 20%,rgba(108,63,197,.06) 0%,transparent 55%),radial-gradient(ellipse at 90% 80%,rgba(232,93,117,.05) 0%,transparent 55%)}
+header{text-align:center;padding:2rem 1rem 1rem;border-bottom:2px solid rgba(108,63,197,.1);background:linear-gradient(135deg,rgba(108,63,197,.05),rgba(232,93,117,.03))}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.5rem,5vw,2.3rem);color:var(--primary);font-weight:800}
+header p{color:var(--muted);font-size:.9rem;margin-top:.2rem;font-weight:600}
+.screen{max-width:700px;margin:2rem auto;padding:0 1.2rem}
+.screen h2{font-family:'Baloo 2',cursive;font-size:1.3rem;color:var(--primary);text-align:center;margin-bottom:1.2rem}
+.level-grid{display:grid;gap:1rem}
+.level-btn{background:var(--card);border:2.5px solid rgba(108,63,197,.15);border-radius:var(--r);padding:1.3rem 1.2rem;cursor:pointer;text-align:left;transition:all .2s;box-shadow:var(--shadow);font-family:'Nunito',sans-serif}
+.level-btn:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 28px rgba(108,63,197,.18)}
+.level-btn .li{font-size:1.8rem;float:left;margin-right:1rem}
+.level-btn .lt{font-weight:800;color:var(--primary);font-size:1.05rem}
+.level-btn .ld{color:var(--muted);font-size:.82rem;margin-top:.2rem;line-height:1.4}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.9rem}
+.cat-btn{background:var(--card);border:2.5px solid rgba(108,63,197,.15);border-radius:var(--r);padding:1.1rem .7rem;cursor:pointer;text-align:center;transition:all .2s;box-shadow:var(--shadow);font-family:'Nunito',sans-serif}
+.cat-btn:hover{border-color:var(--primary);transform:translateY(-3px)}
+.cat-btn .icon{font-size:1.6rem;display:block;margin-bottom:.2rem}
+.cat-btn .label{font-weight:800;color:var(--primary);font-size:.78rem;line-height:1.3}
+#game-screen{display:none;max-width:700px;margin:0 auto;padding:1.5rem 1.2rem 3rem}
+.pbar{background:rgba(108,63,197,.1);border-radius:99px;height:8px;margin-bottom:1rem;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--primary),var(--pl));border-radius:99px;transition:width .4s}
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;font-weight:700;font-size:.88rem;color:var(--muted)}
+.hud .sc{color:var(--accent);font-size:1rem}
+.qcard{background:var(--card);border-radius:var(--r);padding:1.5rem 1.3rem;box-shadow:var(--shadow);border:2px solid rgba(108,63,197,.08);margin-bottom:1rem;animation:fu .35s ease}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.qlbl{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--pl);margin-bottom:.5rem}
+.qtxt{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.4rem;line-height:1.5}
+.qhint{font-size:.83rem;color:var(--muted);font-style:italic;margin-bottom:1rem}
+.passage{background:#faf8ff;border:1.5px solid rgba(108,63,197,.12);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem;font-size:.9rem;line-height:1.75;color:var(--text);max-height:350px;overflow-y:auto;white-space:pre-wrap}
+.awrap{display:flex;gap:.8rem;align-items:flex-start}
+.ainput{flex:1;padding:.8rem 1rem;border:2.5px solid rgba(108,63,197,.2);border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:var(--text);outline:none;transition:border-color .2s}
+.ainput:focus{border-color:var(--primary)}
+.ainput.ok{border-color:var(--green);background:var(--gl)}
+.ainput.err{border-color:var(--red);background:var(--rl)}
+textarea.ainput{min-height:110px;resize:vertical;line-height:1.6}
+textarea.ainput.lg{min-height:160px}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.mc-btn{background:#f4f4fb;border:2.5px solid rgba(108,63,197,.14);border-radius:12px;padding:.8rem 1rem;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .18s;text-align:center}
+.mc-btn:hover:not(:disabled){background:#e8e0ff;border-color:var(--primary);transform:translateY(-2px)}
+.mc-btn.ok{background:var(--gl);border-color:var(--green);color:var(--green)}
+.mc-btn.err{background:var(--rl);border-color:var(--red);color:var(--red)}
+.mc-btn:disabled{cursor:default}
+.sbtn{padding:.8rem 1.5rem;border-radius:12px;border:none;background:var(--primary);color:#fff;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .18s;box-shadow:0 4px 14px rgba(108,63,197,.3)}
+.sbtn:hover{background:var(--pl);transform:translateY(-2px)}
+.sbtn:disabled{opacity:.4;cursor:default;transform:none}
+.fb{min-height:2rem;font-weight:700;font-size:1rem;text-align:center;margin:.6rem 0 .2rem}
+.fb.ok{color:var(--green)}.fb.err{color:var(--red)}.fb.rev{color:var(--a2)}
+.corr{display:none;background:#fff5f0;border:2px solid var(--a2);border-radius:12px;padding:1rem;margin-top:.5rem;font-size:.9rem;animation:fu .3s;line-height:1.5}
+.corr strong{color:var(--accent)}
+.tnote{margin-top:.6rem;padding:.6rem;background:#f5f0ff;border-radius:8px;font-size:.83rem;color:var(--primary)}
+.nav-row{display:flex;justify-content:space-between;gap:1rem;margin-top:.8rem}
+.nbtn{flex:1;padding:.8rem 1rem;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;transition:all .18s}
+#btn-next{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(108,63,197,.3)}
+#btn-next:hover{background:var(--pl);transform:translateY(-2px)}
+#btn-next:disabled{opacity:.4;cursor:default;transform:none}
+#btn-home{background:transparent;color:var(--muted);border:2px solid rgba(108,63,197,.2)}
+#btn-home:hover{border-color:var(--primary);color:var(--primary)}
+#result-screen{display:none;max-width:550px;margin:2rem auto;padding:0 1.2rem;text-align:center;animation:fu .4s}
+.rcard{background:var(--card);border-radius:var(--r);padding:2rem 1.5rem;box-shadow:var(--shadow);border:2px solid rgba(108,63,197,.1)}
+.remoji{font-size:3rem;display:block;margin-bottom:.6rem}
+.rcard h2{font-family:'Baloo 2',cursive;font-size:1.6rem;color:var(--primary);margin-bottom:.3rem}
+.rscore{font-size:2.5rem;font-weight:900;color:var(--accent);line-height:1;margin:.5rem 0}
+.rcard p{color:var(--muted);font-size:.92rem;margin-bottom:1rem}
+.rbtns{display:flex;flex-direction:column;gap:.6rem}
+.rbtns button{padding:.8rem;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;transition:all .18s}
+.bp{background:var(--primary);color:#fff}.bp:hover{background:var(--pl)}
+.bs{background:transparent;border:2px solid rgba(108,63,197,.25)!important;color:var(--muted)}.bs:hover{border-color:var(--primary)!important;color:var(--primary)}
+.larev{margin-top:1rem;text-align:left}
+.larev h3{font-family:'Baloo 2',cursive;color:var(--primary);margin-bottom:.8rem;font-size:1.05rem}
+.lai{background:#faf8ff;border:1.5px solid rgba(108,63,197,.12);border-radius:12px;padding:1rem;margin-bottom:.8rem;font-size:.85rem;line-height:1.6}
+.lai .lq{font-weight:700;color:var(--text);margin-bottom:.3rem}
+.lai .la{color:var(--primary)}
+.lai .ls{color:var(--muted);font-style:italic;margin-top:.3rem;font-size:.8rem}
+.blink{text-align:center;margin-top:1rem}
+.blink button{background:transparent;color:var(--muted);border:2px solid rgba(108,63,197,.2);border-radius:12px;padding:.6rem 1.2rem;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer}
+.blink button:hover{border-color:var(--primary);color:var(--primary)}
+</style>
+</head>
+<body>
+<header><h1>🇬🇧 English Practice</h1><p>Pratique d'anglais · Grades 3 & 4</p></header>
+
+<div id="level-screen" class="screen">
+<h2>Choisis ton niveau / Choose your level</h2>
+<div class="level-grid">
+<button class="level-btn" onclick="selectLevel('beginner')"><span class="li">🌱</span><div><div class="lt">Débutant / Beginner</div><div class="ld">Vocabulaire, noms, verbes, adjectifs, phrases simples.</div></div></button>
+<button class="level-btn" onclick="selectLevel('intermediate')"><span class="li">📚</span><div><div class="lt">Intermédiaire / Intermediate</div><div class="ld">Nouns, verbs, adjectives, reading with short answers.</div></div></button>
+<button class="level-btn" onclick="selectLevel('advanced')"><span class="li">🏆</span><div><div class="lt">Advanced / Avancé</div><div class="ld">Grammar, nouns/verbs/adjectives, reading comprehension with long written answers.</div></div></button>
+</div></div>
+
+<div id="category-screen" class="screen" style="display:none">
+<h2 id="cat-title">Choose a section</h2>
+<div class="cat-grid" id="cat-grid"></div>
+<div class="blink"><button onclick="goLevelSelect()">← Change level</button></div>
+</div>
+
+<div id="game-screen">
+<div class="pbar"><div class="pfill" id="pfill"></div></div>
+<div class="hud"><span id="qctr">Question 1 / 20</span><span class="sc">⭐ <span id="scr">0</span></span></div>
+<div class="qcard">
+<div class="qlbl" id="qcat"></div>
+<div class="qtxt" id="qtxt"></div>
+<div class="qhint" id="qhint" style="display:none"></div>
+<div class="passage" id="qpass" style="display:none"></div>
+<div class="awrap" id="awrap"><input type="text" class="ainput" id="ainp" placeholder="Your answer..." autocomplete="off"><button class="sbtn" id="sbtn" onclick="check()">OK</button></div>
+</div>
+<div class="fb" id="fb"></div>
+<div class="corr" id="corr"></div>
+<div class="nav-row"><button class="nbtn" id="btn-home" onclick="goCats()">🏠 Menu</button><button class="nbtn" id="btn-next" onclick="next()" disabled>Next →</button></div>
+</div>
+
+<div id="result-screen">
+<div class="rcard">
+<span class="remoji" id="remoji">🎉</span><h2 id="rtitle">Done!</h2>
+<div class="rscore" id="rscore"></div><p id="rmsg"></p>
+<div class="larev" id="larev" style="display:none"></div>
+<div class="rbtns"><button class="bp" onclick="startGame(lastCat)">🔄 Replay</button><button class="bs" onclick="goCats()">🏠 Menu</button></div>
+</div></div>
+
+<script>
+function sh(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pk(a,n){return sh([...a]).slice(0,Math.min(n,a.length));}
+function nr(s){return s.toLowerCase().trim().replace(/['']/g,"'").replace(/[.,!?;:]/g,'').replace(/\s+/g,' ');}
+
+// ═══ BEGINNER ═══
+const BN=[
+{t:'Comment dit-on "chat" en anglais ?',c:'cat'},{t:'Comment dit-on "chien" en anglais ?',c:'dog'},
+{t:'Comment dit-on "maison" en anglais ?',c:'house'},{t:'Comment dit-on "école" en anglais ?',c:'school'},
+{t:'Comment dit-on "livre" en anglais ?',c:'book'},{t:'Comment dit-on "arbre" en anglais ?',c:'tree'},
+{t:'Comment dit-on "soleil" en anglais ?',c:'sun'},{t:'Comment dit-on "lune" en anglais ?',c:'moon'},
+{t:'Comment dit-on "table" en anglais ?',c:'table'},{t:'Comment dit-on "chaise" en anglais ?',c:'chair'},
+{t:'Comment dit-on "pomme" en anglais ?',c:'apple'},{t:'Comment dit-on "eau" en anglais ?',c:'water'},
+{t:'Comment dit-on "ami" en anglais ?',c:'friend'},{t:'Comment dit-on "famille" en anglais ?',c:'family'},
+{t:'Comment dit-on "mère" en anglais ?',c:'mother',a:['mother','mom','mum']},
+{t:'Comment dit-on "père" en anglais ?',c:'father',a:['father','dad']},
+{t:'Comment dit-on "frère" en anglais ?',c:'brother'},{t:'Comment dit-on "soeur" en anglais ?',c:'sister'},
+{t:'Comment dit-on "oiseau" en anglais ?',c:'bird'},{t:'Comment dit-on "poisson" en anglais ?',c:'fish'},
+{t:'Comment dit-on "fleur" en anglais ?',c:'flower'},{t:'Comment dit-on "étoile" en anglais ?',c:'star'},
+{t:'Comment dit-on "porte" en anglais ?',c:'door'},{t:'Comment dit-on "fenêtre" en anglais ?',c:'window'},
+{t:'Comment dit-on "voiture" en anglais ?',c:'car'},{t:'Comment dit-on "neige" en anglais ?',c:'snow'},
+{t:'Comment dit-on "garçon" en anglais ?',c:'boy'},{t:'Comment dit-on "fille" en anglais ?',c:'girl'},
+{t:'Le mot "dog" est un noun, verb ou adjective ?',c:'noun'},
+{t:'Le mot "school" est un noun, verb ou adjective ?',c:'noun'},
+{t:'Le mot "apple" est un noun, verb ou adjective ?',c:'noun'},
+{t:'Le mot "book" est un noun, verb ou adjective ?',c:'noun'},
+{t:'Le mot "sun" est un noun, verb ou adjective ?',c:'noun'},
+{t:'Le mot "family" est un noun, verb ou adjective ?',c:'noun'},
+{t:'Le mot "flower" est un noun, verb ou adjective ?',c:'noun'},
+];
+
+const BV=[
+{t:'"I ___ a student." (être)',c:'am',h:'I am / You are / He is'},
+{t:'"She ___ happy." (être)',c:'is',h:'He/She + is'},{t:'"They ___ friends." (être)',c:'are'},
+{t:'"He ___ a dog." (avoir)',c:'has',h:'He/She + has'},{t:'"I ___ a book." (avoir)',c:'have'},
+{t:'"We ___ in the classroom." (être)',c:'are'},{t:'"It ___ cold." (être)',c:'is'},
+{t:'"She ___ a cat." (avoir)',c:'has'},{t:'"I ___ tired." (être)',c:'am'},
+{t:'"The dogs ___ big." (être)',c:'are'},{t:'"He ___ 10 years old." (être)',c:'is'},
+{t:'"We ___ a big family." (avoir)',c:'have'},{t:'"She ___ blue eyes." (avoir)',c:'has'},
+{t:'"The cat ___ black." (être)',c:'is'},{t:'"You ___ very nice." (être)',c:'are'},
+{t:'Comment dit-on "manger" en anglais ?',c:'eat',a:['eat','to eat']},
+{t:'Comment dit-on "courir" en anglais ?',c:'run',a:['run','to run']},
+{t:'Comment dit-on "dormir" en anglais ?',c:'sleep',a:['sleep','to sleep']},
+{t:'Comment dit-on "jouer" en anglais ?',c:'play',a:['play','to play']},
+{t:'Comment dit-on "lire" en anglais ?',c:'read',a:['read','to read']},
+{t:'Comment dit-on "écrire" en anglais ?',c:'write',a:['write','to write']},
+{t:'Comment dit-on "chanter" en anglais ?',c:'sing',a:['sing','to sing']},
+{t:'Comment dit-on "nager" en anglais ?',c:'swim',a:['swim','to swim']},
+{t:'Comment dit-on "danser" en anglais ?',c:'dance',a:['dance','to dance']},
+{t:'Comment dit-on "marcher" en anglais ?',c:'walk',a:['walk','to walk']},
+{t:'Le mot "run" est un noun, verb ou adjective ?',c:'verb'},
+{t:'Le mot "eat" est un noun, verb ou adjective ?',c:'verb'},
+{t:'Le mot "play" est un noun, verb ou adjective ?',c:'verb'},
+{t:'Le mot "sing" est un noun, verb ou adjective ?',c:'verb'},
+{t:'Le mot "dance" est un noun, verb ou adjective ?',c:'verb'},
+];
+
+const BA=[
+{t:'Comment dit-on "grand" en anglais ?',c:'big',a:['big','tall','large']},
+{t:'Comment dit-on "petit" en anglais ?',c:'small',a:['small','little']},
+{t:'Comment dit-on "content" en anglais ?',c:'happy'},{t:'Comment dit-on "triste" en anglais ?',c:'sad'},
+{t:'Comment dit-on "rapide" en anglais ?',c:'fast',a:['fast','quick']},
+{t:'Comment dit-on "lent" en anglais ?',c:'slow'},{t:'Comment dit-on "chaud" en anglais ?',c:'hot'},
+{t:'Comment dit-on "froid" en anglais ?',c:'cold'},{t:'Comment dit-on "beau" en anglais ?',c:'beautiful',a:['beautiful','pretty','handsome']},
+{t:'Comment dit-on "fort" en anglais ?',c:'strong'},{t:'Comment dit-on "gentil" en anglais ?',c:'nice',a:['nice','kind']},
+{t:'Comment dit-on "nouveau" en anglais ?',c:'new'},{t:'Comment dit-on "vieux" en anglais ?',c:'old'},
+{t:'Comment dit-on "facile" en anglais ?',c:'easy'},{t:'Comment dit-on "difficile" en anglais ?',c:'hard',a:['hard','difficult']},
+{t:'Comment dit-on "long" en anglais ?',c:'long'},{t:'Comment dit-on "court" en anglais ?',c:'short'},
+{t:'Comment dit-on "drôle" en anglais ?',c:'funny'},{t:'Comment dit-on "effrayant" en anglais ?',c:'scary'},
+{t:'Comment dit-on "fatigué" en anglais ?',c:'tired'},{t:'Comment dit-on "rouge" en anglais ?',c:'red'},
+{t:'Comment dit-on "bleu" en anglais ?',c:'blue'},{t:'Comment dit-on "vert" en anglais ?',c:'green'},
+{t:'Comment dit-on "jaune" en anglais ?',c:'yellow'},{t:'Comment dit-on "noir" en anglais ?',c:'black'},
+{t:'Le mot "happy" est un noun, verb ou adjective ?',c:'adjective'},
+{t:'Le mot "big" est un noun, verb ou adjective ?',c:'adjective'},
+{t:'Le mot "cold" est un noun, verb ou adjective ?',c:'adjective'},
+{t:'Le mot "fast" est un noun, verb ou adjective ?',c:'adjective'},
+{t:'Le mot "red" est un noun, verb ou adjective ?',c:'adjective'},
+];
+
+const BP=[
+{t:'Comment dit-on "Bonjour" en anglais ?',c:'hello',a:['hello','hi']},
+{t:'Comment dit-on "Au revoir" en anglais ?',c:'goodbye',a:['goodbye','bye']},
+{t:'Comment dit-on "S\'il vous plaît" en anglais ?',c:'please'},
+{t:'Comment dit-on "Merci" en anglais ?',c:'thank you',a:['thank you','thanks']},
+{t:'Comment dit-on "Comment t\'appelles-tu ?" en anglais ?',c:'what is your name'},
+{t:'Comment dit-on "J\'ai faim" en anglais ?',c:'I am hungry'},{t:'Comment dit-on "J\'ai soif" en anglais ?',c:'I am thirsty'},
+{t:'Comment dit-on "Je suis content" en anglais ?',c:'I am happy'},
+{t:'Comment dit-on "Comment ça va ?" en anglais ?',c:'how are you'},
+{t:'Comment dit-on "Excusez-moi" en anglais ?',c:'excuse me'},
+{t:'Comment dit-on "De rien" en anglais ?',c:'you are welcome',a:['you are welcome',"you're welcome"]},
+{t:'Comment dit-on "Je m\'appelle..." en anglais ?',c:'my name is'},
+{t:'Comment dit-on "Quel âge as-tu ?" en anglais ?',c:'how old are you'},
+{t:'Comment dit-on "Bonne nuit" en anglais ?',c:'good night'},
+{t:'Comment dit-on "Bonsoir" en anglais ?',c:'good evening'},
+];
+
+// ═══ INTERMEDIATE ═══
+const IN=[
+{t:'The plural of "child" is ___.',c:'children'},{t:'The plural of "mouse" is ___.',c:'mice'},
+{t:'The plural of "foot" is ___.',c:'feet'},{t:'The plural of "tooth" is ___.',c:'teeth'},
+{t:'The plural of "man" is ___.',c:'men'},{t:'The plural of "woman" is ___.',c:'women'},
+{t:'The plural of "leaf" is ___.',c:'leaves'},{t:'The plural of "knife" is ___.',c:'knives'},
+{t:'The plural of "fish" is ___.',c:'fish'},{t:'The plural of "sheep" is ___.',c:'sheep'},
+{t:'A person who teaches is a ___.',c:'teacher'},{t:'A person who cooks is a ___.',c:'cook',a:['cook','chef']},
+{t:'A place where you buy food is a ___.',c:'store',a:['store','supermarket','shop']},
+{t:'You read books in a ___.',c:'library'},{t:'The meal in the morning is ___.',c:'breakfast'},
+{t:'The meal at noon is ___.',c:'lunch'},{t:'The season after summer is ___.',c:'fall',a:['fall','autumn']},
+{t:'The season after winter is ___.',c:'spring'},{t:'The day after Monday is ___.',c:'Tuesday'},
+{t:'The month after January is ___.',c:'February'},
+{t:'Is "happiness" a noun, verb, or adjective?',c:'noun'},{t:'Is "teacher" a noun, verb, or adjective?',c:'noun'},
+{t:'Is "freedom" a noun, verb, or adjective?',c:'noun'},{t:'Is "library" a noun, verb, or adjective?',c:'noun'},
+{t:'Is "breakfast" a noun, verb, or adjective?',c:'noun'},
+];
+
+const IV=[
+{t:'She ___ (go) to school every day.',c:'goes'},{t:'They ___ (play) soccer on Saturdays.',c:'play'},
+{t:'He ___ (eat) breakfast at 7 AM.',c:'eats'},{t:'The bird ___ (fly) in the sky.',c:'flies'},
+{t:'She ___ (study) French.',c:'studies'},{t:'He ___ (run) very fast.',c:'runs'},
+{t:'My mom ___ (cook) dinner.',c:'cooks'},{t:'She ___ (do) her homework.',c:'does'},
+{t:'He ___ (have) a brother.',c:'has'},{t:'The cat ___ (sleep) on the sofa.',c:'sleeps'},
+{t:'She ___ (brush) her teeth.',c:'brushes'},{t:'He ___ (teach) math.',c:'teaches'},
+{t:'The dog ___ (bark) loudly.',c:'barks'},{t:'Past tense of "go" is ___.',c:'went'},
+{t:'Past tense of "eat" is ___.',c:'ate'},{t:'Past tense of "see" is ___.',c:'saw'},
+{t:'Past tense of "run" is ___.',c:'ran'},{t:'Past tense of "make" is ___.',c:'made'},
+{t:'Past tense of "come" is ___.',c:'came'},{t:'Past tense of "take" is ___.',c:'took'},
+{t:'Past tense of "give" is ___.',c:'gave'},{t:'Past tense of "write" is ___.',c:'wrote'},
+{t:'Yesterday, I ___ (walk) to school.',c:'walked'},{t:'She ___ (play) piano yesterday.',c:'played'},
+{t:'We ___ (watch) a movie last night.',c:'watched'},{t:'I ___ (drink) juice this morning.',c:'drank'},
+{t:'Is "running" a noun, verb, or adjective?',c:'verb'},{t:'Is "teaches" a noun, verb, or adjective?',c:'verb'},
+{t:'Is "swam" a noun, verb, or adjective?',c:'verb'},{t:'Is "jumped" a noun, verb, or adjective?',c:'verb'},
+];
+
+const IA=[
+{t:'The opposite of "hot" is ___.',c:'cold'},{t:'The opposite of "big" is ___.',c:'small'},
+{t:'The opposite of "happy" is ___.',c:'sad'},{t:'The opposite of "fast" is ___.',c:'slow'},
+{t:'The opposite of "up" is ___.',c:'down'},{t:'The opposite of "old" is ___.',c:'young',a:['young','new']},
+{t:'The opposite of "open" is ___.',c:'closed',a:['closed','close','shut']},
+{t:'The opposite of "light" is ___.',c:'dark',a:['dark','heavy']},
+{t:'The opposite of "quiet" is ___.',c:'loud',a:['loud','noisy']},
+{t:'The opposite of "clean" is ___.',c:'dirty'},{t:'The opposite of "wet" is ___.',c:'dry'},
+{t:'The opposite of "empty" is ___.',c:'full'},{t:'The opposite of "soft" is ___.',c:'hard'},
+{t:'The ___ (comparative of "tall") boy is my brother.',c:'taller'},
+{t:'This is the ___ (superlative of "big") house.',c:'biggest'},
+{t:'She is ___ (comparative of "smart") than me.',c:'smarter'},
+{t:'Is "beautiful" a noun, verb, or adjective?',c:'adjective'},
+{t:'Is "angry" a noun, verb, or adjective?',c:'adjective'},
+{t:'Is "enormous" a noun, verb, or adjective?',c:'adjective'},
+{t:'Is "delicious" a noun, verb, or adjective?',c:'adjective'},
+{t:'The colour of the sky on a sunny day is ___.',c:'blue'},
+{t:'The colour of grass is ___.',c:'green'},
+{t:'The opposite of "beautiful" is ___.',c:'ugly'},
+{t:'The opposite of "strong" is ___.',c:'weak'},
+{t:'The opposite of "rich" is ___.',c:'poor'},
+];
+
+const IR=[
+{p:'Tom has a dog named Max. Max is brown and white. He likes to play in the park every afternoon. Every morning, Tom takes Max for a long walk around the neighbourhood. Max loves to chase squirrels and play fetch with a tennis ball. Sometimes, Tom\'s little sister Emma comes along too. She likes to throw the ball for Max. After their walk, Max always drinks a big bowl of water and takes a nap on the sofa. Tom thinks Max is the best dog in the world.',
+q:[{t:'What is the dog\'s name?',c:'Max'},{t:'What colour is Max?',c:'brown and white'},{t:'What does Max love to chase?',c:'squirrels'},{t:'What is Tom\'s sister\'s name?',c:'Emma'},{t:'Where does Max take a nap? Write a full sentence.',c:'on the sofa',a:['on the sofa','the sofa','sofa'],tp:'written'}]},
+{p:'Sara loves to read more than anything. She goes to the library every Saturday morning with her mother. Her favourite books are about animals, especially dolphins and wolves. She has read over fifty books this year! Sara wants to be a veterinarian when she grows up so she can help sick animals. Her teacher, Mrs. Martin, says Sara is one of the best readers in the class. Sara also writes short stories about animals in her free time. Last week, she wrote a story about a brave little fox who saved her family from a forest fire.',
+q:[{t:'When does Sara go to the library?',c:'every Saturday morning',a:['Saturday','every Saturday','Saturday morning']},{t:'Name one of her favourite animals.',c:'dolphins',a:['dolphins','wolves']},{t:'What does Sara want to be when she grows up? Answer in a full sentence.',c:'a veterinarian',a:['a veterinarian','veterinarian','a vet','vet'],tp:'written'},{t:'What is her teacher\'s name?',c:'Mrs. Martin',a:['Mrs. Martin','Mrs Martin']},{t:'What was her last story about? Write a full sentence.',c:'a brave little fox',a:['a fox','a brave little fox','fox','a brave fox'],tp:'written'}]},
+{p:'Lucas and his family went camping last weekend near a lake. They set up their tent under a big oak tree. On the first day, Lucas went fishing with his dad and caught two fish. His mom cooked the fish on the campfire for dinner. That night, they roasted marshmallows and told funny stories. Lucas\'s little brother was scared of the dark, so they used a flashlight to make shadow puppets on the tent wall. The next morning, they went for a hike and saw a deer drinking water from the lake. Lucas said it was the best weekend ever.',
+q:[{t:'Where did the family go camping?',c:'near a lake',a:['near a lake','by a lake','at a lake']},{t:'How many fish did Lucas catch?',c:'two',a:['two','2']},{t:'What did they roast on the campfire?',c:'marshmallows'},{t:'Why did Lucas\'s brother use a flashlight? Write a full sentence.',c:'because he was scared of the dark',a:['he was scared of the dark','because he was scared','scared of the dark'],tp:'written'},{t:'What animal did they see on the hike?',c:'a deer',a:['a deer','deer']}]},
+{p:'Olivia loves baking with her grandmother every Sunday. They always make something different. Last Sunday, they made chocolate chip cookies. First, they mixed the butter and sugar together. Then they added eggs, flour, and chocolate chips. Olivia\'s favourite part is putting the chocolate chips in the dough. Her grandmother always lets her eat a few chips while they bake. After 12 minutes in the oven, the cookies were golden brown and smelled delicious. Olivia brought some cookies to school on Monday and shared them with her friends. Everyone said they were the best cookies they had ever tasted.',
+q:[{t:'When does Olivia bake with her grandmother?',c:'every Sunday',a:['Sunday','every Sunday','on Sunday']},{t:'What did they make last Sunday?',c:'chocolate chip cookies',a:['chocolate chip cookies','cookies']},{t:'What is Olivia\'s favourite part of baking? Write a full sentence.',c:'putting the chocolate chips in the dough',a:['putting the chocolate chips','adding chocolate chips','eating chocolate chips','putting chocolate chips in the dough'],tp:'written'},{t:'How long did the cookies bake in the oven?',c:'12 minutes',a:['12 minutes','twelve minutes']},{t:'Who did Olivia share the cookies with?',c:'her friends',a:['her friends','friends','her friends at school']}]},
+];
+
+// ═══ ADVANCED ═══
+const AN=[
+{t:'Is "happiness" a noun, verb, or adjective?',c:'noun'},{t:'Is "freedom" a noun, verb, or adjective?',c:'noun'},
+{t:'Is "discovery" a noun, verb, or adjective?',c:'noun'},{t:'Is "imagination" a noun, verb, or adjective?',c:'noun'},
+{t:'Is "knowledge" a noun, verb, or adjective?',c:'noun'},{t:'Is "temperature" a noun, verb, or adjective?',c:'noun'},
+{t:'Give a noun for a person who writes books.',c:'author',a:['author','writer']},
+{t:'Give a noun for the leader of a country.',c:'president',a:['president','prime minister','leader']},
+{t:'The noun form of "brave" is ___.',c:'bravery',a:['bravery','courage']},
+{t:'The noun form of "kind" is ___.',c:'kindness'},{t:'The noun form of "strong" is ___.',c:'strength'},
+{t:'The noun form of "free" is ___.',c:'freedom'},{t:'The noun form of "imagine" is ___.',c:'imagination'},
+{t:'The noun form of "decide" is ___.',c:'decision'},{t:'The noun form of "move" is ___.',c:'movement',a:['movement','motion']},
+{t:'The noun form of "act" is ___.',c:'action'},{t:'The noun form of "create" is ___.',c:'creation'},
+{t:'Give a noun for a group of birds.',c:'flock'},{t:'Give a noun for a group of fish.',c:'school',a:['school','shoal']},
+{t:'The noun form of "grow" is ___.',c:'growth'},
+];
+
+const AV=[
+{t:'"I ___ (be) at school yesterday."',c:'was'},{t:'"They ___ (be) at the park yesterday."',c:'were'},
+{t:'"She ___ (read) a book right now." (present continuous)',c:'is reading'},
+{t:'"They ___ (play) outside when it rained."',c:'were playing'},
+{t:'"He ___ (live) in Ottawa since 2020."',c:'has lived'},
+{t:'"If it rains, I ___ (take) an umbrella."',c:'will take'},
+{t:'"I ___ (can) swim when I was five."',c:'could'},
+{t:'"She speaks English ___." (good → adverb)',c:'well'},
+{t:'"I enjoy ___." (swim → gerund)',c:'swimming'},
+{t:'"The cake was ___ by my mom." (make)',c:'made'},
+{t:'Past participle of "write" is ___.',c:'written'},{t:'Past participle of "go" is ___.',c:'gone'},
+{t:'Past participle of "eat" is ___.',c:'eaten'},{t:'Past participle of "see" is ___.',c:'seen'},
+{t:'Past participle of "take" is ___.',c:'taken'},{t:'Past participle of "break" is ___.',c:'broken'},
+{t:'Past participle of "speak" is ___.',c:'spoken'},{t:'Past participle of "drive" is ___.',c:'driven'},
+{t:'Past participle of "swim" is ___.',c:'swum'},{t:'Past participle of "choose" is ___.',c:'chosen'},
+{t:'Is "discovered" a noun, verb, or adjective?',c:'verb'},
+{t:'Is "swimming" a noun, verb, or adjective?',c:'verb',a:['verb','noun']},
+];
+
+const AA=[
+{t:'Comparative of "tall" is ___.',c:'taller'},{t:'Superlative of "fast" is ___.',c:'fastest',a:['fastest','the fastest']},
+{t:'"This book is ___ (interesting, comparative) than that one."',c:'more interesting'},
+{t:'Superlative of "intelligent" is ___.',c:'most intelligent',a:['most intelligent','the most intelligent']},
+{t:'Comparative of "good" is ___.',c:'better'},{t:'Superlative of "good" is ___.',c:'best',a:['best','the best']},
+{t:'Comparative of "bad" is ___.',c:'worse'},{t:'Superlative of "bad" is ___.',c:'worst',a:['worst','the worst']},
+{t:'A synonym for "enormous" is ___.',c:'huge',a:['huge','gigantic','massive','immense']},
+{t:'A synonym for "tiny" is ___.',c:'small',a:['small','minuscule','little']},
+{t:'A synonym for "beautiful" is ___.',c:'gorgeous',a:['gorgeous','lovely','pretty','stunning']},
+{t:'An antonym for "generous" is ___.',c:'selfish',a:['selfish','greedy','stingy']},
+{t:'An antonym for "brave" is ___.',c:'cowardly',a:['cowardly','afraid','scared']},
+{t:'What part of speech is "quickly"?',c:'adverb'},
+{t:'Is "enormous" a noun, verb, or adjective?',c:'adjective'},
+{t:'Is "exhausted" a noun, verb, or adjective?',c:'adjective'},
+{t:'Is "delightful" a noun, verb, or adjective?',c:'adjective'},
+{t:'A word meaning "very tired" is ___.',c:'exhausted',a:['exhausted','drained']},
+{t:'A word meaning "very happy" is ___.',c:'delighted',a:['delighted','thrilled','ecstatic','overjoyed','joyful']},
+{t:'A word meaning "very scared" is ___.',c:'terrified',a:['terrified','petrified','frightened']},
+];
+
+const AR=[
+{p:'The Amazon Rainforest is the largest tropical rainforest in the world. It covers most of the Amazon River basin in South America and stretches across nine countries, including Brazil, Peru, and Colombia. The forest is home to about 10% of all the species on Earth, including jaguars, sloths, and over 2,000 species of butterflies.\n\nScientists believe that many species in the Amazon have not yet been discovered. New plants and animals are found there every year. The Amazon River itself is the second longest river in the world and carries more water than any other river.\n\nUnfortunately, parts of the rainforest are being cut down for farming, logging, and building roads. This is called deforestation. When trees are cut down, animals lose their homes and the air gets more polluted. Many people around the world are working to protect the Amazon because it plays a crucial role in regulating the Earth\'s climate.',
+q:[{t:'How many countries does the Amazon stretch across?',c:'nine',a:['nine','9']},{t:'What percentage of Earth\'s species live in the Amazon?',c:'10%',a:['10%','10','ten percent']},{t:'What is cutting down trees called?',c:'deforestation'}],
+lq:[{t:'Why is the Amazon Rainforest important? Write at least 2 sentences.',s:'The Amazon Rainforest is important because it is home to 10% of all species on Earth. It also plays a crucial role in regulating the Earth\'s climate by absorbing carbon dioxide and producing oxygen.'},{t:'What are the causes and consequences of deforestation? Explain in 2-3 sentences.',s:'Deforestation is caused by farming, logging, and road building. When trees are cut down, animals lose their habitat, the air becomes more polluted, and climate change gets worse.'}]},
+{p:'Marie Curie was born in Warsaw, Poland in 1867. As a young girl, she was an excellent student and loved learning about science and mathematics. At that time, women in Poland were not allowed to attend university, so Marie moved to Paris, France, to study at the Sorbonne.\n\nIn Paris, Marie met Pierre Curie, a scientist who became her husband and research partner. Together, they discovered two new chemical elements: polonium, which Marie named after her home country, and radium. Their work on radioactivity was groundbreaking and changed science forever.\n\nMarie Curie became the first woman to win a Nobel Prize in 1903, which she shared with Pierre and another scientist. After Pierre died in a tragic accident in 1906, Marie continued her research alone. In 1911, she won a second Nobel Prize, this time in Chemistry, making her the only person in history to win Nobel Prizes in two different sciences. She died in 1934 from an illness caused by years of exposure to radiation.',
+q:[{t:'Where was Marie Curie born?',c:'Poland',a:['Warsaw','Poland','Warsaw, Poland']},{t:'Why did she move to Paris?',c:'to study at university',a:['to study','to study at university','to study at the Sorbonne','because women could not attend university in Poland']},{t:'How many Nobel Prizes did she win?',c:'two',a:['two','2']}],
+lq:[{t:'What challenges did Marie Curie face? Write at least 3 sentences.',s:'Marie Curie faced many challenges. As a woman in Poland, she was not allowed to attend university, so she had to move to another country. She also lost her husband Pierre in a tragic accident and had to continue her research alone. Her own health suffered from years of working with radioactive materials.'},{t:'Why is Marie Curie considered one of the most important scientists? Explain in 2-3 sentences.',s:'Marie Curie discovered two new elements and pioneered research on radioactivity. She was the first woman to win a Nobel Prize and the only person to win in two different sciences.'}]},
+{p:'The water cycle is one of the most important processes on Earth. It describes how water constantly moves between the Earth\'s surface and the atmosphere in a never-ending loop.\n\nThe cycle begins when the sun heats water in oceans, lakes, and rivers. This heat causes the water to evaporate, which means it turns from liquid into an invisible gas called water vapour. The water vapour rises into the atmosphere, where it cools down and turns back into tiny water droplets. This process is called condensation, and it is how clouds form.\n\nWhen clouds become heavy with water droplets, the water falls back to Earth as precipitation — this can be rain, snow, sleet, or hail, depending on the temperature. Some of this water flows into rivers and streams, eventually reaching the oceans. Some soaks into the ground and becomes groundwater, which plants use to grow. And then the whole cycle starts again.\n\nWithout the water cycle, there would be no fresh water for drinking, no rain for crops, and life on Earth would not be possible.',
+q:[{t:'What causes water to evaporate?',c:'the sun',a:['the sun','sun','heat','heat from the sun']},{t:'What is condensation?',c:'when water vapour cools and forms clouds',a:['when water vapour turns into droplets','when vapour cools down','when water vapour cools and forms clouds','condensation']},{t:'Name two forms of precipitation.',c:'rain and snow',a:['rain and snow','rain','snow','sleet','hail','rain and hail']}],
+lq:[{t:'Explain the water cycle in your own words. Use at least 3 sentences.',s:'First, the sun heats water in oceans and lakes, causing it to evaporate into water vapour. The vapour rises and cools in the atmosphere, forming clouds through condensation. When clouds get heavy enough, water falls back to Earth as rain or snow, and flows back into rivers and oceans to start the cycle again.'}]},
+{p:'Canada is the second largest country in the world by total area, stretching from the Atlantic Ocean in the east to the Pacific Ocean in the west, and northward into the Arctic Ocean. Despite its enormous size, Canada has a relatively small population of about 40 million people. Most Canadians live within 200 kilometres of the border with the United States, where the climate is milder.\n\nCanada has two official languages: English and French. The province of Quebec is primarily French-speaking, while most other provinces are primarily English-speaking. New Brunswick is the only officially bilingual province. The capital city is Ottawa, which is located in the province of Ontario, right on the border with Quebec.\n\nCanada is known for its stunning natural landscapes, including the Rocky Mountains, Niagara Falls, and vast boreal forests. The country is also famous for maple syrup, ice hockey, and its multicultural society. Canada welcomes immigrants from all over the world, making it one of the most diverse countries on Earth.',
+q:[{t:'What is the capital of Canada?',c:'Ottawa'},{t:'How many official languages does Canada have?',c:'two',a:['two','2']},{t:'Which province is the only officially bilingual one?',c:'New Brunswick'}],
+lq:[{t:'What makes Canada unique as a country? Write at least 3 sentences using details from the text.',s:'Canada is unique because it is the second largest country in the world but has a relatively small population. It has two official languages, English and French, and is known for being very multicultural and welcoming immigrants from around the world. It also has stunning natural landscapes like the Rocky Mountains and Niagara Falls.'}]},
+];
+
+// ═══ ENGINE ═══
+let currentLevel='',questions=[],current=0,score=0,answered=false,lastCat='all',laLog=[];
+
+function selectLevel(l){currentLevel=l;document.getElementById('level-screen').style.display='none';showCats();}
+
+function showCats(){
+const g=document.getElementById('cat-grid');g.innerHTML='';
+const t=document.getElementById('cat-title');
+const cats={
+beginner:[{id:'b_n',i:'📦',l:'Noms / Nouns'},{id:'b_v',i:'🏃',l:'Verbes / Verbs'},{id:'b_a',i:'🌈',l:'Adjectifs'},{id:'b_p',i:'💬',l:'Phrases'},{id:'b_all',i:'🌟',l:'Tout mélanger !'}],
+intermediate:[{id:'i_n',i:'📦',l:'Nouns'},{id:'i_v',i:'🏃',l:'Verbs'},{id:'i_a',i:'🌈',l:'Adjectives'},{id:'i_r',i:'📚',l:'Reading'},{id:'i_all',i:'🌟',l:'Mix!'}],
+advanced:[{id:'a_n',i:'📦',l:'Nouns'},{id:'a_v',i:'🏃',l:'Verbs'},{id:'a_a',i:'🌈',l:'Adjectives'},{id:'a_r',i:'📚',l:'Reading & Writing'},{id:'a_all',i:'🌟',l:'Mix!'}],
+};
+t.textContent=currentLevel==='beginner'?'Choisis une section':'Choose a section';
+(cats[currentLevel]||[]).forEach(c=>{const b=document.createElement('button');b.className='cat-btn';b.onclick=()=>startGame(c.id);b.innerHTML=`<span class="icon">${c.i}</span><span class="label">${c.l}</span>`;g.appendChild(b);});
+document.getElementById('category-screen').style.display='block';
+}
+
+function bRQ(arr,incL){const qs=[];sh([...arr]).forEach(r=>{r.q.forEach(q=>{const tp=q.tp==='written'?'written':'short';qs.push({text:q.t,correct:q.c,altCorrect:q.a,passage:r.p,category:'📚 Reading',type:tp});});if(incL&&r.lq)r.lq.forEach(q=>qs.push({text:q.t,sampleAnswer:q.s,passage:r.p,category:'✍️ Writing',type:'long'}));});return qs;}
+
+function fmt(arr,cat){return arr.map(q=>({text:q.t,correct:q.c,altCorrect:q.a,hint:q.h,category:cat}));}
+
+// Generate MC choices for beginner questions
+function addMC(qs,allAnswers){
+  return qs.map((q,i)=>{
+    // ~65% chance of MC for beginner
+    if(Math.random()<0.65 && q.correct){
+      const c=q.correct;
+      // If the answer is noun/verb/adjective, ALWAYS show as MC with all 3 options
+      if(['noun','verb','adjective'].includes(nr(c))){
+        return {...q,type:'mc',choices:sh(['noun','verb','adjective'])};
+      }
+      // Get 3 wrong answers from pool
+      const wrongs=allAnswers.filter(a=>nr(a)!==nr(c) && !['noun','verb','adjective'].includes(nr(a)));
+      sh(wrongs);
+      const choices=sh([c,wrongs[0]||'---',wrongs[1]||'---',wrongs[2]||'---']);
+      return {...q,type:'mc',choices};
+    }
+    // Even if not in the 65%, still force MC for noun/verb/adjective questions
+    if(['noun','verb','adjective'].includes(nr(q.correct))){
+      return {...q,type:'mc',choices:sh(['noun','verb','adjective'])};
+    }
+    return q;
+  });
+}
+
+// All beginner answer pools for MC generation
+const B_ANS_POOL=[...BN.map(q=>q.c),...BV.map(q=>q.c),...BA.map(q=>q.c),...BP.map(q=>q.c)];
+const B_NOUN_POOL=['cat','dog','house','school','book','tree','sun','moon','table','chair','apple','water','friend','family','mother','father','brother','sister','bird','fish','flower','star','door','window','car','snow','boy','girl','noun','verb','adjective'];
+const B_VERB_POOL=['am','is','are','has','have','eat','run','sleep','play','read','write','sing','swim','dance','walk','noun','verb','adjective'];
+const B_ADJ_POOL=['big','small','happy','sad','fast','slow','hot','cold','beautiful','strong','nice','new','old','easy','hard','long','short','funny','scary','tired','red','blue','green','yellow','black','noun','verb','adjective'];
+
+function startGame(cat){
+lastCat=cat;current=0;score=0;answered=false;laLog=[];
+const m={
+b_n:()=>addMC(pk(fmt(BN,'📦 Noms'),20),B_NOUN_POOL),b_v:()=>addMC(pk(fmt(BV,'🏃 Verbes'),20),B_VERB_POOL),b_a:()=>addMC(pk(fmt(BA,'🌈 Adjectifs'),20),B_ADJ_POOL),
+b_p:()=>addMC(pk(fmt(BP,'💬 Phrases'),15),BP.map(q=>q.c)),b_all:()=>addMC(sh([...pk(fmt(BN,'📦'),5),...pk(fmt(BV,'🏃'),5),...pk(fmt(BA,'🌈'),5),...pk(fmt(BP,'💬'),5)]),B_ANS_POOL),
+i_n:()=>pk(fmt(IN,'📦 Nouns'),20),i_v:()=>pk(fmt(IV,'🏃 Verbs'),20),i_a:()=>pk(fmt(IA,'🌈 Adjectives'),20),
+i_r:()=>bRQ(IR,false),i_all:()=>sh([...pk(fmt(IN,'📦'),5),...pk(fmt(IV,'🏃'),5),...pk(fmt(IA,'🌈'),5),...bRQ(IR,false).slice(0,5)]),
+a_n:()=>pk(fmt(AN,'📦 Nouns'),20),a_v:()=>pk(fmt(AV,'🏃 Verbs'),20),a_a:()=>pk(fmt(AA,'🌈 Adjectives'),20),
+a_r:()=>bRQ(AR,true),a_all:()=>sh([...pk(fmt(AN,'📦'),5),...pk(fmt(AV,'🏃'),5),...pk(fmt(AA,'🌈'),5),...bRQ(AR,true).slice(0,5)]),
+};
+questions=(m[cat]||m.b_all)();
+document.getElementById('category-screen').style.display='none';
+document.getElementById('result-screen').style.display='none';
+document.getElementById('game-screen').style.display='block';
+showQ();
+}
+
+function showQ(){
+answered=false;const q=questions[current],tot=questions.length;
+document.getElementById('pfill').style.width=`${(current/tot)*100}%`;
+document.getElementById('qctr').textContent=`Question ${current+1} / ${tot}`;
+document.getElementById('scr').textContent=score;
+document.getElementById('qcat').textContent=q.category||'';
+document.getElementById('qtxt').textContent=q.text;
+document.getElementById('fb').textContent='';document.getElementById('fb').className='fb';
+document.getElementById('corr').style.display='none';document.getElementById('btn-next').disabled=true;
+const hi=document.getElementById('qhint');if(q.hint){hi.textContent=q.hint;hi.style.display='block';}else hi.style.display='none';
+const pa=document.getElementById('qpass');if(q.passage){pa.textContent=q.passage;pa.style.display='block';}else pa.style.display='none';
+const w=document.getElementById('awrap');
+if(q.type==='mc'){
+  // Multiple choice buttons
+  let html='<div class="mc-grid">';
+  q.choices.forEach(ch=>{html+=`<button class="mc-btn" onclick="checkMC(this,'${ch.replace(/'/g,"\\'")}')">` +ch+'</button>';});
+  html+='</div>';w.innerHTML=html;
+} else if(q.type==='long'){
+  w.innerHTML=`<textarea class="ainput lg" id="ainp" placeholder="Write your answer here (at least 4 sentences)..." rows="7"></textarea><button class="sbtn" id="sbtn" onclick="check()">OK</button>`;
+  document.getElementById('ainp').focus();
+} else if(q.type==='written'){
+  w.innerHTML=`<textarea class="ainput" id="ainp" placeholder="Write your answer in a full sentence..." rows="3"></textarea><button class="sbtn" id="sbtn" onclick="check()">OK</button>`;
+  document.getElementById('ainp').focus();
+} else {
+  w.innerHTML=`<input type="text" class="ainput" id="ainp" placeholder="${currentLevel==='beginner'?'Ta réponse...':'Your answer...'}" autocomplete="off"><button class="sbtn" id="sbtn" onclick="check()">OK</button>`;
+  document.getElementById('ainp').focus();
+}
+document.getElementById('btn-next').textContent=currentLevel==='beginner'?'Question suivante →':'Next →';
+}
+
+function checkMC(btn,choice){
+if(answered)return;answered=true;
+const q=questions[current],fb=document.getElementById('fb');
+const allBtns=document.querySelectorAll('.mc-btn');
+allBtns.forEach(b=>{b.disabled=true;if(nr(b.textContent)===nr(q.correct))b.classList.add('ok');});
+if(nr(choice)===nr(q.correct)){
+  score++;btn.classList.add('ok');fb.textContent='✅ Bravo ! Bonne réponse !';fb.className='fb ok';
+}else{
+  btn.classList.add('err');fb.textContent='❌ Ce n\'est pas la bonne réponse.';fb.className='fb err';
+  const co=document.getElementById('corr');co.innerHTML=`<strong>La bonne réponse :</strong> ${q.correct}`;co.style.display='block';
+}
+document.getElementById('scr').textContent=score;document.getElementById('btn-next').disabled=false;
+if(current===questions.length-1)document.getElementById('btn-next').textContent='Voir les résultats 🎉';
+}
+
+function check(){
+if(answered)return;const inp=document.getElementById('ainp'),ua=inp.value.trim();if(!ua)return;
+answered=true;inp.disabled=true;if(document.getElementById('sbtn'))document.getElementById('sbtn').disabled=true;
+const q=questions[current],fb=document.getElementById('fb'),fr=currentLevel==='beginner';
+if(q.type==='long'){
+const wc=ua.split(/\s+/).filter(w=>w.length>0).length;
+laLog.push({question:q.text,answer:ua,sampleAnswer:q.sampleAnswer||''});
+if(wc>=15){score++;inp.className='ainput ok';fb.textContent='✅ Great answer! Your teacher will review it.';fb.className='fb ok';}
+else{inp.className='ainput err';fb.textContent='⚠️ Try to write more! At least 4 full sentences.';fb.className='fb rev';}
+const co=document.getElementById('corr');co.innerHTML=`<strong>Sample answer:</strong><br>${q.sampleAnswer}<div class="tnote">📋 Your teacher will also review your answer.</div>`;co.style.display='block';
+}else if(q.type==='written'){
+// Written short answer — check keywords but also save for review
+const cn=nr(q.correct),all=[cn];if(q.altCorrect)q.altCorrect.forEach(x=>all.push(nr(x)));
+const wc=ua.split(/\s+/).filter(w=>w.length>0).length;
+const hasKeyword=all.some(c=>nr(ua).includes(c));
+if(hasKeyword&&wc>=3){score++;inp.className='ainput ok';fb.textContent='✅ Correct!';fb.className='fb ok';}
+else if(hasKeyword){inp.className='ainput ok';fb.textContent='✅ Correct! But try to write a full sentence next time.';fb.className='fb ok';score++;}
+else{inp.className='ainput err';fb.textContent='❌ Not quite right.';fb.className='fb err';
+const co=document.getElementById('corr');co.innerHTML=`<strong>Correct answer:</strong> ${q.correct}`;co.style.display='block';}
+}else{
+const cn=nr(q.correct),all=[cn];if(q.altCorrect)q.altCorrect.forEach(x=>all.push(nr(x)));
+if(all.some(c=>nr(ua)===c)){score++;inp.className='ainput ok';fb.textContent=fr?'✅ Bravo ! Bonne réponse !':'✅ Correct!';fb.className='fb ok';}
+else{inp.className='ainput err';fb.textContent=fr?'❌ Ce n\'est pas la bonne réponse.':'❌ Not quite right.';fb.className='fb err';
+const co=document.getElementById('corr');co.innerHTML=`<strong>${fr?'La bonne réponse':'Correct answer'}:</strong> ${q.correct}`;co.style.display='block';}
+}
+document.getElementById('scr').textContent=score;document.getElementById('btn-next').disabled=false;
+if(current===questions.length-1)document.getElementById('btn-next').textContent=fr?'Voir les résultats 🎉':'See results 🎉';
+}
+
+document.addEventListener('keydown',e=>{const q=questions[current];if(e.key==='Enter'&&!(q&&(q.type==='long'||q.type==='written'))&&q.type!=='mc'){if(!answered)check();else if(!document.getElementById('btn-next').disabled)next();}});
+
+function next(){current++;if(current>=questions.length)showRes();else showQ();}
+
+function showRes(){
+document.getElementById('game-screen').style.display='none';
+const rs=document.getElementById('result-screen');rs.style.display='block';
+const tot=questions.length,pct=Math.round((score/tot)*100);
+document.getElementById('rscore').textContent=`${score} / ${tot}`;
+const fr=currentLevel==='beginner';let e,m;
+if(pct===100){e='🏆';m=fr?'Score parfait !':'Perfect score!';}
+else if(pct>=80){e='🌟';m=fr?'Excellent !':'Excellent!';}
+else if(pct>=60){e='😊';m=fr?'Bon travail !':'Good job!';}
+else if(pct>=40){e='💪';m=fr?'Continue !':'Keep going!';}
+else{e='📚';m=fr?'La pratique rend parfait !':'Practice makes perfect!';}
+document.getElementById('remoji').textContent=e;document.getElementById('rmsg').textContent=m;
+try{window.parent.postMessage({type:'gameScore',score:score,total:tot,pct:pct},'*');}catch(e){}
+document.getElementById('rtitle').textContent=fr?'Terminé !':'Done!';
+const la=document.getElementById('larev');
+if(laLog.length>0){let h='<h3>📋 Long Answers — For teacher review:</h3>';
+laLog.forEach((l,i)=>{h+=`<div class="lai"><div class="lq">${i+1}. ${l.question}</div><div class="la"><strong>Student wrote:</strong> ${l.answer}</div><div class="ls"><strong>Sample answer:</strong> ${l.sampleAnswer}</div></div>`;});
+la.innerHTML=h;la.style.display='block';}else la.style.display='none';
+}
+
+function goCats(){document.getElementById('game-screen').style.display='none';document.getElementById('result-screen').style.display='none';document.getElementById('category-screen').style.display='block';}
+function goLevelSelect(){document.getElementById('category-screen').style.display='none';document.getElementById('game-screen').style.display='none';document.getElementById('result-screen').style.display='none';document.getElementById('level-screen').style.display='block';}
+</script>
+</body>
+</html>

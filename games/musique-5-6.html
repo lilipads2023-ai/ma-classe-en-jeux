@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Théorie Musicale – 5e et 6e année</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf6e3;
+    --card: #fffef9;
+    --primary: #2c5f8a;
+    --primary-light: #4a90c4;
+    --accent: #e85d26;
+    --accent2: #f4a261;
+    --green: #2d8a4e;
+    --red: #c0392b;
+    --staff: #2c2c2c;
+    --text: #1a1a2e;
+    --muted: #6b6b8a;
+    --shadow: 0 4px 24px rgba(44,95,138,0.13);
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(74,144,196,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 80%, rgba(232,93,38,0.07) 0%, transparent 60%);
+  }
+
+  header {
+    text-align: center;
+    padding: 2.2rem 1rem 1.2rem;
+    border-bottom: 2px solid rgba(44,95,138,0.1);
+    background: linear-gradient(135deg, rgba(44,95,138,0.06), rgba(232,93,38,0.04));
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    color: var(--primary);
+    letter-spacing: -0.02em;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+    font-weight: 600;
+  }
+
+  /* ── Category selection ── */
+  #category-screen {
+    max-width: 700px;
+    margin: 2.5rem auto;
+    padding: 0 1.2rem;
+  }
+
+  #category-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 1.4rem;
+  }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .cat-btn {
+    background: var(--card);
+    border: 2.5px solid rgba(44,95,138,0.18);
+    border-radius: var(--radius);
+    padding: 1.4rem 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all .22s ease;
+    box-shadow: var(--shadow);
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .cat-btn:hover {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #eaf3fb, #fff);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(44,95,138,0.18);
+  }
+
+  .cat-btn .icon { font-size: 2.2rem; display: block; margin-bottom: .5rem; }
+  .cat-btn .label { font-weight: 800; color: var(--primary); font-size: 0.88rem; line-height: 1.3; }
+
+  /* ── Game screen ── */
+  #game-screen { display: none; max-width: 700px; margin: 0 auto; padding: 1.5rem 1.2rem 3rem; }
+
+  .progress-bar-wrap {
+    background: rgba(44,95,138,0.1);
+    border-radius: 99px;
+    height: 8px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 99px;
+    transition: width .4s ease;
+  }
+
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .hud .score { color: var(--accent); font-size: 1.05rem; }
+
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 1.8rem 1.5rem 1.5rem;
+    box-shadow: var(--shadow);
+    border: 2px solid rgba(44,95,138,0.08);
+    margin-bottom: 1.2rem;
+    animation: fadeUp .35s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-label {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--primary-light);
+    margin-bottom: .7rem;
+  }
+
+  .question-text {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.45;
+  }
+
+  /* ── Staff SVG container ── */
+  .staff-container {
+    display: flex;
+    justify-content: center;
+    margin: .5rem 0 1rem;
+  }
+
+  .staff-container svg { max-width: 100%; }
+
+  /* ── Answers ── */
+  .answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+  }
+
+  .ans-btn {
+    background: #f4f6fb;
+    border: 2.5px solid rgba(44,95,138,0.14);
+    border-radius: 12px;
+    padding: .85rem 1rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all .18s ease;
+    text-align: center;
+  }
+
+  .ans-btn:hover:not(:disabled) {
+    background: #dbeeff;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .ans-btn.correct {
+    background: #d4f5e0;
+    border-color: var(--green);
+    color: var(--green);
+    animation: pop .3s ease;
+  }
+
+  .ans-btn.wrong {
+    background: #fde8e8;
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+
+  .ans-btn:disabled { cursor: default; }
+  .ans-btn svg { display: inline-block; vertical-align: middle; }
+
+  /* ── Feedback ── */
+  .feedback {
+    min-height: 2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: .5rem;
+    transition: all .2s;
+  }
+
+  .feedback.ok  { color: var(--green); }
+  .feedback.err { color: var(--red); }
+
+  /* ── Nav ── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: .8rem;
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: .85rem 1.2rem;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .18s ease;
+  }
+
+  #btn-next {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(44,95,138,0.3);
+  }
+
+  #btn-next:hover { background: var(--primary-light); transform: translateY(-2px); }
+  #btn-next:disabled { opacity: .4; cursor: default; transform: none; }
+
+  #btn-restart {
+    background: transparent;
+    color: var(--muted);
+    border: 2px solid rgba(44,95,138,0.2);
+  }
+
+  #btn-restart:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* ── Results screen ── */
+  #result-screen {
+    display: none;
+    max-width: 500px;
+    margin: 3rem auto;
+    padding: 0 1.2rem;
+    text-align: center;
+    animation: fadeUp .4s ease;
+  }
+
+  .result-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    box-shadow: var(--shadow);
+    border: 2px solid rgba(44,95,138,0.1);
+  }
+
+  .result-emoji { font-size: 4rem; display: block; margin-bottom: 1rem; }
+
+  .result-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: .5rem;
+  }
+
+  .result-card .big-score {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin: .8rem 0;
+  }
+
+  .result-card p { color: var(--muted); font-size: 1rem; margin-bottom: 1.5rem; }
+
+  .result-btns { display: flex; flex-direction: column; gap: .8rem; }
+
+  .result-btns button {
+    padding: .9rem;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .18s;
+  }
+
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-secondary { background: transparent; border: 2px solid rgba(44,95,138,0.25) !important; color: var(--muted); }
+  .btn-secondary:hover { border-color: var(--primary) !important; color: var(--primary); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎵 Théorie Musicale</h1>
+  <p>Jeu de révision · Musique · 5e et 6e année</p>
+</header>
+
+<!-- Category selection -->
+<div id="category-screen">
+  <h2>Choisis une catégorie</h2>
+  <div class="cat-grid">
+    <button class="cat-btn" onclick="startGame('notes')">
+      <span class="icon">🎼</span>
+      <span class="label">Noms des notes</span>
+    </button>
+    <button class="cat-btn" onclick="startGame('durees')">
+      <span class="icon">♩</span>
+      <span class="label">Durées</span>
+    </button>
+    <button class="cat-btn" onclick="startGame('silences')">
+      <span class="icon">🤫</span>
+      <span class="label">Silences</span>
+    </button>
+    <button class="cat-btn" onclick="startGame('indicateurs')">
+      <span class="icon">📊</span>
+      <span class="label">Chiffres indicateurs</span>
+    </button>
+    <button class="cat-btn" onclick="startGame('all')">
+      <span class="icon">🎶</span>
+      <span class="label">Tout mélanger !</span>
+    </button>
+  </div>
+</div>
+
+<!-- Game screen -->
+<div id="game-screen">
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="hud">
+    <span id="q-counter">Question 1 / 10</span>
+    <span class="score">⭐ <span id="score-display">0</span></span>
+  </div>
+  <div class="question-card">
+    <div class="question-label" id="q-category">Noms des notes</div>
+    <div class="question-text" id="q-text"></div>
+    <div class="staff-container" id="staff-area"></div>
+    <div class="answers" id="answers-area"></div>
+  </div>
+  <div class="feedback" id="feedback"></div>
+  <div class="nav-row">
+    <button class="nav-btn" id="btn-restart" onclick="goHome()">🏠 Accueil</button>
+    <button class="nav-btn" id="btn-next" onclick="nextQuestion()" disabled>Question suivante →</button>
+  </div>
+</div>
+
+<!-- Results screen -->
+<div id="result-screen">
+  <div class="result-card">
+    <span class="result-emoji" id="result-emoji">🎉</span>
+    <h2>Terminé !</h2>
+    <div class="big-score" id="result-score"></div>
+    <p id="result-msg"></p>
+    <div class="result-btns">
+      <button class="btn-primary" onclick="startGame(lastCategory)">🔄 Rejouer</button>
+      <button class="btn-secondary" onclick="goHome()">🏠 Choisir une catégorie</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// NOTE POSITIONS ON TREBLE CLEF (Do3 to Do5)
+// Staff lines (bottom to top): Mi4, Sol4, Si4, Ré5, Fa5
+// We draw on a 280×130 SVG canvas
+// Staff lines at y = 95, 82, 69, 56, 43  (spacing = 13px)
+// ─────────────────────────────────────────────
+
+// y positions for each note (lower = higher pitch)
+// Reference: line 1 (bottom) = Mi4 = y:95, each step = 6.5px
+const NOTE_Y = {
+  // Do3
+  'Do3': 147,
+  'Ré3': 140,
+  'Mi3': 134,
+  'Fa3': 127,
+  'Sol3': 121,
+  'La3': 114,
+  'Si3': 108,
+  // Do4 (middle C — ledger line below staff)
+  'Do4': 101,
+  'Ré4': 95,   // line 1 (Mi4 is line 1... let me redo properly)
+};
+
+// Let's define precisely:
+// Staff lines y values (13px spacing): line1=95, line2=82, line3=69, line4=56, line5=43
+// Notes on/between lines (each step = 6.5px going UP):
+// Mi4 = line1 = y:95
+// Fa4 = space above line1 = y:88.5 → 89
+// Sol4 = line2 = y:82
+// La4 = space = y:75.5 → 76
+// Si4 = line3 = y:69
+// Do5 = space = y:62.5 → 63
+// Ré5 = line4 = y:56
+// Fa5 = line5 = y:43
+// Going below line1:
+// Ré4 = space below line1 = y:101.5 → 102
+// Do4 = ledger line below = y:108
+// Si3 = space below Do4 ledger = y:114.5 → 115
+// La3 = ledger line = y:121
+// Sol3 = space = y:127.5 → 128
+// Fa3 = ledger line = y:134
+// Mi3 = space = y:140.5 → 141
+// Ré3 = ledger line = y:147
+// Do3 = space = y:153.5 → 154
+
+const NOTES = [
+  { name: 'Do3',  y: 154, ledgers: [108, 121, 134, 147], noteOnLedger: false },
+  { name: 'Ré3',  y: 147, ledgers: [108, 121, 134, 147], noteOnLedger: true  },
+  { name: 'Mi3',  y: 141, ledgers: [108, 121, 134],      noteOnLedger: false },
+  { name: 'Fa3',  y: 134, ledgers: [108, 121, 134],      noteOnLedger: true  },
+  { name: 'Sol3', y: 128, ledgers: [108, 121],            noteOnLedger: false },
+  { name: 'La3',  y: 121, ledgers: [108, 121],            noteOnLedger: true  },
+  { name: 'Si3',  y: 115, ledgers: [108],                 noteOnLedger: false },
+  { name: 'Do4',  y: 108, ledgers: [108],                 noteOnLedger: true  },
+  { name: 'Ré4',  y: 102, ledgers: [],                    noteOnLedger: false },
+  { name: 'Mi4',  y: 95,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Fa4',  y: 89,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Sol4', y: 82,  ledgers: [],                    noteOnLedger: false },
+  { name: 'La4',  y: 76,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Si4',  y: 69,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Do5',  y: 63,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Ré5',  y: 56,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Mi5',  y: 50,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Fa5',  y: 43,  ledgers: [],                    noteOnLedger: false },
+  { name: 'Sol5', y: 37,  ledgers: [],                    noteOnLedger: false },
+  { name: 'La5',  y: 30,  ledgers: [30],                  noteOnLedger: true  },
+  { name: 'Si5',  y: 24,  ledgers: [30],                  noteOnLedger: false },
+  { name: 'Do6',  y: 17,  ledgers: [17, 30],              noteOnLedger: true  },
+];
+
+// Full staff range: Do4 (1 ledger line below) to La5 (1 ledger line above)
+const MAIN_OCTAVE_NOTES = NOTES.filter(n =>
+  ['Do4','Ré4','Mi4','Fa4','Sol4','La4','Si4','Do5','Ré5','Mi5','Fa5','Sol5','La5'].includes(n.name)
+);
+
+// All solfège names (for wrong answer pool)
+const ALL_SOLFEGE = ['Do','Ré','Mi','Fa','Sol','La','Si'];
+
+function drawStaff(noteObj) {
+  const W = 280, H = 200;
+  const staffLeft = 40, staffRight = 240;
+  const lines = [95, 82, 69, 56, 43];
+  const nx = 140; // note x center
+  const ny = noteObj.y;
+  const noteRx = 11, noteRy = 8;
+
+  let svgParts = [];
+  svgParts.push(`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`);
+
+  // Staff lines
+  for (let ly of lines) {
+    svgParts.push(`<line x1="${staffLeft}" y1="${ly}" x2="${staffRight}" y2="${ly}" stroke="#2c2c2c" stroke-width="1.5"/>`);
+  }
+
+  // Treble clef (simplified unicode rendered via foreignObject — use text instead)
+  svgParts.push(`<text x="44" y="100" font-size="90" font-family="serif" fill="#2c5f8a" dominant-baseline="auto" style="line-height:1">𝄞</text>`);
+
+  // Ledger lines
+  for (let ly of (noteObj.ledgers || [])) {
+    svgParts.push(`<line x1="${nx - 18}" y1="${ly}" x2="${nx + 18}" y2="${ly}" stroke="#2c2c2c" stroke-width="1.5"/>`);
+  }
+
+  // Note head (filled ellipse)
+  svgParts.push(`<ellipse cx="${nx}" cy="${ny}" rx="${noteRx}" ry="${noteRy}" fill="#e85d26" transform="rotate(-15,${nx},${ny})"/>`);
+
+  // Stem (up if note below middle, down if above)
+  const stemUp = ny >= 69;
+  if (stemUp) {
+    svgParts.push(`<line x1="${nx + noteRx - 2}" y1="${ny}" x2="${nx + noteRx - 2}" y2="${ny - 55}" stroke="#e85d26" stroke-width="2.5"/>`);
+  } else {
+    svgParts.push(`<line x1="${nx - noteRx + 2}" y1="${ny}" x2="${nx - noteRx + 2}" y2="${ny + 55}" stroke="#e85d26" stroke-width="2.5"/>`);
+  }
+
+  svgParts.push(`</svg>`);
+  return svgParts.join('');
+}
+
+function makeNoteQuestion(noteObj) {
+  const correctName = noteObj.name.replace(/\d/, ''); // just the solfège syllable
+  // Build 3 wrong answers from the solfège list (excluding the correct one)
+  const wrongs = ALL_SOLFEGE.filter(n => n !== correctName);
+  shuffle(wrongs);
+  const choices = shuffle([correctName, wrongs[0], wrongs[1], wrongs[2]]);
+
+  return {
+    category: '🎼 Noms des notes',
+    text: 'Quel est le nom de cette note ?',
+    staff: drawStaff(noteObj),
+    choices,
+    correct: correctName
+  };
+}
+
+// ─────────────────────────────────────────────
+// DUREES QUESTIONS
+// ─────────────────────────────────────────────
+const dureesQuestions = [
+  { text: 'Combien de temps dure une ronde ?', choices: ['4 temps', '2 temps', '1 temps', '3 temps'], correct: '4 temps' },
+  { text: 'Combien de temps dure une blanche ?', choices: ['2 temps', '4 temps', '1 temps', '½ temps'], correct: '2 temps' },
+  { text: 'Combien de temps dure une noire ?', choices: ['1 temps', '2 temps', '4 temps', '½ temps'], correct: '1 temps' },
+  { text: 'Combien de temps dure une croche ?', choices: ['½ temps', '1 temps', '2 temps', '¼ temps'], correct: '½ temps' },
+  { text: 'Combien de temps dure une double croche ?', choices: ['¼ temps', '½ temps', '1 temps', '2 temps'], correct: '¼ temps' },
+  { text: 'Quelle note dure 4 temps ?', choices: ['Ronde', 'Blanche', 'Noire', 'Croche'], correct: 'Ronde' },
+  { text: 'Quelle note dure 2 temps ?', choices: ['Blanche', 'Noire', 'Ronde', 'Croche'], correct: 'Blanche' },
+  { text: 'Quelle note dure 1 temps ?', choices: ['Noire', 'Blanche', 'Ronde', 'Croche'], correct: 'Noire' },
+  { text: 'Quelle note dure un demi-temps ?', choices: ['Croche', 'Noire', 'Blanche', 'Double croche'], correct: 'Croche' },
+  { text: 'Combien de noires y a-t-il dans une ronde ?', choices: ['4', '2', '3', '8'], correct: '4' },
+  { text: 'Combien de blanches y a-t-il dans une ronde ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'Combien de croches y a-t-il dans une noire ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'Une blanche pointée dure combien de temps ?', choices: ['3 temps', '2 temps', '4 temps', '2½ temps'], correct: '3 temps' },
+  { text: 'Une noire pointée dure combien de temps ?', choices: ['1½ temps', '2 temps', '1 temps', '3 temps'], correct: '1½ temps' },
+  { text: 'Combien de croches y a-t-il dans une blanche ?', choices: ['4', '2', '8', '1'], correct: '4' },
+  { text: 'Combien de croches y a-t-il dans une ronde ?', choices: ['8', '4', '2', '16'], correct: '8' },
+  { text: 'Combien de double croches y a-t-il dans une noire ?', choices: ['4', '2', '8', '1'], correct: '4' },
+  { text: 'Combien de double croches y a-t-il dans une blanche ?', choices: ['8', '4', '16', '2'], correct: '8' },
+  { text: 'Combien de double croches y a-t-il dans une ronde ?', choices: ['16', '8', '4', '32'], correct: '16' },
+  { text: 'Quelle note dure un quart de temps ?', choices: ['Double croche', 'Croche', 'Noire', 'Blanche'], correct: 'Double croche' },
+  { text: 'Quelle note dure le plus longtemps ?', choices: ['Ronde', 'Blanche', 'Noire', 'Croche'], correct: 'Ronde' },
+  { text: 'Quelle note dure le moins longtemps ?', choices: ['Double croche', 'Croche', 'Noire', 'Blanche'], correct: 'Double croche' },
+  { text: 'Une ronde dure combien de blanches ?', choices: ['2', '4', '1', '8'], correct: '2' },
+  { text: 'Une blanche dure combien de croches ?', choices: ['4', '2', '8', '1'], correct: '4' },
+  { text: 'Une croche dure combien de double croches ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'Vrai ou faux : une noire dure plus longtemps qu\'une croche.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : une blanche dure plus longtemps qu\'une ronde.', choices: ['Faux', 'Vrai'], correct: 'Faux' },
+  { text: 'Vrai ou faux : deux croches = une noire.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : deux blanches = une ronde.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : quatre croches = une blanche.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Quelle est la durée totale de 2 noires ?', choices: ['2 temps', '1 temps', '4 temps', '½ temps'], correct: '2 temps' },
+  { text: 'Quelle est la durée totale de 2 blanches ?', choices: ['4 temps', '2 temps', '3 temps', '1 temps'], correct: '4 temps' },
+  { text: 'Quelle est la durée totale de 4 croches ?', choices: ['2 temps', '4 temps', '1 temps', '½ temps'], correct: '2 temps' },
+  { text: 'Quelle est la durée totale de 1 blanche + 1 noire ?', choices: ['3 temps', '2 temps', '4 temps', '1 temps'], correct: '3 temps' },
+  { text: 'Quelle est la durée totale de 1 blanche + 2 noires ?', choices: ['4 temps', '3 temps', '2 temps', '5 temps'], correct: '4 temps' },
+  { text: 'Quelle est la durée totale de 3 noires ?', choices: ['3 temps', '4 temps', '2 temps', '1 temps'], correct: '3 temps' },
+  { text: 'Quelle est la durée totale de 1 noire + 2 croches ?', choices: ['2 temps', '1 temps', '3 temps', '½ temps'], correct: '2 temps' },
+  { text: 'Que veut dire le point après une note ?', choices: ['La note dure 1½ fois sa valeur', 'La note dure 2 fois sa valeur', 'La note est plus forte', 'La note est plus haute'], correct: 'La note dure 1½ fois sa valeur' },
+  { text: 'Une ronde pointée dure combien de temps ?', choices: ['6 temps', '4 temps', '5 temps', '8 temps'], correct: '6 temps' },
+];
+
+// ─────────────────────────────────────────────
+// SILENCES QUESTIONS
+// ─────────────────────────────────────────────
+// SVG rest symbol generators for answer buttons
+function restSVG(type) {
+  const s = 40; // viewBox size
+  if (type === 'pause') {
+    // Whole rest: rectangle hanging below a line
+    return `<svg width="40" height="30" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="10" x2="35" y2="10" stroke="currentColor" stroke-width="2"/><rect x="13" y="10" width="14" height="7" fill="currentColor"/></svg>`;
+  } else if (type === 'demipause') {
+    // Half rest: rectangle sitting on top of a line
+    return `<svg width="40" height="30" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="20" x2="35" y2="20" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="14" height="7" fill="currentColor"/></svg>`;
+  } else if (type === 'soupir') {
+    // Quarter rest: zig-zag shape
+    return `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M22 4 L16 12 L24 18 L14 28 Q18 32 22 28 Q26 24 20 20 L26 12 Z" fill="currentColor"/></svg>`;
+  } else if (type === 'demisoupir') {
+    // Eighth rest: dot with a flag and stem
+    return `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="12" r="3.5" fill="currentColor"/><path d="M21 13 Q26 16 22 28 L24 28 Q28 18 22 11" fill="currentColor"/></svg>`;
+  }
+  return '';
+}
+
+// Labels for rest symbols (used in feedback only)
+const REST_LABELS = {
+  'rest_pause': 'Pause',
+  'rest_demipause': 'Demi-pause',
+  'rest_soupir': 'Soupir',
+  'rest_demisoupir': 'Demi-soupir'
+};
+
+const silencesQuestions = [
+  { text: 'Combien de temps dure une pause ?', choices: ['4 temps', '2 temps', '1 temps', '3 temps'], correct: '4 temps' },
+  { text: 'Combien de temps dure une demi-pause ?', choices: ['2 temps', '4 temps', '1 temps', '½ temps'], correct: '2 temps' },
+  { text: 'Combien de temps dure un soupir ?', choices: ['1 temps', '2 temps', '½ temps', '4 temps'], correct: '1 temps' },
+  { text: 'Combien de temps dure un demi-soupir ?', choices: ['½ temps', '1 temps', '¼ temps', '2 temps'], correct: '½ temps' },
+  { text: 'Quel est le symbole de la pause ?', choices: ['rest_pause', 'rest_demipause', 'rest_soupir', 'rest_demisoupir'], correct: 'rest_pause', useRestSVG: true },
+  { text: 'Quel est le symbole de la demi-pause ?', choices: ['rest_demipause', 'rest_pause', 'rest_soupir', 'rest_demisoupir'], correct: 'rest_demipause', useRestSVG: true },
+  { text: 'Quel est le symbole du soupir ?', choices: ['rest_soupir', 'rest_pause', 'rest_demipause', 'rest_demisoupir'], correct: 'rest_soupir', useRestSVG: true },
+  { text: 'Une pause = combien de soupirs ?', choices: ['4', '2', '3', '8'], correct: '4' },
+  { text: 'Une demi-pause = combien de soupirs ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'La pause occupe toute la mesure dans une mesure à ___', choices: ['4/4', '2/4', '3/4', '6/8'], correct: '4/4' },
+  { text: 'Un demi-soupir = combien de quarts de soupir ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'Quelle est la durée totale : 1 demi-pause + 1 soupir ?', choices: ['3 temps', '4 temps', '2 temps', '5 temps'], correct: '3 temps' },
+  { text: 'Quel silence correspond à la ronde ?', choices: ['Pause', 'Demi-pause', 'Soupir', 'Demi-soupir'], correct: 'Pause' },
+  { text: 'Quel silence correspond à la noire ?', choices: ['Soupir', 'Pause', 'Demi-pause', 'Demi-soupir'], correct: 'Soupir' },
+  { text: 'Quel silence correspond à la blanche ?', choices: ['Demi-pause', 'Pause', 'Soupir', 'Demi-soupir'], correct: 'Demi-pause' },
+  { text: 'Quel silence correspond à la croche ?', choices: ['Demi-soupir', 'Soupir', 'Pause', 'Demi-pause'], correct: 'Demi-soupir' },
+  { text: 'Quel silence dure le plus longtemps ?', choices: ['Pause', 'Demi-pause', 'Soupir', 'Demi-soupir'], correct: 'Pause' },
+  { text: 'Quel silence dure le moins longtemps ?', choices: ['Demi-soupir', 'Soupir', 'Demi-pause', 'Pause'], correct: 'Demi-soupir' },
+  { text: 'Vrai ou faux : la pause dure autant qu\'une ronde.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : le soupir dure autant qu\'une blanche.', choices: ['Faux', 'Vrai'], correct: 'Faux' },
+  { text: 'Vrai ou faux : 2 soupirs = 1 demi-pause.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : 4 demi-soupirs = 1 demi-pause.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : la demi-pause dure plus longtemps que le soupir.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Une pause = combien de demi-pauses ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'Une pause = combien de demi-soupirs ?', choices: ['8', '4', '2', '16'], correct: '8' },
+  { text: 'Quelle est la durée totale : 2 soupirs + 1 demi-pause ?', choices: ['4 temps', '3 temps', '2 temps', '5 temps'], correct: '4 temps' },
+  { text: 'Quelle est la durée totale : 1 soupir + 2 demi-soupirs ?', choices: ['2 temps', '1 temps', '3 temps', '½ temps'], correct: '2 temps' },
+  { text: 'Quelle est la durée totale : 3 soupirs ?', choices: ['3 temps', '4 temps', '2 temps', '1 temps'], correct: '3 temps' },
+  { text: 'Quelle est la durée totale : 2 demi-pauses ?', choices: ['4 temps', '2 temps', '3 temps', '1 temps'], correct: '4 temps' },
+  { text: 'Combien de demi-soupirs y a-t-il dans un soupir ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'Quel est le symbole du demi-soupir ?', choices: ['rest_demisoupir', 'rest_soupir', 'rest_pause', 'rest_demipause'], correct: 'rest_demisoupir', useRestSVG: true },
+];
+
+// ─────────────────────────────────────────────
+// CHIFFRES INDICATEURS QUESTIONS
+// ─────────────────────────────────────────────
+const indicateursQuestions = [
+  { text: 'Dans 4/4, le chiffre du haut indique…', choices: ['4 temps par mesure', '4 croches par mesure', 'La noire vaut 4', '4 rondes'], correct: '4 temps par mesure' },
+  { text: 'Dans 4/4, le chiffre du bas indique…', choices: ['La noire vaut 1 temps', '4 temps', 'La blanche vaut 1 temps', 'La ronde vaut 1 temps'], correct: 'La noire vaut 1 temps' },
+  { text: 'Dans 3/4, combien de temps y a-t-il par mesure ?', choices: ['3', '4', '2', '6'], correct: '3' },
+  { text: 'Dans 2/4, combien de temps y a-t-il par mesure ?', choices: ['2', '4', '3', '1'], correct: '2' },
+  { text: 'Dans 6/8, combien de croches y a-t-il par mesure ?', choices: ['6', '8', '3', '4'], correct: '6' },
+  { text: 'Quelle mesure est la "mesure à quatre temps" ?', choices: ['4/4', '3/4', '2/4', '6/8'], correct: '4/4' },
+  { text: 'Quelle mesure est la "mesure à trois temps" (valse) ?', choices: ['3/4', '4/4', '2/4', '6/8'], correct: '3/4' },
+  { text: 'Dans 4/4, quelle note vaut un temps ?', choices: ['Noire', 'Blanche', 'Croche', 'Ronde'], correct: 'Noire' },
+  { text: 'Dans 6/8, quelle note vaut un temps ?', choices: ['Croche', 'Noire', 'Blanche', 'Ronde'], correct: 'Croche' },
+  { text: 'Que signifie le "4" du bas dans 3/4 ?', choices: ['La noire vaut 1 temps', '4 temps', 'La blanche vaut 1 temps', '4 rondes'], correct: 'La noire vaut 1 temps' },
+  { text: 'Peut-on mettre une ronde dans une mesure à 3/4 ?', choices: ['Non', 'Oui', 'Parfois', 'Seulement en 4/4'], correct: 'Non' },
+  { text: 'Dans 4/4, quelle est la valeur maximale d\'une mesure ?', choices: ['4 temps', '3 temps', '2 temps', '6 temps'], correct: '4 temps' },
+  { text: 'Quelle mesure est la "mesure à deux temps" ?', choices: ['2/4', '4/4', '3/4', '6/8'], correct: '2/4' },
+  { text: 'Dans 3/4, quelle note vaut un temps ?', choices: ['Noire', 'Blanche', 'Croche', 'Ronde'], correct: 'Noire' },
+  { text: 'Dans 2/4, quelle note vaut un temps ?', choices: ['Noire', 'Blanche', 'Croche', 'Ronde'], correct: 'Noire' },
+  { text: 'Combien de noires peut-on mettre dans une mesure à 4/4 ?', choices: ['4', '2', '3', '8'], correct: '4' },
+  { text: 'Combien de noires peut-on mettre dans une mesure à 3/4 ?', choices: ['3', '4', '2', '6'], correct: '3' },
+  { text: 'Combien de noires peut-on mettre dans une mesure à 2/4 ?', choices: ['2', '4', '3', '1'], correct: '2' },
+  { text: 'Combien de blanches peut-on mettre dans une mesure à 4/4 ?', choices: ['2', '4', '1', '3'], correct: '2' },
+  { text: 'Peut-on mettre une blanche dans une mesure à 2/4 ?', choices: ['Oui', 'Non', 'Parfois', 'Seulement en 4/4'], correct: 'Oui' },
+  { text: 'Que signifie le "8" du bas dans 6/8 ?', choices: ['La croche vaut 1 temps', '8 temps', 'La noire vaut 1 temps', '8 rondes'], correct: 'La croche vaut 1 temps' },
+  { text: 'Vrai ou faux : en 4/4, une ronde remplit toute la mesure.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : en 3/4, une ronde remplit toute la mesure.', choices: ['Faux', 'Vrai'], correct: 'Faux' },
+  { text: 'Vrai ou faux : en 2/4, une blanche remplit toute la mesure.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : le chiffre du haut indique le nombre de temps.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Vrai ou faux : le chiffre du bas indique quelle note vaut 1 temps.', choices: ['Vrai', 'Faux'], correct: 'Vrai' },
+  { text: 'Combien de croches peut-on mettre dans une mesure à 4/4 ?', choices: ['8', '4', '2', '16'], correct: '8' },
+  { text: 'Combien de croches peut-on mettre dans une mesure à 3/4 ?', choices: ['6', '3', '4', '8'], correct: '6' },
+  { text: 'Dans 3/4, quelle est la valeur maximale d\'une mesure ?', choices: ['3 temps', '4 temps', '2 temps', '6 temps'], correct: '3 temps' },
+  { text: 'Dans 2/4, quelle est la valeur maximale d\'une mesure ?', choices: ['2 temps', '4 temps', '3 temps', '1 temps'], correct: '2 temps' },
+  { text: 'Quel chiffre indicateur utilise-t-on souvent pour une marche ?', choices: ['2/4', '3/4', '6/8', '4/4'], correct: '2/4' },
+];
+
+// ─────────────────────────────────────────────
+// Utility
+// ─────────────────────────────────────────────
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ─────────────────────────────────────────────
+// Game state
+// ─────────────────────────────────────────────
+let questions = [], current = 0, score = 0, answered = false, lastCategory = 'all';
+
+function buildNoteQuestions(count) {
+  // Generate questions by picking random notes from main octave
+  // Ensure no more than 2 consecutive questions have the same correct answer
+  const questions = [];
+  for (let i = 0; i < count; i++) {
+    let note;
+    let attempts = 0;
+    do {
+      note = MAIN_OCTAVE_NOTES[Math.floor(Math.random() * MAIN_OCTAVE_NOTES.length)];
+      attempts++;
+      // Check if last 2 questions had the same note name
+      const noteName = note.name.replace(/\d/, '');
+      const prev1 = questions[i - 1];
+      const prev2 = questions[i - 2];
+      const wouldRepeat = prev1 && prev2 &&
+        prev1.correct === noteName && prev2.correct === noteName;
+      if (!wouldRepeat || attempts > 20) break;
+    } while (true);
+    questions.push({ ...makeNoteQuestion(note), category: '🎼 Noms des notes' });
+  }
+  return questions;
+}
+
+function startGame(cat) {
+  lastCategory = cat;
+  current = 0; score = 0; answered = false;
+
+  if (cat === 'notes') {
+    // Generate bank of 100 note questions, pick 20
+    questions = buildNoteQuestions(100).slice(0, 20);
+  } else if (cat === 'durees') {
+    questions = shuffle([...dureesQuestions]).slice(0, 20).map(q => ({ ...q, category: '♩ Durées', staff: null }));
+  } else if (cat === 'silences') {
+    questions = shuffle([...silencesQuestions]).slice(0, 20).map(q => ({ ...q, category: '🤫 Silences', staff: null }));
+  } else if (cat === 'indicateurs') {
+    questions = shuffle([...indicateursQuestions]).slice(0, 20).map(q => ({ ...q, category: '📊 Chiffres indicateurs', staff: null }));
+  } else { // all
+    const noteQs  = buildNoteQuestions(100).slice(0, 10);
+    const dureeQs = shuffle([...dureesQuestions]).slice(0, 10).map(q => ({ ...q, category: '♩ Durées', staff: null }));
+    const silQs   = shuffle([...silencesQuestions]).slice(0, 10).map(q => ({ ...q, category: '🤫 Silences', staff: null }));
+    const indQs   = shuffle([...indicateursQuestions]).slice(0, 10).map(q => ({ ...q, category: '📊 Chiffres indicateurs', staff: null }));
+    questions = shuffle([...noteQs, ...dureeQs, ...silQs, ...indQs]);
+  }
+
+  document.getElementById('category-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[current];
+  const total = questions.length;
+
+  // Progress
+  document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
+  document.getElementById('q-counter').textContent = `Question ${current + 1} / ${total}`;
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('btn-next').disabled = true;
+
+  // Staff
+  const staffArea = document.getElementById('staff-area');
+  staffArea.innerHTML = q.staff || '';
+
+  // Answers — shuffle choices so correct answer isn't always in same spot
+  const answersArea = document.getElementById('answers-area');
+  answersArea.innerHTML = '';
+  const shuffledChoices = [...q.choices];
+  shuffle(shuffledChoices);
+  shuffledChoices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.className = 'ans-btn';
+    if (q.useRestSVG) {
+      // Render SVG rest symbol inside the button (no label — just the symbol)
+      const restType = choice.replace('rest_', '');
+      btn.innerHTML = restSVG(restType);
+      btn.dataset.value = choice;
+    } else {
+      btn.textContent = choice;
+      btn.dataset.value = choice;
+    }
+    btn.onclick = () => checkAnswer(choice, btn, q.correct, q.useRestSVG);
+    answersArea.appendChild(btn);
+  });
+}
+
+function checkAnswer(choice, btn, correct, useRestSVG) {
+  if (answered) return;
+  answered = true;
+
+  const allBtns = document.querySelectorAll('.ans-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    if (b.dataset.value === correct) b.classList.add('correct');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (choice === correct) {
+    score++;
+    btn.classList.add('correct');
+    fb.textContent = '✅ Bravo ! Bonne réponse !';
+    fb.className = 'feedback ok';
+  } else {
+    btn.classList.add('wrong');
+    const correctLabel = useRestSVG ? REST_LABELS[correct] : correct;
+    fb.textContent = `❌ La bonne réponse était : ${correctLabel}`;
+    fb.className = 'feedback err';
+  }
+
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('btn-next').disabled = false;
+
+  const isLast = current === questions.length - 1;
+  document.getElementById('btn-next').textContent = isLast ? 'Voir les résultats 🎉' : 'Question suivante →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('game-screen').style.display = 'none';
+  const rs = document.getElementById('result-screen');
+  rs.style.display = 'block';
+
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('result-score').textContent = `${score} / ${total}`;
+
+  let emoji, msg;
+  if (pct === 100) { emoji = '🏆'; msg = 'Score parfait ! Tu es un·e champion·ne de la musique ! 🎵'; }
+  else if (pct >= 80) { emoji = '🌟'; msg = 'Excellent travail ! Continue comme ça !'; }
+  else if (pct >= 60) { emoji = '😊'; msg = 'Bon travail ! Encore un peu de pratique et tu seras parfait·e !'; }
+  else if (pct >= 40) { emoji = '💪'; msg = 'Continue à pratiquer, tu vas y arriver !'; }
+  else { emoji = '🎵'; msg = 'La pratique mène à la perfection ! Réessaie !'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  try{window.parent.postMessage({type:'gameScore',score:score,total:total,pct:pct},'*');}catch(e){}
+  document.getElementById('result-msg').textContent = msg;
+}
+
+function goHome() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('category-screen').style.display = 'block';
+}
+</script>
+</body>
+</html>
