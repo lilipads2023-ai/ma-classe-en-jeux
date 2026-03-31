@@ -1,7 +1,662 @@
-{
-    id: "sciences-1-energie",
-    title: "Sciences 1re — L'énergie dans nos vies",
-    file: "games/jeu_energie.html",
-    grade: "1re",
-    subject: "Sciences"
-},
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'énergie dans nos vies — Jeu de sciences</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: #F8F9FE; min-height: 100vh; }
+@keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.95); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.card { background: white; border-radius: 22px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); padding: 24px; }
+.section-btn { border: none; border-radius: 16px; padding: 14px 10px; cursor: pointer; transition: all 0.25s; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 5px; min-height: 82px; justify-content: center; }
+.section-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+.section-btn:active { transform: scale(0.97); }
+.progress-bar { height: 10px; border-radius: 99px; background: #EDF2F7; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #6C5CE7, #A29BFE, #6C5CE7); background-size: 200% 100%; animation: shimmer 2s linear infinite; transition: width 0.5s ease; }
+.action-btn { border: none; padding: 14px 28px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+.action-btn:hover { transform: scale(1.05); }
+.action-btn:active { transform: scale(0.97); }
+button:focus { outline: 3px solid #A29BFE; outline-offset: 2px; }
+.choice-btn { padding: 14px 16px; border-radius: 14px; font-size: 16px; font-weight: 600; font-family: 'Nunito', sans-serif; text-align: left; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.04); cursor: pointer; background: white; border: 2px solid #E2E8F0; color: #2D3436; width: 100%; }
+.choice-btn:hover:not([disabled]) { transform: scale(1.02); }
+.choice-btn[disabled] { cursor: default; }
+.tf-btn { padding: 18px 36px; border-radius: 16px; cursor: pointer; font-size: 20px; font-weight: 800; transition: all 0.2s; font-family: 'Nunito', sans-serif; min-width: 130; border-width: 2px; border-style: solid; }
+.tf-btn[disabled] { cursor: default; }
+.sort-cat-btn { width: 100%; padding: 12px 8px; border-radius: 14px; border: 2px solid #CBD5E0; background: #F7FAFC; cursor: pointer; font-size: 15px; font-weight: 700; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+.sort-cat-btn:hover:not([disabled]) { background: #EDF2F7; }
+.sort-cat-btn[disabled] { cursor: default; background: #EDF2F7; }
+.intrus-btn { padding: 14px 16px; border-radius: 14px; font-size: 15px; font-weight: 600; font-family: 'Nunito', sans-serif; text-align: center; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.04); cursor: pointer; background: white; border: 2px solid #E2E8F0; color: #2D3436; }
+.intrus-btn:hover:not([disabled]) { transform: scale(1.02); }
+.intrus-btn[disabled] { cursor: default; }
+#app { max-width: 520px; margin: 0 auto; padding: 16px 16px 50px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ═══════════════════════════════════════════
+// QUESTION BANK
+// ═══════════════════════════════════════════
+const ALL_QUESTIONS = [
+  // SECTION: L'ÉNERGIE
+  { section:"energie", type:"mcq", q:"Qu'est-ce que l'énergie ?", choices:["La capacité de déplacer ou modifier quelque chose","Un type de nourriture","Une couleur"], answer:0 },
+  { section:"energie", type:"mcq", q:"Combien de types d'énergie sont présentés dans le cahier ?", choices:["2","3","5"], answer:1 },
+  { section:"energie", type:"mcq", q:"Lequel n'est PAS un type d'énergie ?", choices:["L'énergie thermique","L'énergie magique","L'énergie sonore"], answer:1 },
+  { section:"energie", type:"truefalse", q:"L'énergie est la capacité de déplacer ou de modifier quelque chose.", answer:true },
+  { section:"energie", type:"truefalse", q:"L'énergie lumineuse est une énergie qu'on peut entendre.", answer:false },
+  { section:"energie", type:"truefalse", q:"L'énergie sonore est une énergie qu'on peut entendre.", answer:true },
+  { section:"energie", type:"truefalse", q:"L'énergie thermique est un type d'énergie qu'on peut sentir.", answer:true },
+  { section:"energie", type:"mcq", q:"L'énergie thermique concerne…", choices:["Le chaud et le froid","Les couleurs","Les odeurs"], answer:0 },
+  { section:"energie", type:"mcq", q:"L'énergie lumineuse nous permet de…", choices:["Sentir les odeurs","Voir les choses","Entendre les sons"], answer:1 },
+  { section:"energie", type:"truefalse", q:"L'énergie n'existe que sous une seule forme.", answer:false },
+  { section:"energie", type:"mcq", q:"Quel mot décrit la capacité de déplacer quelque chose ?", choices:["La couleur","L'énergie","Le poids"], answer:1 },
+  { section:"energie", type:"truefalse", q:"Il existe de nombreux types d'énergie.", answer:true },
+
+  // SECTION: TYPES D'ÉNERGIE
+  { section:"types", type:"sort", q:"Classe ces objets : énergie SONORE ou LUMINEUSE ?", categories:["Sonore","Lumineuse"], items:[
+    {text:"Une guitare 🎸", cat:"Sonore"},{text:"Une ampoule 💡", cat:"Lumineuse"},{text:"Un oiseau qui chante 🐦", cat:"Sonore"},{text:"Une bougie allumée 🕯️", cat:"Lumineuse"},{text:"Une trompette 🎺", cat:"Sonore"},{text:"Une lampe de poche 🔦", cat:"Lumineuse"}
+  ]},
+  { section:"types", type:"sort", q:"Classe ces objets : énergie THERMIQUE ou SONORE ?", categories:["Thermique","Sonore"], items:[
+    {text:"Un feu de camp 🔥", cat:"Thermique"},{text:"Un tambour 🥁", cat:"Sonore"},{text:"Un grille-pain chaud 🍞", cat:"Thermique"},{text:"Un clavier musical 🎹", cat:"Sonore"},{text:"Le soleil ☀️", cat:"Thermique"},{text:"Un micro 🎤", cat:"Sonore"}
+  ]},
+  { section:"types", type:"sort", q:"Classe ces objets : énergie LUMINEUSE ou THERMIQUE ?", categories:["Lumineuse","Thermique"], items:[
+    {text:"Une lampe 💡", cat:"Lumineuse"},{text:"Un radiateur 🔥", cat:"Thermique"},{text:"Un écran d'ordinateur 💻", cat:"Lumineuse"},{text:"Un four chaud 🍕", cat:"Thermique"},{text:"Une étoile ⭐", cat:"Lumineuse"},{text:"Une tasse de chocolat chaud ☕", cat:"Thermique"}
+  ]},
+  { section:"types", type:"intrus", q:"Quel objet ne fait PAS d'énergie sonore ?", choices:["Une guitare 🎸","Une trompette 🎺","Un livre 📖","Un oiseau qui chante 🐦"], answer:2 },
+  { section:"types", type:"intrus", q:"Quel objet ne donne PAS d'énergie lumineuse ?", choices:["Une ampoule 💡","Une bougie 🕯️","Un chapeau 🎩","Une lampe de poche 🔦"], answer:2 },
+  { section:"types", type:"intrus", q:"Quel objet ne produit PAS d'énergie thermique ?", choices:["Un feu 🔥","Le soleil ☀️","Un crayon ✏️","Un grille-pain 🍞"], answer:2 },
+  { section:"types", type:"mcq", q:"Une bougie produit quel(s) type(s) d'énergie ?", choices:["Thermique et lumineuse","Sonore seulement","Lumineuse seulement"], answer:0 },
+  { section:"types", type:"mcq", q:"Une télévision donne quel(s) type(s) d'énergie ?", choices:["Thermique seulement","Lumineuse et sonore","Sonore seulement"], answer:1 },
+  { section:"types", type:"truefalse", q:"Un feu de camp produit de l'énergie thermique et lumineuse.", answer:true },
+  { section:"types", type:"truefalse", q:"Un livre produit de l'énergie sonore.", answer:false },
+  { section:"types", type:"truefalse", q:"Un volcan produit de l'énergie thermique.", answer:true },
+  { section:"types", type:"mcq", q:"Quel objet produit de l'énergie sonore ?", choices:["Un chapeau","Un tambour","Un crayon"], answer:1 },
+  { section:"types", type:"mcq", q:"L'énergie thermique, c'est…", choices:["Ce qu'on peut voir","Ce qu'on peut sentir (chaud/froid)","Ce qu'on peut entendre"], answer:1 },
+  { section:"types", type:"truefalse", q:"Une lampe de poche donne de l'énergie lumineuse.", answer:true },
+  { section:"types", type:"truefalse", q:"Un pull produit de l'énergie lumineuse.", answer:false },
+  { section:"types", type:"mcq", q:"Un gâteau d'anniversaire avec des bougies allumées produit…", choices:["De l'énergie thermique et lumineuse","De l'énergie sonore","Aucune énergie"], answer:0 },
+  { section:"types", type:"intrus", q:"Quel objet ne produit PAS de chaleur ?", choices:["Un feu de camp 🔥","Un grille-pain 🍞","Un ballon de basket 🏀","Le soleil ☀️"], answer:2 },
+
+  // SECTION: SOURCES D'ÉNERGIE
+  { section:"sources", type:"mcq", q:"Qu'est-ce qu'une source d'énergie ?", choices:["Quelque chose dont l'énergie peut être prélevée","Un jouet","Un animal"], answer:0 },
+  { section:"sources", type:"mcq", q:"La chaleur et la lumière du soleil donnent…", choices:["L'énergie éolienne","L'énergie solaire","L'énergie sonore"], answer:1 },
+  { section:"sources", type:"mcq", q:"La puissance du vent qui souffle donne…", choices:["L'énergie hydraulique","L'énergie solaire","L'énergie éolienne"], answer:2 },
+  { section:"sources", type:"mcq", q:"La puissance de l'eau courante donne…", choices:["L'énergie hydraulique","L'énergie éolienne","L'énergie thermique"], answer:0 },
+  { section:"sources", type:"truefalse", q:"Le pétrole est recueilli dans le sous-sol et brûlé pour produire de l'énergie.", answer:true },
+  { section:"sources", type:"truefalse", q:"Le vent est une source d'énergie.", answer:true },
+  { section:"sources", type:"truefalse", q:"Un jouet en peluche est une source d'énergie.", answer:false },
+  { section:"sources", type:"sort", q:"Classe : SOURCE d'énergie ou PAS une source d'énergie ?", categories:["Source d'énergie","Pas une source"], items:[
+    {text:"Le soleil ☀️", cat:"Source d'énergie"},{text:"Le vent 💨", cat:"Source d'énergie"},{text:"Un crayon ✏️", cat:"Pas une source"},{text:"L'eau courante 🌊", cat:"Source d'énergie"},{text:"Un chapeau 🎩", cat:"Pas une source"},{text:"La nourriture 🍎", cat:"Source d'énergie"}
+  ]},
+  { section:"sources", type:"mcq", q:"Le bois est brûlé pour produire…", choices:["De l'énergie lumineuse","De la chaleur","Du bruit"], answer:1 },
+  { section:"sources", type:"mcq", q:"La nourriture est une source d'énergie pour…", choices:["Les voitures","Les êtres vivants","Les roches"], answer:1 },
+  { section:"sources", type:"truefalse", q:"L'eau courante peut produire de l'électricité.", answer:true },
+  { section:"sources", type:"intrus", q:"Lequel n'est PAS une source d'énergie ?", choices:["Le soleil ☀️","Le vent 💨","Une chaussure 👟","Le pétrole 🛢️"], answer:2 },
+  { section:"sources", type:"truefalse", q:"La nourriture que nous mangeons nous donne de l'énergie.", answer:true },
+
+  // SECTION: LE SOLEIL
+  { section:"soleil", type:"mcq", q:"Le Soleil est la ___ source d'énergie de la Terre.", choices:["Plus petite","Principale","Moins importante"], answer:1 },
+  { section:"soleil", type:"truefalse", q:"Le Soleil réchauffe l'air, la terre et l'eau.", answer:true },
+  { section:"soleil", type:"truefalse", q:"Le Soleil permet aux plantes de pousser.", answer:true },
+  { section:"soleil", type:"truefalse", q:"Sans le Soleil, les plantes pourraient encore pousser.", answer:false },
+  { section:"soleil", type:"mcq", q:"Le Soleil donne de l'énergie aux plantes pour…", choices:["Fabriquer leur propre nourriture","Voler","Parler"], answer:0 },
+  { section:"soleil", type:"mcq", q:"Quand les plantes poussent, elles nous donnent…", choices:["Des jouets","De l'air pur (oxygène)","Du chocolat"], answer:1 },
+  { section:"soleil", type:"truefalse", q:"Le Soleil est une source de lumière pour la Terre.", answer:true },
+  { section:"soleil", type:"mcq", q:"Le Soleil donne deux choses importantes à la Terre :", choices:["Lumière et chaleur","Bruit et froid","Vent et pluie"], answer:0 },
+  { section:"soleil", type:"truefalse", q:"Si le Soleil n'existait pas, la Terre serait très froide et sombre.", answer:true },
+  { section:"soleil", type:"mcq", q:"Qui utilise l'énergie du soleil pour pousser ?", choices:["Les roches","Les plantes","Les voitures"], answer:1 },
+  { section:"soleil", type:"truefalse", q:"Le Soleil peut décolorer le papier de construction noir.", answer:true },
+  { section:"soleil", type:"sort", q:"Classe : a besoin du Soleil ou PAS besoin du Soleil ?", categories:["Besoin du Soleil","Pas besoin"], items:[
+    {text:"Les plantes 🌱", cat:"Besoin du Soleil"},{text:"Une roche 🪨", cat:"Pas besoin"},{text:"Les fleurs 🌻", cat:"Besoin du Soleil"},{text:"Un stylo ✒️", cat:"Pas besoin"},{text:"Les arbres 🌳", cat:"Besoin du Soleil"},{text:"Une chaise 🪑", cat:"Pas besoin"}
+  ]},
+  { section:"soleil", type:"mcq", q:"Le soleil donne de l'énergie ___ aux plantes.", choices:["sonore","lumineuse","magnétique"], answer:1 },
+  { section:"soleil", type:"truefalse", q:"Les plantes utilisent l'énergie sonore du soleil pour pousser.", answer:false },
+
+  // SECTION: LE VENT
+  { section:"vent", type:"truefalse", q:"Le vent est une source d'énergie.", answer:true },
+  { section:"vent", type:"truefalse", q:"Le vent est très puissant.", answer:true },
+  { section:"vent", type:"mcq", q:"L'énergie éolienne est créée quand le vent souffle sur…", choices:["Les arbres","Les éoliennes","Les maisons"], answer:1 },
+  { section:"vent", type:"mcq", q:"Le vent peut faire voler…", choices:["Un cerf-volant","Une maison","Un lac"], answer:0 },
+  { section:"vent", type:"mcq", q:"Une éolienne sert à…", choices:["Faire de la musique","Transformer le vent en électricité","Arroser les plantes"], answer:1 },
+  { section:"vent", type:"truefalse", q:"Une moulinette tourne grâce au vent.", answer:true },
+  { section:"vent", type:"truefalse", q:"Le vent ne peut rien déplacer.", answer:false },
+  { section:"vent", type:"mcq", q:"Que peut secouer le vent ?", choices:["Les branches des arbres","Les montagnes","Les lacs"], answer:0 },
+  { section:"vent", type:"intrus", q:"Qu'est-ce que le vent ne peut PAS faire ?", choices:["Faire voler un cerf-volant 🪁","Secouer les arbres 🌳","Faire bouger les montagnes 🏔️","Souffler les feuilles 🍂"], answer:2 },
+  { section:"vent", type:"truefalse", q:"L'énergie éolienne vient du soleil.", answer:false },
+
+  // SECTION: L'EAU COURANTE
+  { section:"eau", type:"truefalse", q:"L'eau courante est une source d'énergie.", answer:true },
+  { section:"eau", type:"mcq", q:"L'énergie hydraulique est créée quand l'eau traverse…", choices:["Un barrage hydroélectrique","Un verre","Un robinet"], answer:0 },
+  { section:"eau", type:"truefalse", q:"L'eau en mouvement est très puissante.", answer:true },
+  { section:"eau", type:"mcq", q:"Dans un barrage, l'eau fait tourner…", choices:["Les pales de la turbine","Les lumières","Les fenêtres"], answer:0 },
+  { section:"eau", type:"truefalse", q:"L'eau, le vent et le soleil sont des sources d'énergie renouvelables.", answer:true },
+  { section:"eau", type:"mcq", q:"Que signifie « renouvelable » ?", choices:["Qui ne s'épuise pas","Qui coûte cher","Qui est rouge"], answer:0 },
+  { section:"eau", type:"truefalse", q:"L'énergie hydraulique vient de l'eau qui ne bouge pas.", answer:false },
+  { section:"eau", type:"mcq", q:"Un barrage hydroélectrique produit…", choices:["De l'électricité","Des bonbons","Du vent"], answer:0 },
+
+  // SECTION: ALIMENTATION ET ÉNERGIE
+  { section:"alimentation", type:"truefalse", q:"Tous les êtres vivants ont besoin de nourriture pour obtenir de l'énergie.", answer:true },
+  { section:"alimentation", type:"mcq", q:"Un lapin mange…", choices:["De la viande","Des plantes","De la lumière du soleil"], answer:1 },
+  { section:"alimentation", type:"mcq", q:"Une plante utilise ___ pour son énergie.", choices:["De la viande","Des plantes","La lumière du soleil"], answer:2 },
+  { section:"alimentation", type:"mcq", q:"Un lion mange…", choices:["Des plantes","De la viande","De la lumière du soleil"], answer:1 },
+  { section:"alimentation", type:"sort", q:"Classe ces aliments : donne BEAUCOUP d'énergie ou rend FATIGUÉ ?", categories:["Beaucoup d'énergie","Rend fatigué"], items:[
+    {text:"Pomme 🍎", cat:"Beaucoup d'énergie"},{text:"Bonbons 🍬", cat:"Rend fatigué"},{text:"Brocoli 🥦", cat:"Beaucoup d'énergie"},{text:"Chips 🍟", cat:"Rend fatigué"},{text:"Poulet 🍗", cat:"Beaucoup d'énergie"},{text:"Sucreries 🧁", cat:"Rend fatigué"}
+  ]},
+  { section:"alimentation", type:"mcq", q:"Je mets la nourriture dans ma…", choices:["Bouche","Poche","Chaussure"], answer:0 },
+  { section:"alimentation", type:"mcq", q:"La nourriture va dans mon…", choices:["Cerveau","Estomac","Pied"], answer:1 },
+  { section:"alimentation", type:"mcq", q:"Je mâche la nourriture avec mes…", choices:["Yeux","Oreilles","Dents"], answer:2 },
+  { section:"alimentation", type:"truefalse", q:"Les fruits et légumes donnent beaucoup de bonne énergie.", answer:true },
+  { section:"alimentation", type:"truefalse", q:"Manger trop de bonbons donne beaucoup d'énergie.", answer:false },
+  { section:"alimentation", type:"mcq", q:"La nourriture me donne de l'énergie pour…", choices:["Bouger","Devenir invisible","Voler"], answer:0 },
+  { section:"alimentation", type:"truefalse", q:"Les aliments qui ne sont pas utilisés par le corps sont des déchets.", answer:true },
+  { section:"alimentation", type:"intrus", q:"Quel aliment ne donne PAS beaucoup de bonne énergie ?", choices:["Une pomme 🍎","Du brocoli 🥦","Des bonbons 🍬","Du poulet 🍗"], answer:2 },
+
+  // SECTION: LA CHAÎNE ALIMENTAIRE
+  { section:"chaine", type:"mcq", q:"Une chaîne alimentaire commence avec…", choices:["Un animal","Le Soleil","L'eau"], answer:1 },
+  { section:"chaine", type:"mcq", q:"Les plantes utilisent l'énergie du soleil pour…", choices:["Chanter","Pousser","Courir"], answer:1 },
+  { section:"chaine", type:"truefalse", q:"Les animaux et les insectes obtiennent leur énergie en mangeant les plantes.", answer:true },
+  { section:"chaine", type:"truefalse", q:"Certains animaux obtiennent de l'énergie en mangeant d'autres animaux.", answer:true },
+  { section:"chaine", type:"mcq", q:"Une chaîne alimentaire montre comment…", choices:["L'énergie passe par différents êtres vivants","Les voitures fonctionnent","Les nuages se forment"], answer:0 },
+  { section:"chaine", type:"truefalse", q:"Une chaîne alimentaire commence avec un lion.", answer:false },
+  { section:"chaine", type:"sort", q:"Mets dans l'ordre de la chaîne alimentaire :", categories:["1er (début)","2e","3e","4e (fin)"], items:[
+    {text:"Soleil ☀️", cat:"1er (début)"},{text:"Plante 🌱", cat:"2e"},{text:"Souris 🐭", cat:"3e"},{text:"Hibou 🦉", cat:"4e (fin)"}
+  ]},
+  { section:"chaine", type:"mcq", q:"Après le soleil, qui vient dans la chaîne alimentaire ?", choices:["Le lion","La plante","Le poisson"], answer:1 },
+  { section:"chaine", type:"truefalse", q:"Les plantes mangent des animaux pour obtenir de l'énergie.", answer:false },
+
+  // SECTION: ÉNERGIE RENOUVELABLE
+  { section:"renouvelable", type:"mcq", q:"Que signifie « énergie renouvelable » ?", choices:["Énergie qui ne s'épuise pas","Énergie très chère","Énergie rouge"], answer:0 },
+  { section:"renouvelable", type:"sort", q:"Classe : RENOUVELABLE ou NON RENOUVELABLE ?", categories:["Renouvelable","Non renouvelable"], items:[
+    {text:"Le soleil ☀️", cat:"Renouvelable"},{text:"Le pétrole 🛢️", cat:"Non renouvelable"},{text:"Le vent 💨", cat:"Renouvelable"},{text:"Le gaz ⛽", cat:"Non renouvelable"},{text:"L'eau courante 🌊", cat:"Renouvelable"},{text:"Le charbon 🪨", cat:"Non renouvelable"}
+  ]},
+  { section:"renouvelable", type:"truefalse", q:"Le pétrole est une source d'énergie renouvelable.", answer:false },
+  { section:"renouvelable", type:"truefalse", q:"Le soleil est une source d'énergie renouvelable.", answer:true },
+  { section:"renouvelable", type:"truefalse", q:"Le gaz est une source d'énergie non renouvelable.", answer:true },
+  { section:"renouvelable", type:"mcq", q:"Quand le pétrole et le gaz sont épuisés, ils…", choices:["Reviennent vite","Disparaissent à jamais","Deviennent de l'eau"], answer:1 },
+  { section:"renouvelable", type:"intrus", q:"Quelle source d'énergie est NON renouvelable ?", choices:["Le soleil ☀️","Le vent 💨","Le pétrole 🛢️","L'eau courante 🌊"], answer:2 },
+  { section:"renouvelable", type:"truefalse", q:"L'eau courante est une énergie qui peut s'épuiser.", answer:false },
+
+  // SECTION: L'ÉLECTRICITÉ
+  { section:"electricite", type:"mcq", q:"L'électricité est…", choices:["Le flux d'énergie électrique","Un animal","Une couleur"], answer:0 },
+  { section:"electricite", type:"sort", q:"Classe : a besoin d'ÉLECTRICITÉ ou PAS besoin ?", categories:["Besoin d'électricité","Pas besoin"], items:[
+    {text:"Un ordinateur 💻", cat:"Besoin d'électricité"},{text:"Un livre 📖", cat:"Pas besoin"},{text:"Une ampoule 💡", cat:"Besoin d'électricité"},{text:"Un ballon 🏀", cat:"Pas besoin"},{text:"Un grille-pain 🍞", cat:"Besoin d'électricité"},{text:"Un crayon ✏️", cat:"Pas besoin"}
+  ]},
+  { section:"electricite", type:"mcq", q:"Une éolienne transforme le vent en…", choices:["Eau","Électricité","Nourriture"], answer:1 },
+  { section:"electricite", type:"mcq", q:"Un panneau solaire utilise l'énergie du…", choices:["Vent","Soleil","Pétrole"], answer:1 },
+  { section:"electricite", type:"mcq", q:"Un barrage hydroélectrique utilise l'énergie de…", choices:["L'eau","Le feu","L'air"], answer:0 },
+  { section:"electricite", type:"truefalse", q:"Un livre a besoin d'électricité pour fonctionner.", answer:false },
+  { section:"electricite", type:"truefalse", q:"Un ordinateur a besoin d'électricité pour fonctionner.", answer:true },
+  { section:"electricite", type:"intrus", q:"Quel objet n'a PAS besoin d'électricité ?", choices:["Un ordinateur 💻","Un grille-pain 🍞","Un skateboard 🛹","Une lampe 💡"], answer:2 },
+  { section:"electricite", type:"mcq", q:"L'énergie est collectée et transformée en…", choices:["Électricité","Papier","Musique"], answer:0 },
+  { section:"electricite", type:"truefalse", q:"Une lampe de poche fonctionne avec des piles.", answer:true },
+
+  // SECTION: ÉCONOMISER L'ÉNERGIE
+  { section:"economiser", type:"sort", q:"Classe : ÉCONOMISE l'énergie ou GASPILLE l'énergie ?", categories:["Économise","Gaspille"], items:[
+    {text:"Éteindre les lumières 💡", cat:"Économise"},{text:"Laisser le robinet ouvert 🚰", cat:"Gaspille"},{text:"Aller à l'école à pied 🚶", cat:"Économise"},{text:"Laisser la voiture allumée 🚗", cat:"Gaspille"},{text:"Jouer dehors ⚽", cat:"Économise"},{text:"Jeter la nourriture 🍔", cat:"Gaspille"}
+  ]},
+  { section:"economiser", type:"truefalse", q:"Éteindre les lumières quand on quitte une pièce permet d'économiser l'énergie.", answer:true },
+  { section:"economiser", type:"truefalse", q:"Laisser le robinet ouvert permet d'économiser l'eau.", answer:false },
+  { section:"economiser", type:"mcq", q:"Pour économiser l'énergie, on peut…", choices:["Laisser toutes les lumières allumées","Éteindre les lumières en sortant","Ouvrir tous les robinets"], answer:1 },
+  { section:"economiser", type:"mcq", q:"Aller à l'école à pied au lieu d'en voiture…", choices:["Gaspille l'énergie","Économise l'énergie","Ne change rien"], answer:1 },
+  { section:"economiser", type:"truefalse", q:"Utiliser le soleil pour sécher les vêtements économise de l'énergie.", answer:true },
+  { section:"economiser", type:"truefalse", q:"Laisser la voiture allumée quand elle est garée gaspille de l'énergie.", answer:true },
+  { section:"economiser", type:"mcq", q:"Pourquoi doit-on économiser l'énergie ?", choices:["Pour que les gens du futur puissent aussi en avoir","Parce que c'est drôle","Pour faire du bruit"], answer:0 },
+  { section:"economiser", type:"intrus", q:"Quelle activité NE permet PAS d'économiser l'énergie ?", choices:["Éteindre les lumières 💡","Aller à pied 🚶","Laisser le robinet ouvert 🚰","Lire un livre 📖"], answer:2 },
+  { section:"economiser", type:"mcq", q:"Jouer dehors au lieu de jouer aux jeux vidéo…", choices:["Utilise plus d'électricité","Économise de l'électricité","Ne change rien"], answer:1 },
+  { section:"economiser", type:"truefalse", q:"Jeter de la nourriture sans la manger est un gaspillage d'énergie.", answer:true },
+
+  // SECTION: VIE SANS ÉLECTRICITÉ
+  { section:"sanselectricite", type:"mcq", q:"Avant l'électricité, les gens utilisaient ___ pour s'éclairer la nuit.", choices:["Des bougies et des lanternes","Des téléphones","Des télévisions"], answer:0 },
+  { section:"sanselectricite", type:"mcq", q:"Avant l'électricité, les maisons étaient chauffées par…", choices:["Des climatiseurs","Des cheminées","Des ventilateurs"], answer:1 },
+  { section:"sanselectricite", type:"truefalse", q:"Avant l'électricité, les gens utilisaient des machines à laver.", answer:false },
+  { section:"sanselectricite", type:"truefalse", q:"Avant l'électricité, les aliments étaient cuits sur un feu.", answer:true },
+  { section:"sanselectricite", type:"sort", q:"En camping sans électricité : POSSIBLE ou IMPOSSIBLE ?", categories:["Possible","Impossible"], items:[
+    {text:"Jouer au ballon ⚽", cat:"Possible"},{text:"Regarder la télé 📺", cat:"Impossible"},{text:"Faire un feu 🔥", cat:"Possible"},{text:"Utiliser un ordi 💻", cat:"Impossible"},{text:"Lire un livre 📖", cat:"Possible"},{text:"Jouer aux jeux vidéo 🎮", cat:"Impossible"}
+  ]},
+  { section:"sanselectricite", type:"mcq", q:"Sans électricité, on pourrait s'amuser en…", choices:["Jouant aux jeux vidéo","Jouant dehors","Regardant la télé"], answer:1 },
+  { section:"sanselectricite", type:"truefalse", q:"Sans électricité, on peut encore lire un livre.", answer:true },
+  { section:"sanselectricite", type:"truefalse", q:"Sans électricité, on peut utiliser un réfrigérateur.", answer:false },
+
+  // SECTION: ÉNERGIE ET SAISONS
+  { section:"saisons", type:"truefalse", q:"Nous utilisons l'énergie de la même façon en été et en hiver.", answer:false },
+  { section:"saisons", type:"mcq", q:"En hiver, on utilise de l'énergie pour…", choices:["Se rafraîchir","Se réchauffer","Nager"], answer:1 },
+  { section:"saisons", type:"mcq", q:"En été, on peut utiliser l'énergie du soleil pour…", choices:["Chauffer la maison","Sécher les vêtements dehors","Faire de la neige"], answer:1 },
+  { section:"saisons", type:"truefalse", q:"En hiver, on utilise plus de chauffage qu'en été.", answer:true },
+  { section:"saisons", type:"sort", q:"Classe : utilisation d'énergie en HIVER ou en ÉTÉ ?", categories:["Hiver","Été"], items:[
+    {text:"Chauffage 🔥", cat:"Hiver"},{text:"Ventilateur 🌀", cat:"Été"},{text:"Manteau chaud 🧥", cat:"Hiver"},{text:"Climatiseur ❄️", cat:"Été"},{text:"Feu de cheminée 🪵", cat:"Hiver"},{text:"Piscine 🏊", cat:"Été"}
+  ]},
+  { section:"saisons", type:"mcq", q:"Quelle saison utilise le plus de chauffage ?", choices:["L'été","Le printemps","L'hiver"], answer:2 },
+];
+
+const SECTIONS_META = [
+  { id:"energie", label:"L'énergie", emoji:"⚡", bg:"#FFB830" },
+  { id:"types", label:"Types d'énergie", emoji:"🔥", bg:"#FF6B6B" },
+  { id:"sources", label:"Sources d'énergie", emoji:"🌍", bg:"#4ECDC4" },
+  { id:"soleil", label:"Le Soleil", emoji:"☀️", bg:"#FFD93D" },
+  { id:"vent", label:"Le vent", emoji:"💨", bg:"#74B9FF" },
+  { id:"eau", label:"L'eau courante", emoji:"🌊", bg:"#0984E3" },
+  { id:"alimentation", label:"Alimentation", emoji:"🍎", bg:"#E17055" },
+  { id:"chaine", label:"Chaîne alimentaire", emoji:"🦉", bg:"#A29BFE" },
+  { id:"renouvelable", label:"Renouvelable", emoji:"♻️", bg:"#00B894" },
+  { id:"electricite", label:"L'électricité", emoji:"🔌", bg:"#FDCB6E" },
+  { id:"economiser", label:"Économiser", emoji:"💚", bg:"#55EFC4" },
+  { id:"sanselectricite", label:"Sans électricité", emoji:"🕯️", bg:"#636E72" },
+  { id:"saisons", label:"Énergie & saisons", emoji:"🌦️", bg:"#6C5CE7" },
+];
+
+// ═══════════════════════════════════════════
+// UTILITY FUNCTIONS
+// ═══════════════════════════════════════════
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickRandom(arr, n) {
+  return shuffle(arr).slice(0, Math.min(n, arr.length));
+}
+
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ═══════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════
+let state = {
+  screen: "home",
+  selectedSection: null,
+  questions: [],
+  currentQ: 0,
+  score: 0,
+  results: [],
+  streak: 0,
+  bestStreak: 0,
+  answered: false,
+  // Sort question state
+  sortShuffled: [],
+  sortPlaced: {},
+  sortCurrentIdx: 0,
+  sortDone: false,
+};
+
+const app = document.getElementById('app');
+
+function typeLabel(t) {
+  return { mcq:"Choix multiples", truefalse:"Vrai ou Faux", sort:"Classement", intrus:"Trouve l'intrus" }[t] || "";
+}
+function typeColor(t) {
+  return { mcq:"#6C5CE7", truefalse:"#00B894", sort:"#E17055", intrus:"#0984E3" }[t] || "#666";
+}
+
+function startQuiz(sectionId) {
+  const pool = sectionId === "all" ? ALL_QUESTIONS : ALL_QUESTIONS.filter(q => q.section === sectionId);
+  state.questions = pickRandom(pool, 20);
+  state.currentQ = 0;
+  state.score = 0;
+  state.results = [];
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.selectedSection = sectionId;
+  state.answered = false;
+  state.screen = "quiz";
+  initSortState();
+  render();
+}
+
+function initSortState() {
+  const q = state.questions[state.currentQ];
+  if (q && q.type === "sort") {
+    state.sortShuffled = shuffle(q.items);
+    state.sortPlaced = {};
+    state.sortCurrentIdx = 0;
+    state.sortDone = false;
+  }
+}
+
+function handleAnswer(correct) {
+  if (state.answered) return;
+  state.answered = true;
+  state.score = correct ? state.score + 1 : state.score;
+  state.streak = correct ? state.streak + 1 : 0;
+  state.bestStreak = Math.max(state.bestStreak, state.streak);
+  state.results.push({ correct, question: state.questions[state.currentQ].q });
+
+  setTimeout(() => {
+    if (state.currentQ + 1 >= state.questions.length) {
+      state.screen = "results";
+    } else {
+      state.currentQ++;
+      state.answered = false;
+      initSortState();
+    }
+    render();
+  }, 1200);
+}
+
+function getEmoji() {
+  const pct = state.score / state.questions.length;
+  if (pct >= 0.9) return "🏆";
+  if (pct >= 0.7) return "⭐";
+  if (pct >= 0.5) return "👍";
+  return "💪";
+}
+
+function getMessage() {
+  const pct = state.score / state.questions.length;
+  if (pct >= 0.9) return "Incroyable ! Tu es un expert de l'énergie !";
+  if (pct >= 0.7) return "Bravo ! Tu connais bien l'énergie !";
+  if (pct >= 0.5) return "Bon travail ! Continue à apprendre !";
+  return "Continue ! Tu vas t'améliorer !";
+}
+
+// ═══════════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════════
+
+function renderHome() {
+  const sectionLabel = state.selectedSection === "all" ? "Toutes les sections" : (SECTIONS_META.find(s => s.id === state.selectedSection)?.label || "");
+
+  return `
+    <div style="animation:slideUp 0.5s ease">
+      <div style="text-align:center;margin-bottom:24px;padding:32px 20px;background:linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #74B9FF 100%);border-radius:24px;color:white;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;font-size:100px;opacity:0.1;transform:rotate(15deg)">⚡</div>
+        <div style="font-size:52px;margin-bottom:8px;animation:float 3s ease-in-out infinite">⚡</div>
+        <h1 style="font-family:'Fredoka One',cursive;font-size:26px;margin-bottom:6px;letter-spacing:0.5px">L'énergie dans nos vies</h1>
+        <p style="font-size:15px;opacity:0.9;font-weight:600">Jeu de sciences — 1re année</p>
+      </div>
+
+      <button onclick="startQuiz('all')" style="width:100%;padding:18px;border-radius:16px;border:none;background:linear-gradient(135deg, #00B894, #55EFC4);color:white;font-size:17px;font-weight:800;cursor:pointer;font-family:'Fredoka One',cursive;margin-bottom:20px;box-shadow:0 4px 15px rgba(0,184,148,0.3);transition:all 0.2s;letter-spacing:0.5px"
+        onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+        🎲 20 questions au hasard
+      </button>
+
+      <p style="font-weight:700;font-size:14px;color:#A0AEC0;margin-bottom:12px;text-align:center;text-transform:uppercase;letter-spacing:1px">
+        ou choisis une section
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:10px">
+        ${SECTIONS_META.map(s => {
+          const count = ALL_QUESTIONS.filter(q => q.section === s.id).length;
+          return `<button class="section-btn" style="background:${s.bg}" onclick="startQuiz('${s.id}')">
+            <span style="font-size:24px">${s.emoji}</span>
+            <span style="font-size:11px;line-height:1.2;max-width:90px">${s.label}</span>
+            <span style="font-size:10px;opacity:0.8">${count} Q</span>
+          </button>`;
+        }).join('')}
+      </div>
+
+      <div style="margin-top:20px;text-align:center;font-size:13px;color:#A0AEC0;font-weight:600">
+        📚 ${ALL_QUESTIONS.length} questions au total
+      </div>
+    </div>
+  `;
+}
+
+function renderMCQ(q) {
+  return `
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <p style="font-size:19px;font-weight:700;line-height:1.5;color:#2D3436">${escapeHTML(q.q)}</p>
+      ${q.choices.map((c, i) => `
+        <button class="choice-btn" id="mcq-${i}" onclick="handleMCQ(${i}, ${q.answer})" ${state.answered ? 'disabled' : ''}>
+          ${escapeHTML(c)}
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function handleMCQ(selected, answer) {
+  if (state.answered) return;
+  // Show colors
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById('mcq-' + i);
+    if (!btn) continue;
+    btn.disabled = true;
+    if (i === answer) {
+      btn.style.background = '#C6F6D5'; btn.style.border = '2px solid #38A169'; btn.style.color = '#22543D';
+    } else if (i === selected) {
+      btn.style.background = '#FED7D7'; btn.style.border = '2px solid #E53E3E'; btn.style.color = '#742A2A';
+    }
+  }
+  handleAnswer(selected === answer);
+}
+
+function renderTrueFalse(q) {
+  return `
+    <div style="display:flex;flex-direction:column;gap:20px;align-items:center">
+      <p style="font-size:19px;font-weight:700;line-height:1.5;color:#2D3436;text-align:center">${escapeHTML(q.q)}</p>
+      <div style="display:flex;gap:16px">
+        <button class="tf-btn" id="tf-true" style="background:#E8F5E9;border-color:#A5D6A7;color:#2E7D32" onclick="handleTF(true, ${q.answer})" ${state.answered ? 'disabled' : ''}>
+          ✅ Vrai
+        </button>
+        <button class="tf-btn" id="tf-false" style="background:#FFEBEE;border-color:#EF9A9A;color:#C62828" onclick="handleTF(false, ${q.answer})" ${state.answered ? 'disabled' : ''}>
+          ❌ Faux
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function handleTF(selected, answer) {
+  if (state.answered) return;
+  const btnId = selected ? 'tf-true' : 'tf-false';
+  const btn = document.getElementById(btnId);
+  const correct = selected === answer;
+  if (btn) {
+    btn.style.background = correct ? '#C6F6D5' : '#FED7D7';
+    btn.style.borderWidth = '3px';
+    btn.style.borderColor = correct ? '#38A169' : '#E53E3E';
+  }
+  document.getElementById('tf-true').disabled = true;
+  document.getElementById('tf-false').disabled = true;
+  handleAnswer(correct);
+}
+
+function renderSort(q) {
+  const items = state.sortShuffled;
+  const placed = state.sortPlaced;
+  const currentIdx = state.sortCurrentIdx;
+  const done = state.sortDone;
+  const currentItem = !done ? items[currentIdx] : null;
+
+  let html = `<div style="display:flex;flex-direction:column;gap:14px">
+    <p style="font-size:19px;font-weight:700;line-height:1.5;color:#2D3436">${escapeHTML(q.q)}</p>`;
+
+  if (!done && currentItem) {
+    html += `<div style="text-align:center;padding:14px 16px;background:#FFFBEB;border-radius:14px;border:2px dashed #F6AD55;font-size:20px;font-weight:700;font-family:'Nunito',sans-serif;animation:slideUp 0.3s ease">
+      👉 ${escapeHTML(currentItem.text)}
+    </div>`;
+  }
+
+  html += `<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">`;
+  q.categories.forEach(cat => {
+    const itemsInCat = items.filter((_, i) => placed[i] === cat);
+    html += `<div style="flex:1;min-width:130px">
+      <button class="sort-cat-btn" onclick="handleSortPlace('${cat.replace(/'/g, "\\'")}')" ${done ? 'disabled' : ''}>${escapeHTML(cat)}</button>
+      <div style="margin-top:6px;min-height:30px">`;
+    itemsInCat.forEach(it => {
+      const idx = items.indexOf(it);
+      const correct = it.cat === placed[idx];
+      html += `<div style="padding:4px 8px;border-radius:8px;font-size:13px;margin-bottom:3px;background:${done ? (correct ? '#C6F6D5' : '#FED7D7') : '#EDF2F7'};font-weight:600">
+        ${escapeHTML(it.text)} ${done ? (correct ? '✅' : '❌') : ''}
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  html += `</div>`;
+
+  if (!done) {
+    html += `<div style="text-align:center;font-size:13px;color:#A0AEC0">${currentIdx + 1} / ${items.length}</div>`;
+  }
+  if (done) {
+    const allCorrect = items.every((it, i) => placed[i] === it.cat);
+    html += `<div style="text-align:center;font-size:16px;font-weight:700;color:${allCorrect ? '#38A169' : '#E53E3E'};padding:8px;border-radius:10px;background:${allCorrect ? '#F0FFF4' : '#FFF5F5'}">
+      ${allCorrect ? '🎉 Tout est bien classé !' : 'Oups ! Regarde les corrections.'}
+    </div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function handleSortPlace(cat) {
+  if (state.sortDone || state.answered) return;
+  state.sortPlaced[state.sortCurrentIdx] = cat;
+  const nextIdx = state.sortCurrentIdx + 1;
+
+  if (nextIdx >= state.sortShuffled.length) {
+    state.sortDone = true;
+    const allCorrect = state.sortShuffled.every((it, i) => state.sortPlaced[i] === it.cat);
+    render();
+    setTimeout(() => handleAnswer(allCorrect), 1800);
+  } else {
+    state.sortCurrentIdx = nextIdx;
+    render();
+  }
+}
+
+function renderIntrus(q) {
+  return `
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <p style="font-size:19px;font-weight:700;line-height:1.5;color:#2D3436">🔍 ${escapeHTML(q.q)}</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        ${q.choices.map((c, i) => `
+          <button class="intrus-btn" id="intrus-${i}" onclick="handleIntrus(${i}, ${q.answer})" ${state.answered ? 'disabled' : ''}>
+            ${escapeHTML(c)}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function handleIntrus(selected, answer) {
+  if (state.answered) return;
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById('intrus-' + i);
+    if (!btn) continue;
+    btn.disabled = true;
+    if (i === answer) {
+      btn.style.background = '#C6F6D5'; btn.style.border = '2px solid #38A169'; btn.style.color = '#22543D';
+    } else if (i === selected) {
+      btn.style.background = '#FED7D7'; btn.style.border = '2px solid #E53E3E'; btn.style.color = '#742A2A';
+    }
+  }
+  handleAnswer(selected === answer);
+}
+
+function renderQuiz() {
+  const q = state.questions[state.currentQ];
+  const sectionLabel = state.selectedSection === "all" ? "Toutes les sections" : (SECTIONS_META.find(s => s.id === state.selectedSection)?.label || "");
+
+  let questionHTML = '';
+  switch (q.type) {
+    case 'mcq': questionHTML = renderMCQ(q); break;
+    case 'truefalse': questionHTML = renderTrueFalse(q); break;
+    case 'sort': questionHTML = renderSort(q); break;
+    case 'intrus': questionHTML = renderIntrus(q); break;
+  }
+
+  return `
+    <div style="animation:slideUp 0.4s ease">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <button onclick="state.screen='home';render()" style="background:none;border:none;font-size:14px;color:#A0AEC0;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700">← Retour</button>
+        <div style="font-size:14px;font-weight:800;color:#6C5CE7;display:flex;align-items:center;gap:6px">
+          <span>${state.score}/${state.currentQ}</span>
+          ${state.streak >= 3 ? `<span style="color:#E17055;font-size:13px">🔥${state.streak}</span>` : ''}
+        </div>
+      </div>
+
+      <div class="progress-bar" style="margin-bottom:6px">
+        <div class="progress-fill" style="width:${((state.currentQ) / state.questions.length) * 100}%"></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:13px;font-weight:700;color:#A0AEC0">Question ${state.currentQ + 1} / ${state.questions.length}</span>
+        <span style="font-size:11px;font-weight:700;color:${typeColor(q.type)};background:${typeColor(q.type)}15;padding:3px 10px;border-radius:99px">${typeLabel(q.type)}</span>
+      </div>
+
+      <div class="card" style="animation:slideUp 0.35s ease">
+        ${questionHTML}
+      </div>
+    </div>
+  `;
+}
+
+function renderResults() {
+  const sectionLabel = state.selectedSection === "all" ? "Toutes les sections" : (SECTIONS_META.find(s => s.id === state.selectedSection)?.label || "");
+
+  return `
+    <div style="animation:bounceIn 0.6s ease">
+      <div class="card" style="padding:28px;text-align:center">
+        <div style="font-size:64px;margin-bottom:6px;animation:pulse 1.5s infinite">${getEmoji()}</div>
+        <h2 style="font-family:'Fredoka One',cursive;font-size:24px;color:#2D3436;margin-bottom:4px">Résultat</h2>
+        <p style="font-size:13px;color:#A0AEC0;font-weight:600;margin-bottom:10px">${escapeHTML(sectionLabel)}</p>
+        <div style="font-size:44px;font-weight:900;color:#6C5CE7;margin-bottom:6px">${state.score} / ${state.questions.length}</div>
+        <p style="font-size:16px;font-weight:600;color:#636E72;margin-bottom:4px">${getMessage()}</p>
+        ${state.bestStreak >= 3 ? `<p style="font-size:14px;color:#E17055;font-weight:700;margin-bottom:8px">🔥 Meilleure série : ${state.bestStreak} de suite !</p>` : ''}
+
+        <div style="margin:16px 0;background:#F7FAFC;border-radius:14px;padding:14px;text-align:left;max-height:220px;overflow-y:auto">
+          ${state.results.map(r => `
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:13px;font-weight:600;line-height:1.4">
+              <span style="flex-shrink:0;font-size:15px">${r.correct ? '✅' : '❌'}</span>
+              <span style="color:${r.correct ? '#2E7D32' : '#C62828'}">${escapeHTML(r.question)}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="action-btn" onclick="startQuiz('${state.selectedSection}')" style="background:#6C5CE7;color:white">🔄 Rejouer</button>
+          <button class="action-btn" onclick="state.screen='home';render()" style="background:#EDF2F7;color:#2D3436">🏠 Accueil</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function render() {
+  switch (state.screen) {
+    case 'home': app.innerHTML = renderHome(); break;
+    case 'quiz': app.innerHTML = renderQuiz(); break;
+    case 'results': app.innerHTML = renderResults(); break;
+  }
+}
+
+// ═══════════════════════════════════════════
+// SCORE REPORTING (for parent site hub)
+// ═══════════════════════════════════════════
+// When quiz ends and results screen shows, report score to parent
+const _origRenderResults = renderResults;
+renderResults = function() {
+  const html = _origRenderResults();
+  // Report score to parent hub
+  try {
+    const pct = Math.round((state.score / state.questions.length) * 100);
+    window.parent.postMessage({
+      type: 'gameScore',
+      score: state.score,
+      total: state.questions.length,
+      pct: pct
+    }, '*');
+  } catch(e) {}
+  return html;
+};
+
+// Start the app!
+render();
+</script>
+</body>
+</html>
