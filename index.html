@@ -15,6 +15,7 @@
 }
 body{font-family:'Nunito',sans-serif;background:var(--cloud);color:var(--night);min-height:100vh;overflow-x:hidden}
 
+/* ── Background blobs ── */
 .bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .bg i{position:absolute;border-radius:50%;opacity:.06;animation:drift 25s infinite ease-in-out}
 .bg i:nth-child(1){width:350px;height:350px;background:var(--coral);top:-80px;left:-60px}
@@ -24,6 +25,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cloud);color:var(--night);
 .bg i:nth-child(5){width:280px;height:280px;background:var(--sun);bottom:5%;right:8%;animation-delay:-11s}
 @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(25px,-18px) scale(1.04)}66%{transform:translate(-18px,12px) scale(.96)}}
 
+/* ── Header ── */
 header{position:relative;z-index:10;text-align:center;padding:2.5rem 1.5rem 1.5rem}
 .logo{font-family:'Fredoka',sans-serif;font-size:clamp(2rem,5.5vw,3.2rem);font-weight:700;
   background:linear-gradient(135deg,var(--coral),var(--lavender),var(--sky));
@@ -31,6 +33,25 @@ header{position:relative;z-index:10;text-align:center;padding:2.5rem 1.5rem 1.5r
 .logo-row{font-size:clamp(1.8rem,4.5vw,2.8rem);margin-bottom:.2rem}
 header .sub{font-size:1.05rem;color:var(--slate);font-weight:700;margin-top:.3rem}
 
+/* ── Announcement banner ── */
+.announce-banner{position:relative;z-index:10;max-width:960px;margin:0 auto 1rem;padding:0 1.5rem}
+.announce-box{background:linear-gradient(135deg,#DBEAFE,#EDE9FE);border:2px solid var(--ocean);border-radius:16px;padding:1rem 1.3rem;display:flex;align-items:flex-start;gap:.7rem;animation:pop .3s ease}
+.announce-box .ab-icon{font-size:1.4rem;flex-shrink:0;margin-top:.1rem}
+.announce-box .ab-text{font-weight:700;font-size:.95rem;line-height:1.5;flex:1}
+@keyframes pop{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+
+/* ── Assigned work pinned section ── */
+.assigned-section{position:relative;z-index:10;max-width:1100px;margin:0 auto .8rem;padding:0 1.5rem}
+.assigned-title{font-family:'Fredoka',sans-serif;font-size:1rem;font-weight:700;color:var(--coral);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.assigned-grid{display:flex;gap:.8rem;overflow-x:auto;padding-bottom:.3rem}
+.assigned-card{background:#fff;border-radius:16px;padding:1rem 1.2rem;box-shadow:0 4px 16px rgba(0,0,0,.06);cursor:pointer;
+  border:3px solid var(--coral);min-width:220px;flex-shrink:0;transition:all .2s}
+.assigned-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.1)}
+.assigned-card .ac-icon{font-size:1.5rem}
+.assigned-card .ac-title{font-family:'Fredoka',sans-serif;font-size:.9rem;font-weight:700;margin-top:.3rem}
+.assigned-card .ac-grade{font-size:.75rem;font-weight:700;color:var(--slate);margin-top:.2rem}
+
+/* ── Toolbar / filters ── */
 .toolbar{position:relative;z-index:10;max-width:960px;margin:0 auto 1.5rem;padding:0 1.5rem}
 .filter-group{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;justify-content:center;margin-bottom:.6rem}
 .filter-group .label{font-family:'Fredoka',sans-serif;font-size:.78rem;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-right:.2rem}
@@ -46,8 +67,8 @@ header .sub{font-size:1.05rem;color:var(--slate);font-weight:700;margin-top:.3re
 .chip.sub-chip.on[data-s="musique"]{background:linear-gradient(135deg,var(--rose),var(--lavender))}
 .chip.sub-chip.on[data-s="all"]{background:linear-gradient(135deg,var(--ocean),var(--lavender))}
 
+/* ── Game grid ── */
 main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5rem 4rem}
-
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.1rem}
 .card{background:#fff;border-radius:20px;padding:1.6rem;box-shadow:0 6px 24px rgba(0,0,0,.06);cursor:pointer;
   transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;border:3px solid transparent}
@@ -67,39 +88,36 @@ main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5re
 .card p{font-size:.85rem;color:#94A3B8;line-height:1.4}
 .tags{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.7rem}
 .tag{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:.18rem .55rem;border-radius:50px}
-.tag-maths{background:#DBEAFE;color:var(--ocean)}
-.tag-sciences{background:#CCFBF1;color:#0F766E}
-.tag-francais{background:#FEE2E2;color:var(--coral)}
-.tag-anglais{background:#EDE9FE;color:var(--lavender)}
-.tag-musique{background:#FCE7F3;color:var(--rose)}
-.tag-grade{background:var(--mist);color:var(--slate)}
+.tag-maths{background:#DBEAFE;color:var(--ocean)}.tag-sciences{background:#CCFBF1;color:#0F766E}
+.tag-francais{background:#FEE2E2;color:var(--coral)}.tag-anglais{background:#EDE9FE;color:var(--lavender)}
+.tag-musique{background:#FCE7F3;color:var(--rose)}.tag-grade{background:var(--mist);color:var(--slate)}
 .tag-topic{background:#FFF7ED;color:#9A3412;border:1px solid #FDBA74}
 .card.hidden{display:none}
-
 .empty-msg{text-align:center;padding:3rem;color:#94A3B8;display:none}
 .empty-msg.show{display:block}
 
+/* ── FAB ── */
 .teacher-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:50;width:52px;height:52px;border-radius:50%;border:none;
   background:linear-gradient(135deg,var(--ocean),var(--lavender));color:#fff;font-size:1.4rem;cursor:pointer;
   box-shadow:0 6px 24px rgba(59,130,246,.35);transition:transform .2s}
 .teacher-fab:hover{transform:scale(1.1)}
 
+/* ── Modals ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(30,41,59,.45);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:1rem}
 .overlay.show{display:flex}
 .modal{background:#fff;border-radius:24px;padding:2.2rem;max-width:440px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.15);animation:pop .3s cubic-bezier(.34,1.56,.64,1);position:relative}
-@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 .modal h2{font-family:'Fredoka',sans-serif;font-size:1.4rem;text-align:center;margin-bottom:.4rem}
 .modal .hint{text-align:center;color:var(--slate);margin-bottom:1.2rem;font-size:.95rem}
-.modal input{width:100%;padding:.85rem 1rem;border:3px solid #E2E8F0;border-radius:14px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;text-align:center;outline:none;transition:border-color .2s}
-.modal input:focus{border-color:var(--lavender)}
+.modal input,.modal select{width:100%;padding:.85rem 1rem;border:3px solid #E2E8F0;border-radius:14px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;text-align:center;outline:none;transition:border-color .2s;background:#fff}
+.modal input:focus,.modal select:focus{border-color:var(--lavender)}
 .mbtn{width:100%;margin-top:.8rem;padding:.85rem;border:none;border-radius:14px;font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .mbtn:hover{transform:translateY(-2px)}
 .mbtn.primary{background:linear-gradient(135deg,var(--coral),var(--lavender));box-shadow:0 4px 18px rgba(255,107,107,.3)}
 .mbtn.blue{background:linear-gradient(135deg,var(--ocean),var(--lavender));box-shadow:0 4px 18px rgba(59,130,246,.3)}
 .modal .err{color:var(--coral);font-weight:700;text-align:center;margin-top:.6rem;display:none;font-size:.9rem}
 .modal .close-x{position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#94A3B8}
-.modal .close-x:hover{color:var(--night)}
 
+/* ── Game view ── */
 #game-view{display:none;position:fixed;inset:0;z-index:80;background:var(--cloud);flex-direction:column}
 #game-view.show{display:flex}
 .gv-bar{display:flex;align-items:center;gap:.8rem;padding:.6rem 1rem;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06);z-index:2}
@@ -109,43 +127,131 @@ main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5re
 .gv-back:hover{background:var(--mist)}
 #game-frame{flex:1;border:none;width:100%}
 
+/* ══════════════════════════════════════ */
+/*  TEACHER PANEL                        */
+/* ══════════════════════════════════════ */
 #teacher-panel{display:none;position:fixed;inset:0;z-index:90;background:var(--cloud);flex-direction:column}
 #teacher-panel.show{display:flex}
 .tp-bar{display:flex;align-items:center;gap:.8rem;padding:.8rem 1.2rem;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .tp-bar h3{font-family:'Fredoka',sans-serif;font-size:1.1rem;flex:1}
 .tp-body{flex:1;overflow-y:auto;padding:1.5rem;max-width:100%;margin:0 auto;width:100%}
+
+/* Tabs */
+.tp-tabs{display:flex;gap:.35rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.tp-tab{padding:.5rem .9rem;border-radius:50px;border:2px solid #E2E8F0;background:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer;transition:all .2s;color:var(--slate);white-space:nowrap}
+.tp-tab:hover{border-color:var(--ocean);color:var(--ocean)}
+.tp-tab.on{background:linear-gradient(135deg,var(--ocean),var(--lavender));color:#fff;border-color:transparent}
+
+/* Sections */
+.tp-section{display:none}.tp-section.show{display:block}
+
+/* Common form elements */
 .filter-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
-.filter-row input{padding:.5rem .8rem;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;outline:none;min-width:200px}
-.filter-row input:focus{border-color:var(--lavender)}
+.filter-row input,.filter-row select{padding:.5rem .8rem;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;outline:none;min-width:160px;background:#fff}
+.filter-row input:focus,.filter-row select:focus{border-color:var(--lavender)}
 .fbtn{padding:.5rem 1rem;border-radius:10px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;border:2px solid}
 .fbtn-export{border-color:var(--mint);background:#ECFDF5;color:#065F46}.fbtn-export:hover{background:var(--mint);color:#fff}
 .fbtn-clear{border-color:var(--coral);background:#FEF2F2;color:#991B1B}.fbtn-clear:hover{background:var(--coral);color:#fff}
+.fbtn-add{border-color:var(--ocean);background:#EFF6FF;color:#1E40AF}.fbtn-add:hover{background:var(--ocean);color:#fff}
+.fbtn-print{border-color:var(--indigo);background:#EEF2FF;color:#3730A3}.fbtn-print:hover{background:var(--indigo);color:#fff}
 
+/* Score tables */
 .score-tbl{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06)}
 .score-tbl th{font-family:'Fredoka',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);background:var(--cloud);padding:.8rem;text-align:left;border-bottom:2px solid #E2E8F0}
 .score-tbl td{padding:.7rem .8rem;border-bottom:1px solid var(--mist);font-weight:600;font-size:.9rem}
 .score-tbl tr:last-child td{border-bottom:none}
 .score-tbl tr:hover td{background:#FAFBFE}
-
 .pill{display:inline-block;padding:.15rem .55rem;border-radius:50px;font-size:.78rem;font-weight:800}
 .pill-hi{background:#ECFDF5;color:#065F46}.pill-mid{background:#FEF9C3;color:#854D0E}.pill-lo{background:#FEF2F2;color:#991B1B}
 .pill-none{background:var(--mist);color:#94A3B8}
+.flag-low{background:#FEF2F2!important}
+.flag-low td:first-child::before{content:'⚠️ ';font-size:.75rem}
 
+/* Grid table */
 .grid-tbl{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06)}
 .grid-tbl th{font-family:'Fredoka',sans-serif;font-size:.65rem;font-weight:700;color:var(--slate);background:var(--cloud);padding:.55rem .35rem;text-align:center;border-bottom:2px solid #E2E8F0;writing-mode:vertical-lr;transform:rotate(180deg);height:120px;white-space:nowrap}
 .grid-tbl th:first-child{writing-mode:horizontal-tb;transform:none;text-align:left;padding-left:1rem;position:sticky;left:0;background:var(--cloud);z-index:2;min-width:110px;height:auto}
+.grid-tbl th:last-child{writing-mode:horizontal-tb;transform:none;text-align:center;height:auto;width:60px}
 .grid-tbl td{padding:.4rem .3rem;text-align:center;border-bottom:1px solid var(--mist);font-size:.82rem;font-weight:700}
 .grid-tbl td:first-child{text-align:left;padding-left:1rem;font-weight:800;position:sticky;left:0;background:#fff;z-index:1;white-space:nowrap}
 .grid-tbl tr:hover td{background:#FAFBFE}
 .grid-tbl tr:hover td:first-child{background:#FAFBFE}
+.trend-up{color:var(--mint)}.trend-down{color:var(--coral)}.trend-flat{color:var(--slate)}
 
-.view-toggle{display:flex;gap:.4rem;margin-bottom:1rem}
+.view-toggle{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
 .view-btn{padding:.45rem .9rem;border-radius:50px;border:2px solid #E2E8F0;background:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;color:var(--slate)}
 .view-btn.on{background:linear-gradient(135deg,var(--ocean),var(--lavender));color:#fff;border-color:transparent}
 .grid-scroll{overflow-x:auto;margin-top:.5rem}
-
 .tp-pass-info{font-size:.82rem;color:#94A3B8;text-align:right;margin-bottom:.8rem}
 .tp-pass-info code{background:var(--mist);padding:.15rem .5rem;border-radius:6px;font-weight:800;color:var(--slate)}
+
+/* Student management */
+.grade-section{margin-bottom:1rem}
+.grade-header{display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;background:#fff;border-radius:12px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.04);border:2px solid #E2E8F0;transition:all .2s;user-select:none}
+.grade-header:hover{border-color:var(--ocean);background:#F0F7FF}
+.grade-header .gh-arrow{transition:transform .2s;font-size:.8rem;color:var(--slate)}
+.grade-header.open .gh-arrow{transform:rotate(90deg)}
+.grade-header .gh-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:.95rem;flex:1}
+.grade-header .gh-count{font-size:.78rem;font-weight:800;background:var(--mist);padding:.15rem .5rem;border-radius:50px;color:var(--slate)}
+.grade-body{display:none;padding:.5rem .3rem}.grade-body.open{display:block}
+.student-row{display:flex;align-items:center;gap:.4rem;padding:.35rem .5rem;border-radius:8px;transition:background .15s}
+.student-row:hover{background:var(--mist)}
+.student-row .sname{flex:1;font-weight:700;font-size:.88rem}
+.student-row .sname.archived{color:#94A3B8;text-decoration:line-through}
+.student-row button{padding:.2rem .5rem;border-radius:8px;border:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s}
+.student-row .btn-archive{background:#FEF3C7;color:#92400E}.student-row .btn-unarchive{background:#DBEAFE;color:#1E40AF}
+.student-row .btn-del{background:#FEE2E2;color:#991B1B}
+.add-student-row{display:flex;gap:.4rem;margin-top:.4rem;padding:.2rem 0}
+.add-student-row input{flex:1;padding:.4rem .6rem;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;outline:none}
+.add-student-row input:focus{border-color:var(--lavender)}
+.add-student-row button{padding:.4rem .8rem;border-radius:10px;border:none;background:var(--ocean);color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer}
+.show-archived-toggle{display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;font-size:.85rem;font-weight:700;color:var(--slate)}
+.show-archived-toggle input{width:16px;height:16px;cursor:pointer}
+
+/* Manual score & forms */
+.manual-score-form,.settings-card{background:#fff;border-radius:16px;padding:1.2rem;box-shadow:0 4px 16px rgba(0,0,0,.06);margin-bottom:1rem}
+.manual-score-form h3,.settings-card h3{font-family:'Fredoka',sans-serif;font-size:1rem;color:var(--ocean);margin-bottom:.8rem}
+.msf-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem;align-items:center}
+.msf-row label{font-weight:700;font-size:.82rem;min-width:70px;color:var(--slate)}
+.msf-row select,.msf-row input{padding:.45rem .7rem;border:2px solid #E2E8F0;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;outline:none;flex:1;min-width:120px;background:#fff}
+.msf-row select:focus,.msf-row input:focus{border-color:var(--lavender)}
+.msf-submit{padding:.55rem 1.2rem;border-radius:12px;border:none;background:linear-gradient(135deg,var(--ocean),var(--lavender));color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s}
+.msf-submit:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(59,130,246,.3)}
+.msf-msg{font-size:.85rem;font-weight:700;margin-top:.4rem;min-height:1.2rem}
+.msf-msg.ok{color:var(--mint)}.msf-msg.err{color:var(--coral)}
+
+/* Class stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem;margin-top:.8rem}
+.stat-card{background:#fff;border-radius:14px;padding:1rem;box-shadow:0 3px 12px rgba(0,0,0,.05);border-left:4px solid var(--ocean)}
+.stat-card h4{font-family:'Fredoka',sans-serif;font-size:.85rem;font-weight:700;color:var(--night);margin-bottom:.4rem;line-height:1.3}
+.stat-card .stat-row{display:flex;justify-content:space-between;font-size:.82rem;font-weight:700;padding:.15rem 0}
+.stat-card .stat-row .stat-label{color:var(--slate)}.stat-card .stat-row .stat-val{color:var(--night)}
+.stat-card .stat-avg{font-size:1.4rem;font-weight:900;color:var(--ocean)}
+
+/* Game visibility toggles */
+.game-vis-row{display:flex;align-items:center;gap:.6rem;padding:.4rem .6rem;border-radius:8px;transition:background .15s}
+.game-vis-row:hover{background:var(--mist)}
+.game-vis-row .gv-name{flex:1;font-weight:700;font-size:.88rem}
+.game-vis-row .gv-name.is-hidden{color:#94A3B8;text-decoration:line-through}
+.toggle-switch{position:relative;width:42px;height:24px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#CBD5E1;border-radius:24px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle-switch input:checked+.toggle-slider{background:var(--ocean)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(18px)}
+
+/* Print styles */
+@media print{
+  body{background:#fff!important}
+  .bg,.teacher-fab,#game-view,#teacher-panel,.overlay,.tp-bar,.tp-tabs,.filter-row,.view-toggle,.fbtn,.gv-back{display:none!important}
+  #print-area{display:block!important;padding:1rem}
+  #print-area h1{font-family:'Fredoka',sans-serif;font-size:1.5rem;margin-bottom:.5rem}
+  #print-area table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.5rem}
+  #print-area th,#print-area td{border:1px solid #ccc;padding:.4rem .5rem;text-align:left}
+  #print-area th{background:#f0f0f0;font-weight:700}
+  .no-print{display:none!important}
+}
+#print-area{display:none}
 
 @media(max-width:600px){
   .grid{grid-template-columns:1fr}
@@ -153,6 +259,10 @@ main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5re
   .filter-group{gap:.3rem}
   .gv-bar h3{font-size:.88rem}
   .grid-tbl th{font-size:.6rem;height:90px}
+  .tp-tabs{gap:.25rem}
+  .tp-tab{font-size:.72rem;padding:.4rem .65rem}
+  .msf-row{flex-direction:column}
+  .stats-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -166,6 +276,20 @@ main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5re
   <p class="sub">Apprends en t'amusant !</p>
 </header>
 
+<!-- ANNOUNCEMENT BANNER (teacher sets this) -->
+<div class="announce-banner" id="announce-area" style="display:none">
+  <div class="announce-box">
+    <span class="ab-icon">📢</span>
+    <div class="ab-text" id="announce-text"></div>
+  </div>
+</div>
+
+<!-- ASSIGNED WORK (pinned games) -->
+<div class="assigned-section" id="assigned-area" style="display:none">
+  <div class="assigned-title">📌 Travail du jour</div>
+  <div class="assigned-grid" id="assigned-grid"></div>
+</div>
+
 <div class="toolbar">
   <div class="filter-group" id="grade-filters"></div>
   <div class="filter-group" id="subject-filters"></div>
@@ -178,27 +302,36 @@ main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5re
 
 <button class="teacher-fab" onclick="openTeacherModal()" title="Espace enseignant">🔑</button>
 
+<!-- Print area (hidden, used for print reports) -->
+<div id="print-area"></div>
+
+<!-- NAME MODAL -->
 <div class="overlay" id="name-modal">
   <div class="modal">
     <button class="close-x" onclick="closeModal('name-modal')">✕</button>
     <h2>👋 Comment t'appelles-tu ?</h2>
-    <p class="hint">Entre ton prénom pour commencer !</p>
-    <input type="text" id="inp-name" placeholder="Ton prénom..." maxlength="30" onkeydown="if(event.key==='Enter')launchGame()">
+    <p class="hint">Choisis ton nom ou entre ton prénom !</p>
+    <select id="inp-name-select" style="margin-bottom:.5rem" onchange="onStudentSelect()">
+      <option value="">— Choisis ton nom —</option>
+    </select>
+    <input type="text" id="inp-name" placeholder="Ou écris ton prénom ici..." maxlength="30" onkeydown="if(event.key==='Enter')launchGame()">
     <button class="mbtn primary" onclick="launchGame()">🚀 C'est parti !</button>
   </div>
 </div>
 
+<!-- TEACHER LOGIN -->
 <div class="overlay" id="teacher-modal">
   <div class="modal">
     <button class="close-x" onclick="closeModal('teacher-modal')">✕</button>
     <h2>🔑 Espace enseignant</h2>
-    <p class="hint">Entrez le mot de passe pour accéder aux résultats.</p>
+    <p class="hint">Entrez le mot de passe pour accéder.</p>
     <input type="password" id="inp-pass" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')teacherLogin()">
     <button class="mbtn blue" onclick="teacherLogin()">🔓 Accéder</button>
     <p class="err" id="pass-err">Mot de passe incorrect</p>
   </div>
 </div>
 
+<!-- GAME VIEW -->
 <div id="game-view">
   <div class="gv-bar">
     <button class="gv-back" onclick="closeGame()">← Retour</button>
@@ -208,245 +341,276 @@ main{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 1.5re
   <iframe id="game-frame" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
 </div>
 
+<!-- TEACHER PANEL -->
 <div id="teacher-panel">
   <div class="tp-bar">
     <button class="gv-back" onclick="closeTeacher()">← Retour</button>
-    <h3>📊 Tableau de bord</h3>
+    <h3>📊 Espace enseignant</h3>
   </div>
   <div class="tp-body">
     <p class="tp-pass-info">Mot de passe : <code id="show-pass"></code></p>
-    <div class="view-toggle">
-      <button class="view-btn on" onclick="setView('grid',this)">📊 Grille élèves × jeux</button>
-      <button class="view-btn" onclick="setView('list',this)">📋 Liste chronologique</button>
+    <div class="tp-tabs">
+      <button class="tp-tab on" onclick="switchTab('scores',this)">📊 Scores</button>
+      <button class="tp-tab" onclick="switchTab('stats',this)">📈 Statistiques</button>
+      <button class="tp-tab" onclick="switchTab('students',this)">👩‍🎓 Élèves</button>
+      <button class="tp-tab" onclick="switchTab('manual',this)">✏️ Score manuel</button>
+      <button class="tp-tab" onclick="switchTab('assign',this)">📌 Travail du jour</button>
+      <button class="tp-tab" onclick="switchTab('visibility',this)">👁️ Visibilité</button>
+      <button class="tp-tab" onclick="switchTab('settings',this)">⚙️ Paramètres</button>
     </div>
-    <div class="filter-row">
-      <input type="text" id="f-name" placeholder="🔍 Chercher un élève..." oninput="renderDashboard()">
-      <button class="fbtn fbtn-export" onclick="exportCSV()">📥 Exporter CSV</button>
-      <button class="fbtn fbtn-clear" onclick="clearScores()">🗑️ Effacer tout</button>
+
+    <!-- SCORES -->
+    <div class="tp-section show" id="tab-scores">
+      <div class="view-toggle">
+        <button class="view-btn on" onclick="setView('grid',this)">📊 Grille</button>
+        <button class="view-btn" onclick="setView('list',this)">📋 Liste</button>
+      </div>
+      <div class="filter-row">
+        <input type="text" id="f-name" placeholder="🔍 Chercher un élève..." oninput="renderDashboard()">
+        <select id="f-grade" onchange="renderDashboard()"><option value="">Tous les niveaux</option></select>
+        <label style="font-size:.82rem;font-weight:700;color:var(--slate);display:flex;align-items:center;gap:.3rem"><input type="checkbox" id="f-flaglow" onchange="renderDashboard()" style="width:14px;height:14px"> ⚠️ &lt;50%</label>
+        <button class="fbtn fbtn-print" onclick="printReport()">🖨️ Imprimer</button>
+        <button class="fbtn fbtn-export" onclick="exportCSV()">📥 CSV</button>
+        <button class="fbtn fbtn-clear" onclick="clearScores()">🗑️ Effacer</button>
+      </div>
+      <div class="grid-scroll" id="scores-wrap"></div>
     </div>
-    <div class="grid-scroll" id="scores-wrap"></div>
+
+    <!-- STATS -->
+    <div class="tp-section" id="tab-stats">
+      <h3 style="font-family:'Fredoka',sans-serif;font-size:1.1rem;color:var(--ocean);margin-bottom:.6rem">📈 Statistiques par jeu</h3>
+      <div class="filter-row">
+        <select id="stat-grade" onchange="renderStats()"><option value="">Tous les niveaux</option></select>
+      </div>
+      <div class="stats-grid" id="stats-grid"></div>
+    </div>
+
+    <!-- STUDENTS -->
+    <div class="tp-section" id="tab-students">
+      <div class="show-archived-toggle">
+        <input type="checkbox" id="show-archived" onchange="renderStudents()">
+        <label for="show-archived">Afficher les élèves archivés</label>
+      </div>
+      <div id="students-list"></div>
+    </div>
+
+    <!-- MANUAL SCORE -->
+    <div class="tp-section" id="tab-manual">
+      <div class="manual-score-form">
+        <h3>✏️ Ajouter ou modifier un score</h3>
+        <div class="msf-row"><label>Niveau :</label><select id="ms-grade" onchange="updateManualStudents()"><option value="">—</option></select></div>
+        <div class="msf-row"><label>Élève :</label><select id="ms-student"><option value="">— Choisir un niveau —</option></select></div>
+        <div class="msf-row"><label>Jeu :</label><select id="ms-game"><option value="">—</option></select></div>
+        <div class="msf-row"><label>Score :</label><input type="number" id="ms-score" placeholder="15" min="0" style="max-width:90px"><label style="min-width:auto">/ </label><input type="number" id="ms-total" placeholder="20" min="1" style="max-width:90px"></div>
+        <button class="msf-submit" onclick="submitManualScore()">💾 Enregistrer</button>
+        <div class="msf-msg" id="ms-msg"></div>
+      </div>
+    </div>
+
+    <!-- ASSIGN WORK -->
+    <div class="tp-section" id="tab-assign">
+      <div class="manual-score-form">
+        <h3>📌 Travail du jour / Annonce</h3>
+        <div class="msf-row"><label>Annonce :</label><input type="text" id="set-announce" placeholder="Ex: Aujourd'hui : jeu de maths 4e !" style="flex:2"></div>
+        <div style="display:flex;gap:.4rem;margin-bottom:.8rem">
+          <button class="msf-submit" onclick="saveAnnounce()">💾 Publier l'annonce</button>
+          <button class="fbtn fbtn-clear" onclick="clearAnnounce()">✕ Retirer</button>
+        </div>
+      </div>
+      <div class="manual-score-form">
+        <h3>📌 Assigner un jeu (Travail du jour)</h3>
+        <p style="font-size:.82rem;color:var(--slate);margin-bottom:.6rem">Les jeux assignés apparaissent en haut de la page pour les élèves.</p>
+        <div class="msf-row"><label>Jeu :</label><select id="assign-game"><option value="">—</option></select></div>
+        <div class="msf-row"><label>Niveaux :</label><select id="assign-grades" multiple style="min-height:80px"><option value="">—</option></select></div>
+        <button class="msf-submit" onclick="addAssignment()">📌 Assigner</button>
+        <div style="margin-top:.8rem" id="assignments-list"></div>
+      </div>
+    </div>
+
+    <!-- VISIBILITY -->
+    <div class="tp-section" id="tab-visibility">
+      <div class="manual-score-form">
+        <h3>👁️ Visibilité des jeux</h3>
+        <p style="font-size:.82rem;color:var(--slate);margin-bottom:.6rem">Désactive un jeu pour le cacher des élèves sans le supprimer.</p>
+        <div id="visibility-list"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="tp-section" id="tab-settings">
+      <div class="settings-card">
+        <h3>📚 Matières</h3>
+        <div class="msf-row">
+          <input type="text" id="new-sub-key" placeholder="Clé (ex: arts)" style="max-width:110px">
+          <input type="text" id="new-sub-emoji" placeholder="Emoji" style="max-width:70px">
+          <input type="text" id="new-sub-label" placeholder="Nom (ex: Arts)" style="max-width:130px">
+          <button class="fbtn fbtn-add" onclick="addSubject()">+</button>
+        </div>
+        <div id="subjects-list" style="margin-top:.4rem"></div>
+      </div>
+      <div class="settings-card">
+        <h3>🎓 Niveaux</h3>
+        <div class="msf-row">
+          <input type="text" id="new-grade-key" placeholder="Clé" style="max-width:80px">
+          <input type="text" id="new-grade-label" placeholder="Nom" style="max-width:160px">
+          <button class="fbtn fbtn-add" onclick="addGrade()">+</button>
+        </div>
+        <div id="grades-list" style="margin-top:.4rem"></div>
+      </div>
+      <div class="settings-card">
+        <h3>🔑 Mot de passe</h3>
+        <div class="msf-row">
+          <input type="text" id="new-pass" placeholder="Nouveau mot de passe" style="max-width:250px">
+          <button class="fbtn fbtn-add" onclick="changePassword()">Changer</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-//
-//  ╔═══════════════════════════════════════════════════════════╗
-//  ║  SECTION ÉDITABLE — Modifie ces parties sur GitHub!      ║
-//  ║  Clique sur le crayon (✏️) pour éditer ce fichier.       ║
-//  ╚═══════════════════════════════════════════════════════════╝
-//
+//  SECTION ÉDITABLE — Jeux, matières, niveaux
 // ═══════════════════════════════════════════════════════════════
 
-// ─────────────────────────────────────
-// 🔑 MOT DE PASSE ENSEIGNANT
-//    Change-le ici :
-// ─────────────────────────────────────
-const TEACHER_PASSWORD = "classe2026";
+const DEFAULT_PASSWORD = "classe2026";
 
-// ─────────────────────────────────────
-// 📚 MATIÈRES
-//    Ajoute de nouvelles matières ici.
-//    Les filtres apparaissent
-//    automatiquement!
-// ─────────────────────────────────────
-const SUBJECTS = {
+const DEFAULT_SUBJECTS = {
   maths:    { emoji: "🔢", label: "Maths" },
   sciences: { emoji: "🔬", label: "Sciences" },
   francais: { emoji: "📖", label: "Français" },
   anglais:  { emoji: "🇬🇧", label: "Anglais" },
   musique:  { emoji: "🎵", label: "Musique" },
-  // arts:     { emoji: "🎨", label: "Arts" },
-  // histoire: { emoji: "🏛️", label: "Histoire" },
-  // geo:      { emoji: "🌍", label: "Géographie" },
 };
 
-// ─────────────────────────────────────
-// 🎓 NIVEAUX / ANNÉES
-//    Ajoute des niveaux ici.
-// ─────────────────────────────────────
-const GRADES = {
-  "mat": "Maternelle",
-  "jar": "Jardin",
-  "1":   "1re année",
-  "2":   "2e année",
-  "3":   "3e année",
-  "4":   "4e année",
-  "5":   "5e année",
-  "6":   "6e année",
-  "7":   "7e année",
-  "8":   "8e année",
+const DEFAULT_GRADES = {
+  "mat":"Maternelle","jar":"Jardin","1":"1re année","2":"2e année","3":"3e année",
+  "4":"4e année","5":"5e année","6":"6e année","7":"7e année","8":"8e année",
 };
-
-// ─────────────────────────────────────
-// 🎮 LISTE DES JEUX
-//
-//  Pour AJOUTER un jeu :
-//    1. Mets le fichier .html dans /games/
-//    2. Copie-colle un bloc ci-dessous
-//    3. Change les valeurs
-//
-//  Champs :
-//    id      → identifiant unique (pas d'espaces)
-//    title   → nom affiché sur la carte
-//    desc    → description courte
-//    icon    → emoji
-//    file    → chemin vers le fichier HTML
-//    subject → clé de SUBJECTS (ex: "maths")
-//    grades  → tableau de clés de GRADES (ex: ["4"])
-//    color   → couleur d'accent de la carte :
-//              sky, coral, lavender, rose, mint,
-//              sun, peach, teal, indigo
-//    topics  → tableau de sous-thèmes (OPTIONNEL)
-//              ex: ["Littéracie financière", "Multiplication"]
-//
-// ─────────────────────────────────────
 
 const GAMES = [
-  {
-    id: "musique-5",
-    title: "Théorie musicale — 5e",
-    desc: "Notes, durées, silences et chiffres indicateurs.",
-    icon: "🎵",
-    file: "games/musique-5-6.html",
-    subject: "musique",
-    grades: ["5"],
-    topics: ["Notes", "Durées", "Silences", "Chiffres indicateurs"],
-    color: "rose"
-  },
-  {
-    id: "musique-6",
-    title: "Théorie musicale — 6e",
-    desc: "Notes, durées, silences et chiffres indicateurs.",
-    icon: "🎶",
-    file: "games/musique-5-6.html",
-    subject: "musique",
-    grades: ["6"],
-    topics: ["Notes", "Durées", "Silences", "Chiffres indicateurs"],
-    color: "rose"
-  },
-  {
-    id: "maths-4e-jeu1",
-    title: "Maths 4e — Littéracie financière",
-    desc: "Pièces, billets, monnaie, multiplication et division.",
-    icon: "🪙",
-    file: "games/maths-4e-jeu1.html",
-    subject: "maths",
-    grades: ["4"],
-    topics: ["Littéracie financière", "Multiplication", "Division"],
-    color: "sky"
-  },
-  {
-    id: "maths-4e-jeu2",
-    title: "Maths 4e — Niveau 2",
-    desc: "Diagrammes, suites, multiplication et division avancées.",
-    icon: "📊",
-    file: "games/maths-4e-jeu2.html",
-    subject: "maths",
-    grades: ["4"],
-    topics: ["Diagrammes", "Suites", "Multiplication", "Division"],
-    color: "mint"
-  },
-  {
-    id: "maths-pei",
-    title: "Maths PEI — Pratique",
-    desc: "Arrondissement, additions, soustractions et problèmes.",
-    icon: "🧮",
-    file: "games/maths-pei.html",
-    subject: "maths",
-    grades: ["3"],
-    topics: ["Arrondissement", "Additions", "Soustractions", "Résolution de problèmes"],
-    color: "sun"
-  },
-  {
-    id: "maths-pei3",
-    title: "Maths PEI — 3e année",
-    desc: "Contenu combiné et simplifié pour le niveau PEI.",
-    icon: "⚡",
-    file: "games/maths-pei3.html",
-    subject: "maths",
-    grades: ["3"],
-    topics: ["Littéracie financière", "Multiplication", "Division", "Diagrammes", "Suites"],
-    color: "coral"
-  },
-  {
-    id: "english-3-4",
-    title: "English Practice",
-    desc: "3 niveaux : débutant, intermédiaire et avancé.",
-    icon: "🇬🇧",
-    file: "games/english-3-4.html",
-    subject: "anglais",
-    grades: ["3", "4"],
-    topics: ["Vocabulaire", "Grammaire", "Lecture"],
-    color: "lavender"
-  },
- {
-    id: "sciences-1-energie",
-    title: "Sciences 1re — L'énergie dans nos vies",
-    desc: "Énergie thermique, lumineuse, sonore, chaîne alimentaire et plus.",
-    icon: "⚡",
-    file: "games/jeu_energie.html",
-    subject: "sciences",
-    grades: ["1"],
-    topics: ["Énergie", "Sources d'énergie", "Chaîne alimentaire", "Renouvelable"],
-    color: "sun"
-},
-
-  // ──────────────────────────────────────────
-  //  ✏️ COPIE CE MODÈLE POUR AJOUTER UN JEU :
-  //
-  //  {
-  //    id: "unique-id",
-  //    title: "Titre du jeu",
-  //    desc: "Description courte.",
-  //    icon: "🎯",
-  //    file: "games/nom-du-fichier.html",
-  //    subject: "maths",
-  //    grades: ["4"],
-  //    topics: ["Fractions", "Décimaux"],
-  //    color: "sky"
-  //  },
-  //
-  // ──────────────────────────────────────────
+  { id:"musique-5", title:"Théorie musicale — 5e", desc:"Notes, durées, silences et chiffres indicateurs.", icon:"🎵", file:"games/musique-5-6.html", subject:"musique", grades:["5"], topics:["Notes","Durées","Silences","Chiffres indicateurs"], color:"rose" },
+  { id:"musique-6", title:"Théorie musicale — 6e", desc:"Notes, durées, silences et chiffres indicateurs.", icon:"🎶", file:"games/musique-5-6.html", subject:"musique", grades:["6"], topics:["Notes","Durées","Silences","Chiffres indicateurs"], color:"rose" },
+  { id:"maths-4e-jeu1", title:"Maths 4e — Littéracie financière", desc:"Pièces, billets, monnaie, multiplication et division.", icon:"🪙", file:"games/maths-4e-jeu1.html", subject:"maths", grades:["4"], topics:["Littéracie financière","Multiplication","Division"], color:"sky" },
+  { id:"maths-4e-jeu2", title:"Maths 4e — Niveau 2", desc:"Diagrammes, suites, multiplication et division avancées.", icon:"📊", file:"games/maths-4e-jeu2.html", subject:"maths", grades:["4"], topics:["Diagrammes","Suites","Multiplication","Division"], color:"mint" },
+  { id:"maths-pei", title:"Maths PEI — Pratique", desc:"Arrondissement, additions, soustractions et problèmes.", icon:"🧮", file:"games/maths-pei.html", subject:"maths", grades:["3"], topics:["Arrondissement","Additions","Soustractions","Résolution de problèmes"], color:"sun" },
+  { id:"maths-pei3", title:"Maths PEI — 3e année", desc:"Contenu combiné et simplifié pour le niveau PEI.", icon:"⚡", file:"games/maths-pei3.html", subject:"maths", grades:["3"], topics:["Littéracie financière","Multiplication","Division","Diagrammes","Suites"], color:"coral" },
+  { id:"english-3-4", title:"English Practice", desc:"3 niveaux : débutant, intermédiaire et avancé.", icon:"🇬🇧", file:"games/english-3-4.html", subject:"anglais", grades:["3","4"], topics:["Vocabulaire","Grammaire","Lecture"], color:"lavender" },
+  { id:"sciences-1-energie", title:"Sciences 1re — L'énergie dans nos vies", desc:"Énergie thermique, lumineuse, sonore, chaîne alimentaire et plus.", icon:"⚡", file:"games/jeu_energie.html", subject:"sciences", grades:["1"], topics:["Énergie","Sources d'énergie","Chaîne alimentaire","Renouvelable"], color:"sun" },
+  // ✏️ COPIE CE MODÈLE POUR AJOUTER UN JEU :
+  // { id:"unique-id", title:"Titre", desc:"Description.", icon:"🎯", file:"games/fichier.html", subject:"maths", grades:["4"], topics:["Thème"], color:"sky" },
 ];
 
 // ═══════════════════════════════════════════════════════════════
-//
-//  ╔═══════════════════════════════════════════════════════════╗
-//  ║  FIN DE LA SECTION ÉDITABLE                              ║
-//  ║  Le reste fonctionne automatiquement!                    ║
-//  ╚═══════════════════════════════════════════════════════════╝
-//
+//  FIN DE LA SECTION ÉDITABLE
 // ═══════════════════════════════════════════════════════════════
 
-let activeG="all", activeS="all", pendingId=null, playerName="";
+// ── DATA LAYER ──
+const DB = {
+  _g(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch{return d}},
+  _s(k,v){localStorage.setItem(k,JSON.stringify(v))},
+  get password(){return localStorage.getItem('hub_password')||DEFAULT_PASSWORD},
+  set password(v){localStorage.setItem('hub_password',v)},
+  get subjects(){return this._g('hub_subjects',null)||{...DEFAULT_SUBJECTS}},
+  set subjects(v){this._s('hub_subjects',v)},
+  get grades(){return this._g('hub_grades',null)||{...DEFAULT_GRADES}},
+  set grades(v){this._s('hub_grades',v)},
+  get students(){return this._g('hub_students',{})},
+  set students(v){this._s('hub_students',v)},
+  get scores(){return this._g('hub_scores',[])},
+  set scores(v){this._s('hub_scores',v)},
+  get hiddenGames(){return this._g('hub_hidden_games',[])},
+  set hiddenGames(v){this._s('hub_hidden_games',v)},
+  get announce(){return localStorage.getItem('hub_announce')||''},
+  set announce(v){localStorage.setItem('hub_announce',v)},
+  get assignments(){return this._g('hub_assignments',[])},
+  set assignments(v){this._s('hub_assignments',v)},
 
+  studentsFor(g){return(this.students[g]||[])},
+  addStudent(g,name){
+    const s=this.students;if(!s[g])s[g]=[];
+    // Duplicate detection — normalize name
+    const norm=name.trim().toLowerCase();
+    const existing=s[g].find(st=>st.name.trim().toLowerCase()===norm);
+    if(existing){
+      // If archived, unarchive it
+      if(existing.archived){existing.archived=false;this.students=s;return'unarchived';}
+      return false;
+    }
+    // Check across all grades for possible duplicate
+    for(const gk in s){
+      const dup=s[gk].find(st=>st.name.trim().toLowerCase()===norm&&!st.archived);
+      if(dup)return'exists_in_'+gk;
+    }
+    s[g].push({name:name.trim(),archived:false});this.students=s;return true;
+  },
+  archiveStudent(g,n){const s=this.students;const st=(s[g]||[]).find(x=>x.name===n);if(st)st.archived=true;this.students=s},
+  unarchiveStudent(g,n){const s=this.students;const st=(s[g]||[]).find(x=>x.name===n);if(st)st.archived=false;this.students=s},
+  deleteStudent(g,n){const s=this.students;if(s[g])s[g]=s[g].filter(x=>x.name!==n);this.students=s},
+  addScore(e){const s=this.scores;s.unshift(e);this.scores=s},
+};
+
+function getSubjects(){return{...DEFAULT_SUBJECTS,...DB.subjects}}
+function getGrades(){return{...DEFAULT_GRADES,...DB.grades}}
+
+// Normalize player name for duplicate matching
+function normName(n){return n.trim().replace(/\s+/g,' ').split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ')}
+
+let activeG="all",activeS="all",pendingId=null,playerName="";
+
+// ── ANNOUNCEMENT ──
+function renderAnnounce(){
+  const txt=DB.announce;
+  const el=document.getElementById('announce-area');
+  if(txt){document.getElementById('announce-text').textContent=txt;el.style.display='block';}
+  else{el.style.display='none';}
+}
+
+// ── ASSIGNMENTS ──
+function renderAssignments(){
+  const assigns=DB.assignments;
+  const area=document.getElementById('assigned-area');
+  const grid=document.getElementById('assigned-grid');
+  const GRADES=getGrades();
+  const visible=assigns.filter(a=>{
+    const game=GAMES.find(g=>g.id===a.gameId);
+    return game&&!DB.hiddenGames.includes(a.gameId);
+  });
+  if(!visible.length){area.style.display='none';return;}
+  area.style.display='block';
+  grid.innerHTML='';
+  visible.forEach(a=>{
+    const game=GAMES.find(g=>g.id===a.gameId);
+    const gl=(a.grades||[]).map(x=>GRADES[x]||x).join(', ');
+    grid.innerHTML+=`<div class="assigned-card" onclick="openGame('${game.id}')">
+      <span class="ac-icon">${game.icon}</span>
+      <div class="ac-title">${game.title}</div>
+      <div class="ac-grade">${gl}</div>
+    </div>`;
+  });
+}
+
+// ── FILTERS & RENDER ──
 function buildFilters(){
+  const SUBJECTS=getSubjects(),GRADES=getGrades();
   const usedGrades=[...new Set(GAMES.flatMap(g=>g.grades))];
   const gradeOrder=Object.keys(GRADES);
   const sorted=usedGrades.sort((a,b)=>gradeOrder.indexOf(a)-gradeOrder.indexOf(b));
   const gDiv=document.getElementById('grade-filters');
   gDiv.innerHTML='<span class="label">Année :</span><button class="chip grade-chip on" data-g="all" onclick="tog(this,\'g\')">Toutes</button>';
-  sorted.forEach(g=>{
-    const lbl=GRADES[g]||g;
-    gDiv.innerHTML+=`<button class="chip grade-chip" data-g="${g}" onclick="tog(this,'g')">${lbl}</button>`;
-  });
-
+  sorted.forEach(g=>{gDiv.innerHTML+=`<button class="chip grade-chip" data-g="${g}" onclick="tog(this,'g')">${GRADES[g]||g}</button>`;});
   const usedSubs=[...new Set(GAMES.map(g=>g.subject))];
-  const subOrder=Object.keys(SUBJECTS);
-  const sortedS=usedSubs.sort((a,b)=>subOrder.indexOf(a)-subOrder.indexOf(b));
+  const sortedS=usedSubs.sort((a,b)=>Object.keys(SUBJECTS).indexOf(a)-Object.keys(SUBJECTS).indexOf(b));
   const sDiv=document.getElementById('subject-filters');
   sDiv.innerHTML='<span class="label">Matière :</span><button class="chip sub-chip on" data-s="all" onclick="tog(this,\'s\')">Toutes</button>';
-  sortedS.forEach(s=>{
-    const info=SUBJECTS[s]||{emoji:"📚",label:s};
-    sDiv.innerHTML+=`<button class="chip sub-chip" data-s="${s}" onclick="tog(this,'s')">${info.emoji} ${info.label}</button>`;
-  });
+  sortedS.forEach(s=>{const info=SUBJECTS[s]||{emoji:"📚",label:s};sDiv.innerHTML+=`<button class="chip sub-chip" data-s="${s}" onclick="tog(this,'s')">${info.emoji} ${info.label}</button>`;});
 }
 
 function render(){
-  const grid=document.getElementById('grid');
-  grid.innerHTML='';let vis=0;
+  const SUBJECTS=getSubjects(),GRADES=getGrades(),hidden=DB.hiddenGames;
+  const grid=document.getElementById('grid');grid.innerHTML='';let vis=0;
   GAMES.forEach(g=>{
+    if(hidden.includes(g.id))return; // hidden from students
     const mG=activeG==='all'||g.grades.includes(activeG);
     const mS=activeS==='all'||g.subject===activeS;
     const show=mG&&mS;if(show)vis++;
@@ -468,8 +632,28 @@ function tog(btn,type){
   btn.classList.add('on');render();
 }
 
+// ── NAME MODAL ──
+function populateNameDropdown(gameId){
+  const game=GAMES.find(g=>g.id===gameId);
+  const sel=document.getElementById('inp-name-select');
+  sel.innerHTML='<option value="">— Choisis ton nom —</option>';
+  if(!game)return;
+  const GRADES=getGrades();
+  game.grades.forEach(gk=>{
+    const students=DB.studentsFor(gk).filter(s=>!s.archived);
+    if(students.length){
+      const og=document.createElement('optgroup');og.label=GRADES[gk]||gk;
+      students.sort((a,b)=>a.name.localeCompare(b.name,'fr'));
+      students.forEach(s=>{const o=document.createElement('option');o.value=s.name;o.textContent=s.name;og.appendChild(o);});
+      sel.appendChild(og);
+    }
+  });
+}
+function onStudentSelect(){const s=document.getElementById('inp-name-select');if(s.value)document.getElementById('inp-name').value=s.value;}
+
 function openGame(id){
-  pendingId=id;
+  if(DB.hiddenGames.includes(id))return;
+  pendingId=id;populateNameDropdown(id);
   document.getElementById('inp-name').value=playerName||'';
   document.getElementById('inp-name').style.borderColor='#E2E8F0';
   document.getElementById('name-modal').classList.add('show');
@@ -477,8 +661,12 @@ function openGame(id){
 }
 
 function launchGame(){
-  const name=document.getElementById('inp-name').value.trim();
+  const selVal=document.getElementById('inp-name-select').value;
+  const inpVal=document.getElementById('inp-name').value.trim();
+  let name=selVal||inpVal;
   if(!name){document.getElementById('inp-name').style.borderColor='var(--coral)';return;}
+  // Normalize name to prevent duplicates
+  name=normName(name);
   playerName=name;closeModal('name-modal');
   const game=GAMES.find(g=>g.id===pendingId);
   document.getElementById('gv-title').textContent=game.icon+' '+game.title;
@@ -486,141 +674,362 @@ function launchGame(){
   document.getElementById('game-frame').src=game.file;
   document.getElementById('game-view').classList.add('show');
   document.body.style.overflow='hidden';
-  savePlay(playerName,game.title,game.subject,game.grades.join('/'));
+  DB.addScore({name:playerName,game:game.title,subject:game.subject,grade:game.grades.join('/'),date:new Date().toLocaleString('fr-CA')});
 }
 
-function closeGame(){
-  document.getElementById('game-view').classList.remove('show');
-  document.getElementById('game-frame').src='about:blank';
-  document.body.style.overflow='';
-}
-
+function closeGame(){document.getElementById('game-view').classList.remove('show');document.getElementById('game-frame').src='about:blank';document.body.style.overflow='';}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
-
-function savePlay(name,game,subject,grade){
-  const s=JSON.parse(localStorage.getItem('hub_scores')||'[]');
-  s.unshift({name,game,subject,grade,date:new Date().toLocaleString('fr-CA')});
-  localStorage.setItem('hub_scores',JSON.stringify(s));
-}
 
 window.addEventListener('message',function(e){
   if(e.data&&e.data.type==='gameScore'){
-    const s=JSON.parse(localStorage.getItem('hub_scores')||'[]');
-    if(s.length){s[0].score=e.data.score;s[0].total=e.data.total;s[0].pct=e.data.pct;localStorage.setItem('hub_scores',JSON.stringify(s));}
+    const s=DB.scores;if(s.length){s[0].score=e.data.score;s[0].total=e.data.total;s[0].pct=e.data.pct;DB.scores=s;}
   }
 });
 
-// ── Teacher ──
-function openTeacherModal(){
-  document.getElementById('inp-pass').value='';
-  document.getElementById('pass-err').style.display='none';
-  document.getElementById('teacher-modal').classList.add('show');
-  setTimeout(()=>document.getElementById('inp-pass').focus(),120);
-}
-function teacherLogin(){
-  if(document.getElementById('inp-pass').value===TEACHER_PASSWORD){closeModal('teacher-modal');openTeacher();}
-  else document.getElementById('pass-err').style.display='block';
-}
+// ── TEACHER ──
+function openTeacherModal(){document.getElementById('inp-pass').value='';document.getElementById('pass-err').style.display='none';document.getElementById('teacher-modal').classList.add('show');setTimeout(()=>document.getElementById('inp-pass').focus(),120);}
+function teacherLogin(){if(document.getElementById('inp-pass').value===DB.password){closeModal('teacher-modal');openTeacher();}else document.getElementById('pass-err').style.display='block';}
 function openTeacher(){
-  document.getElementById('show-pass').textContent=TEACHER_PASSWORD;
-  renderDashboard();
-  document.getElementById('teacher-panel').classList.add('show');
-  document.body.style.overflow='hidden';
+  document.getElementById('show-pass').textContent=DB.password;
+  populateGradeFilter();renderDashboard();renderStudents();renderSubjectsList();renderGradesList();
+  populateManualForm();renderVisibility();populateAssignForm();renderAssignmentsList();renderStats();
+  document.getElementById('set-announce').value=DB.announce;
+  document.getElementById('teacher-panel').classList.add('show');document.body.style.overflow='hidden';
 }
 function closeTeacher(){document.getElementById('teacher-panel').classList.remove('show');document.body.style.overflow='';}
 
-let dashView='grid';
-function setView(v,btn){
-  dashView=v;
-  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');renderDashboard();
+function switchTab(id,btn){
+  document.querySelectorAll('.tp-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tp-section').forEach(s=>s.classList.remove('show'));
+  btn.classList.add('on');document.getElementById('tab-'+id).classList.add('show');
+  if(id==='students')renderStudents();if(id==='manual')populateManualForm();
+  if(id==='settings'){renderSubjectsList();renderGradesList();}
+  if(id==='stats')renderStats();if(id==='visibility')renderVisibility();
+  if(id==='assign'){populateAssignForm();renderAssignmentsList();}
 }
+
+function populateGradeFilter(){
+  const GRADES=getGrades();
+  ['f-grade','stat-grade'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    sel.innerHTML='<option value="">Tous les niveaux</option>';
+    Object.entries(GRADES).forEach(([k,v])=>{sel.innerHTML+=`<option value="${k}">${v}</option>`;});
+  });
+}
+
+// ── SCORES DASHBOARD ──
+let dashView='grid';
+function setView(v,btn){dashView=v;document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderDashboard();}
 function renderDashboard(){if(dashView==='grid')renderGrid();else renderList();}
 
+// Compute trend for a student: compare last 3 scores avg vs previous 3
+function getTrend(studentScores){
+  const withPct=studentScores.filter(s=>s.pct!=null);
+  if(withPct.length<2)return'flat';
+  const recent=withPct.slice(0,Math.min(3,withPct.length));
+  const older=withPct.slice(3,Math.min(6,withPct.length));
+  if(!older.length)return'flat';
+  const avgR=recent.reduce((a,s)=>a+s.pct,0)/recent.length;
+  const avgO=older.reduce((a,s)=>a+s.pct,0)/older.length;
+  if(avgR-avgO>=10)return'up';if(avgO-avgR>=10)return'down';return'flat';
+}
+
 function renderGrid(){
-  const scores=JSON.parse(localStorage.getItem('hub_scores')||'[]');
-  const fn=document.getElementById('f-name').value.toLowerCase();
-  const w=document.getElementById('scores-wrap');
-
-  if(!scores.length){
-    w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem;margin-bottom:.8rem">📭</p><p>Les scores apparaîtront ici quand les élèves joueront !</p></div>';
-    return;
+  const scores=DB.scores,fn=document.getElementById('f-name').value.toLowerCase();
+  const fg=document.getElementById('f-grade').value,flagLow=document.getElementById('f-flaglow').checked;
+  const w=document.getElementById('scores-wrap'),GRADES=getGrades();
+  if(!scores.length){w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem;margin-bottom:.8rem">📭</p><p>Les scores apparaîtront ici !</p></div>';return;}
+  const uniqueGames=[...new Set(GAMES.map(g=>g.title))];
+  let allStudents=[...new Set(scores.map(s=>s.name))];
+  if(fn)allStudents=allStudents.filter(n=>n.toLowerCase().includes(fn));
+  if(fg){
+    const gradeNames=DB.studentsFor(fg).map(s=>s.name);
+    const scoreNames=scores.filter(s=>s.grade&&s.grade.split('/').includes(fg)).map(s=>s.name);
+    const valid=new Set([...gradeNames,...scoreNames]);
+    allStudents=allStudents.filter(n=>valid.has(n));
   }
+  allStudents.sort((a,b)=>a.localeCompare(b,'fr'));
 
-  const gameOrder=GAMES.map(g=>g.title);
-  const uniqueGames=[...new Set(gameOrder)];
-
-  const allStudents=[...new Set(scores.map(s=>s.name))];
-  const students=fn?allStudents.filter(n=>n.toLowerCase().includes(fn)):allStudents;
-  students.sort((a,b)=>a.localeCompare(b,'fr'));
-
-  if(!students.length){
-    w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem">🔍</p><p>Aucun élève trouvé.</p></div>';
-    return;
-  }
-
-  const map={};
-  students.forEach(s=>{map[s]={};});
+  // Build score map + compute per-student avg
+  const map={},avgMap={};
+  allStudents.forEach(s=>{map[s]={};});
   scores.forEach(s=>{
     if(!map[s.name])return;
-    const key=s.game;
-    const existing=map[s.name][key];
-    const pct=s.pct||null;
-    if(!existing){map[s.name][key]={score:s.score,total:s.total,pct:pct,date:s.date};}
-    else if(pct!==null&&(existing.pct===null||pct>existing.pct)){map[s.name][key]={score:s.score,total:s.total,pct:pct,date:s.date};}
+    const key=s.game,existing=map[s.name][key],pct=s.pct||null;
+    if(!existing)map[s.name][key]={score:s.score,total:s.total,pct,date:s.date};
+    else if(pct!==null&&(existing.pct===null||pct>existing.pct))map[s.name][key]={score:s.score,total:s.total,pct,date:s.date};
   });
+  allStudents.forEach(name=>{
+    const vals=Object.values(map[name]).filter(d=>d.pct!=null).map(d=>d.pct);
+    avgMap[name]=vals.length?Math.round(vals.reduce((a,v)=>a+v,0)/vals.length):null;
+  });
+
+  // Flag filter
+  let students=allStudents;
+  if(flagLow)students=students.filter(n=>avgMap[n]!==null&&avgMap[n]<50);
+
+  if(!students.length){w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem">🔍</p><p>Aucun élève trouvé.</p></div>';return;}
 
   let html='<table class="grid-tbl"><thead><tr><th>Élève</th>';
   uniqueGames.forEach(g=>{html+=`<th title="${g}">${g}</th>`;});
-  html+='</tr></thead><tbody>';
+  html+='<th>Moy.</th><th>📈</th></tr></thead><tbody>';
 
   students.forEach(name=>{
-    html+=`<tr><td>${name}</td>`;
+    const avg=avgMap[name];
+    const isLow=avg!==null&&avg<50;
+    const studentScores=scores.filter(s=>s.name===name);
+    const trend=getTrend(studentScores);
+    const trendIcon=trend==='up'?'<span class="trend-up">↑</span>':trend==='down'?'<span class="trend-down">↓</span>':'<span class="trend-flat">→</span>';
+    const avgPill=avg!==null?`<span class="pill ${avg>=80?'pill-hi':avg>=50?'pill-mid':'pill-lo'}">${avg}%</span>`:'<span class="pill pill-none">—</span>';
+
+    html+=`<tr class="${isLow?'flag-low':''}"><td>${name}</td>`;
     uniqueGames.forEach(game=>{
       const d=map[name][game];
-      if(!d){html+='<td><span class="pill pill-none">—</span></td>';}
-      else if(d.pct!==null&&d.pct!==undefined){
-        const cls=d.pct>=80?'pill-hi':d.pct>=50?'pill-mid':'pill-lo';
-        html+=`<td><span class="pill ${cls}" title="${d.score}/${d.total} — ${d.date}">${d.pct}%</span></td>`;
-      } else{html+=`<td><span class="pill pill-none" title="${d.date}">✓</span></td>`;}
+      if(!d)html+='<td><span class="pill pill-none">—</span></td>';
+      else if(d.pct!=null){const cls=d.pct>=80?'pill-hi':d.pct>=50?'pill-mid':'pill-lo';html+=`<td><span class="pill ${cls}" title="${d.score}/${d.total} — ${d.date}">${d.pct}%</span></td>`;}
+      else html+=`<td><span class="pill pill-none" title="${d.date}">✓</span></td>`;
     });
-    html+='</tr>';
+    html+=`<td>${avgPill}</td><td>${trendIcon}</td></tr>`;
   });
-  html+='</tbody></table>';
-  w.innerHTML=html;
+  html+='</tbody></table>';w.innerHTML=html;
 }
 
 function renderList(){
-  const scores=JSON.parse(localStorage.getItem('hub_scores')||'[]');
-  const fn=document.getElementById('f-name').value.toLowerCase();
-  const f=scores.filter(s=>!fn||s.name.toLowerCase().includes(fn));
+  const scores=DB.scores,fn=document.getElementById('f-name').value.toLowerCase(),fg=document.getElementById('f-grade').value;
+  let f=scores.filter(s=>!fn||s.name.toLowerCase().includes(fn));
+  if(fg)f=f.filter(s=>s.grade&&s.grade.split('/').includes(fg));
   const w=document.getElementById('scores-wrap');
   if(!f.length){w.innerHTML='<div style="text-align:center;padding:3rem;color:#94A3B8"><p style="font-size:2.5rem;margin-bottom:.8rem">📭</p><p>Aucun résultat.</p></div>';return;}
   w.innerHTML=`<table class="score-tbl"><thead><tr><th>Élève</th><th>Jeu</th><th>Score</th><th>Date</th></tr></thead>
-  <tbody>${f.map(s=>{
-    let sc='—';
-    if(s.pct!==undefined&&s.pct!==null){const cls=s.pct>=80?'pill-hi':s.pct>=50?'pill-mid':'pill-lo';sc=`${s.score}/${s.total} <span class="pill ${cls}">${s.pct}%</span>`;}
-    return `<tr><td>${s.name}</td><td>${s.game}</td><td>${sc}</td><td>${s.date}</td></tr>`;
-  }).join('')}</tbody></table>`;
+  <tbody>${f.map(s=>{let sc='—';if(s.pct!=null){const cls=s.pct>=80?'pill-hi':s.pct>=50?'pill-mid':'pill-lo';sc=`${s.score}/${s.total} <span class="pill ${cls}">${s.pct}%</span>`;}
+  return `<tr class="${s.pct!=null&&s.pct<50?'flag-low':''}"><td>${s.name}</td><td>${s.game}</td><td>${sc}</td><td>${s.date}</td></tr>`;}).join('')}</tbody></table>`;
 }
 
 function exportCSV(){
-  const s=JSON.parse(localStorage.getItem('hub_scores')||'[]');
-  if(!s.length)return alert('Aucun résultat.');
-  const csv='Élève,Jeu,Matière,Score,Pourcentage,Date\n'+s.map(r=>{
-    const sc=r.score!==undefined?r.score+'/'+r.total:'';
-    const pct=r.pct!==undefined?r.pct+'%':'';
-    return `"${r.name}","${r.game}","${r.subject}","${sc}","${pct}","${r.date}"`;
-  }).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
-  a.download=`resultats_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+  const s=DB.scores;if(!s.length)return alert('Aucun résultat.');
+  const csv='Élève,Jeu,Matière,Score,Pourcentage,Date\n'+s.map(r=>{const sc=r.score!==undefined?r.score+'/'+r.total:'';const pct=r.pct!=null?r.pct+'%':'';return`"${r.name}","${r.game}","${r.subject}","${sc}","${pct}","${r.date}"`;}).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download=`resultats_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+}
+function clearScores(){if(confirm('⚠️ Effacer tous les résultats ?')){DB.scores=[];renderDashboard();}}
+
+// ── PRINT REPORT ──
+function printReport(){
+  const scores=DB.scores,GRADES=getGrades(),fg=document.getElementById('f-grade').value;
+  const uniqueGames=[...new Set(GAMES.map(g=>g.title))];
+  let students=[...new Set(scores.map(s=>s.name))];
+  if(fg){const valid=new Set([...DB.studentsFor(fg).map(s=>s.name),...scores.filter(s=>s.grade&&s.grade.split('/').includes(fg)).map(s=>s.name)]);students=students.filter(n=>valid.has(n));}
+  students.sort((a,b)=>a.localeCompare(b,'fr'));
+
+  const map={};students.forEach(s=>{map[s]={};});
+  scores.forEach(s=>{if(!map[s.name])return;const k=s.game,ex=map[s.name][k],p=s.pct||null;if(!ex)map[s.name][k]={score:s.score,total:s.total,pct:p,date:s.date};else if(p!==null&&(ex.pct===null||p>ex.pct))map[s.name][k]={score:s.score,total:s.total,pct:p,date:s.date};});
+
+  const gradeLabel=fg?GRADES[fg]:'Tous les niveaux';
+  let html=`<h1>📊 Ma Classe en Jeux — Rapport</h1><p><strong>Niveau :</strong> ${gradeLabel} | <strong>Date :</strong> ${new Date().toLocaleDateString('fr-CA')}</p>`;
+  html+=`<table><thead><tr><th>Élève</th>`;
+  uniqueGames.forEach(g=>{html+=`<th>${g}</th>`;});
+  html+='<th>Moyenne</th></tr></thead><tbody>';
+  students.forEach(name=>{
+    html+=`<tr><td><strong>${name}</strong></td>`;
+    const vals=[];
+    uniqueGames.forEach(game=>{const d=map[name][game];if(!d)html+='<td>—</td>';else if(d.pct!=null){html+=`<td>${d.pct}%</td>`;vals.push(d.pct);}else html+='<td>✓</td>';});
+    const avg=vals.length?Math.round(vals.reduce((a,v)=>a+v,0)/vals.length):'—';
+    html+=`<td><strong>${typeof avg==='number'?avg+'%':avg}</strong></td></tr>`;
+  });
+  html+='</tbody></table>';
+  document.getElementById('print-area').innerHTML=html;
+  document.getElementById('print-area').style.display='block';
+  window.print();
+  setTimeout(()=>{document.getElementById('print-area').style.display='none';},500);
 }
 
-function clearScores(){
-  if(confirm('⚠️ Effacer tous les résultats ?')){localStorage.removeItem('hub_scores');renderDashboard();}
+// ── CLASS STATISTICS ──
+function renderStats(){
+  const scores=DB.scores,fg=document.getElementById('stat-grade').value;
+  const grid=document.getElementById('stats-grid');grid.innerHTML='';
+  GAMES.forEach(game=>{
+    let gameScores=scores.filter(s=>s.game===game.title&&s.pct!=null);
+    if(fg)gameScores=gameScores.filter(s=>s.grade&&s.grade.split('/').includes(fg));
+    // Best per student
+    const best={};
+    gameScores.forEach(s=>{if(!best[s.name]||s.pct>best[s.name])best[s.name]=s.pct;});
+    const vals=Object.values(best);
+    if(!vals.length)return;
+    const avg=Math.round(vals.reduce((a,v)=>a+v,0)/vals.length);
+    const high=Math.max(...vals),low=Math.min(...vals);
+    const completed=vals.length;
+    grid.innerHTML+=`<div class="stat-card">
+      <h4>${game.icon} ${game.title}</h4>
+      <div class="stat-avg">${avg}%</div>
+      <div class="stat-row"><span class="stat-label">Meilleur</span><span class="stat-val">${high}%</span></div>
+      <div class="stat-row"><span class="stat-label">Plus bas</span><span class="stat-val ${low<50?'trend-down':''}">${low}%</span></div>
+      <div class="stat-row"><span class="stat-label">Élèves</span><span class="stat-val">${completed}</span></div>
+    </div>`;
+  });
+  if(!grid.innerHTML)grid.innerHTML='<div style="text-align:center;padding:2rem;color:#94A3B8">Pas encore de données.</div>';
 }
 
-buildFilters();render();
+// ── STUDENT MANAGEMENT ──
+function renderStudents(){
+  const GRADES=getGrades(),showArc=document.getElementById('show-archived').checked;
+  const c=document.getElementById('students-list');let html='';
+  Object.entries(GRADES).forEach(([gk,gLabel])=>{
+    const all=DB.studentsFor(gk),vis=showArc?all:all.filter(s=>!s.archived);
+    const active=all.filter(s=>!s.archived).length;
+    html+=`<div class="grade-section"><div class="grade-header" onclick="toggleGrade(this)"><span class="gh-arrow">▶</span><span class="gh-title">${gLabel}</span><span class="gh-count">${active}</span></div><div class="grade-body">`;
+    if(!vis.length)html+='<div style="padding:.4rem .5rem;color:#94A3B8;font-size:.82rem;font-style:italic">Aucun élève.</div>';
+    vis.sort((a,b)=>a.name.localeCompare(b.name,'fr'));
+    vis.forEach(st=>{
+      html+=`<div class="student-row"><span class="sname ${st.archived?'archived':''}">${st.name}${st.archived?' (archivé)':''}</span>
+      ${st.archived?`<button class="btn-unarchive" onclick="unarchiveStudent('${gk}','${esc(st.name)}')">↩</button>`
+      :`<button class="btn-archive" onclick="archiveStudent('${gk}','${esc(st.name)}')">📦</button>`}
+      <button class="btn-del" onclick="deleteStudent('${gk}','${esc(st.name)}')">✕</button></div>`;
+    });
+    html+=`<div class="add-student-row"><input type="text" id="add-st-${gk}" placeholder="Ajouter un élève..." onkeydown="if(event.key==='Enter')addStudentFromInput('${gk}')"><button onclick="addStudentFromInput('${gk}')">+</button></div></div></div>`;
+  });
+  c.innerHTML=html;
+}
+function esc(s){return s.replace(/'/g,"\\'");}
+function toggleGrade(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('open');}
+function addStudentFromInput(grade){
+  const inp=document.getElementById('add-st-'+grade),name=inp.value.trim();
+  if(!name)return;
+  const result=DB.addStudent(grade,normName(name));
+  if(result===false){alert('Cet élève existe déjà dans ce niveau !');return;}
+  if(typeof result==='string'&&result.startsWith('exists_in_')){
+    const GRADES=getGrades();const gk=result.replace('exists_in_','');
+    alert(`⚠️ « ${normName(name)} » existe déjà dans ${GRADES[gk]||gk} !`);return;
+  }
+  if(result==='unarchived'){alert(`« ${normName(name)} » a été restauré(e) !`);}
+  inp.value='';renderStudents();
+}
+function archiveStudent(g,n){DB.archiveStudent(g,n);renderStudents();}
+function unarchiveStudent(g,n){DB.unarchiveStudent(g,n);renderStudents();}
+function deleteStudent(g,n){if(confirm(`Supprimer « ${n} » ?`)){DB.deleteStudent(g,n);renderStudents();}}
+
+// ── MANUAL SCORE ──
+function populateManualForm(){
+  const GRADES=getGrades();
+  const gSel=document.getElementById('ms-grade');gSel.innerHTML='<option value="">—</option>';
+  Object.entries(GRADES).forEach(([k,v])=>{gSel.innerHTML+=`<option value="${k}">${v}</option>`;});
+  const gameSel=document.getElementById('ms-game');gameSel.innerHTML='<option value="">—</option>';
+  GAMES.forEach(g=>{gameSel.innerHTML+=`<option value="${g.title}">${g.icon} ${g.title}</option>`;});
+  updateManualStudents();
+}
+function updateManualStudents(){
+  const g=document.getElementById('ms-grade').value,sel=document.getElementById('ms-student');
+  sel.innerHTML='<option value="">—</option>';if(!g)return;
+  DB.studentsFor(g).filter(s=>!s.archived).sort((a,b)=>a.name.localeCompare(b.name,'fr')).forEach(s=>{sel.innerHTML+=`<option value="${s.name}">${s.name}</option>`;});
+}
+function submitManualScore(){
+  const msg=document.getElementById('ms-msg'),student=document.getElementById('ms-student').value,game=document.getElementById('ms-game').value;
+  const sv=document.getElementById('ms-score').value,tv=document.getElementById('ms-total').value,grade=document.getElementById('ms-grade').value;
+  if(!student||!game){msg.textContent='❌ Choisis un élève et un jeu.';msg.className='msf-msg err';return;}
+  if(!sv||!tv){msg.textContent='❌ Entre le score et le total.';msg.className='msf-msg err';return;}
+  const score=parseInt(sv),total=parseInt(tv);
+  if(isNaN(score)||isNaN(total)||total<=0||score<0){msg.textContent='❌ Valeurs invalides.';msg.className='msf-msg err';return;}
+  const pct=Math.round((score/total)*100);const gameObj=GAMES.find(g=>g.title===game);
+  DB.addScore({name:student,game,subject:gameObj?gameObj.subject:'',grade,score,total,pct,date:new Date().toLocaleString('fr-CA'),manual:true});
+  msg.textContent=`✅ ${student} — ${score}/${total} (${pct}%)`;msg.className='msf-msg ok';
+  document.getElementById('ms-score').value='';document.getElementById('ms-total').value='';
+}
+
+// ── ASSIGNMENTS ──
+function populateAssignForm(){
+  const GRADES=getGrades();
+  const gSel=document.getElementById('assign-game');gSel.innerHTML='<option value="">—</option>';
+  GAMES.forEach(g=>{gSel.innerHTML+=`<option value="${g.id}">${g.icon} ${g.title}</option>`;});
+  const grSel=document.getElementById('assign-grades');grSel.innerHTML='';
+  Object.entries(GRADES).forEach(([k,v])=>{grSel.innerHTML+=`<option value="${k}">${v}</option>`;});
+}
+function addAssignment(){
+  const gameId=document.getElementById('assign-game').value;
+  const grSel=document.getElementById('assign-grades');
+  const grades=[...grSel.selectedOptions].map(o=>o.value).filter(Boolean);
+  if(!gameId){alert('Choisis un jeu.');return;}
+  const assigns=DB.assignments;
+  // Remove existing assignment for this game
+  const idx=assigns.findIndex(a=>a.gameId===gameId);if(idx>=0)assigns.splice(idx,1);
+  assigns.push({gameId,grades});DB.assignments=assigns;
+  renderAssignmentsList();renderAssignments();
+}
+function removeAssignment(gameId){
+  const a=DB.assignments.filter(x=>x.gameId!==gameId);DB.assignments=a;renderAssignmentsList();renderAssignments();
+}
+function renderAssignmentsList(){
+  const assigns=DB.assignments,GRADES=getGrades(),c=document.getElementById('assignments-list');
+  if(!assigns.length){c.innerHTML='<div style="color:#94A3B8;font-size:.85rem;font-style:italic">Aucun travail assigné.</div>';return;}
+  let html='';
+  assigns.forEach(a=>{
+    const game=GAMES.find(g=>g.id===a.gameId);if(!game)return;
+    const gl=(a.grades||[]).map(x=>GRADES[x]||x).join(', ')||'Tous';
+    html+=`<div style="display:flex;align-items:center;gap:.5rem;padding:.35rem 0"><span style="flex:1;font-weight:700;font-size:.88rem">${game.icon} ${game.title} <span style="color:var(--slate);font-size:.78rem">(${gl})</span></span><button class="btn-del" style="padding:.2rem .5rem;font-size:.7rem;border-radius:8px;border:none;background:#FEE2E2;color:#991B1B;cursor:pointer" onclick="removeAssignment('${a.gameId}')">✕</button></div>`;
+  });
+  c.innerHTML=html;
+}
+
+// ── ANNOUNCE ──
+function saveAnnounce(){DB.announce=document.getElementById('set-announce').value.trim();renderAnnounce();alert('✅ Annonce publiée !');}
+function clearAnnounce(){DB.announce='';document.getElementById('set-announce').value='';renderAnnounce();}
+
+// ── GAME VISIBILITY ──
+function renderVisibility(){
+  const hidden=DB.hiddenGames,c=document.getElementById('visibility-list');
+  let html='';
+  GAMES.forEach(g=>{
+    const isVisible=!hidden.includes(g.id);
+    html+=`<div class="game-vis-row">
+      <span class="gv-name ${isVisible?'':'is-hidden'}">${g.icon} ${g.title}</span>
+      <label class="toggle-switch"><input type="checkbox" ${isVisible?'checked':''} onchange="toggleGameVis('${g.id}',this.checked)"><span class="toggle-slider"></span></label>
+    </div>`;
+  });
+  c.innerHTML=html;
+}
+function toggleGameVis(id,visible){
+  let h=DB.hiddenGames;
+  if(visible)h=h.filter(x=>x!==id);
+  else if(!h.includes(id))h.push(id);
+  DB.hiddenGames=h;render();renderAssignments();renderVisibility();
+}
+
+// ── SETTINGS ──
+function renderSubjectsList(){
+  const SUBJECTS=getSubjects(),c=document.getElementById('subjects-list');let html='';
+  Object.entries(SUBJECTS).forEach(([k,v])=>{
+    html+=`<div style="display:flex;align-items:center;gap:.4rem;padding:.2rem 0"><span>${v.emoji}</span><span style="font-weight:700;font-size:.85rem;flex:1">${v.label}</span><code style="font-size:.72rem;background:#F1F5F9;padding:.1rem .35rem;border-radius:4px;color:#64748B">${k}</code>${DEFAULT_SUBJECTS[k]?'':`<button class="btn-del" style="padding:.15rem .4rem;font-size:.65rem" onclick="removeSubject('${k}')">✕</button>`}</div>`;
+  });c.innerHTML=html;
+}
+function addSubject(){
+  const key=document.getElementById('new-sub-key').value.trim().toLowerCase().replace(/[^a-z0-9]/g,'');
+  const emoji=document.getElementById('new-sub-emoji').value.trim(),label=document.getElementById('new-sub-label').value.trim();
+  if(!key||!label)return alert('Remplis la clé et le nom.');
+  const s=DB.subjects;s[key]={emoji:emoji||'📚',label};DB.subjects=s;
+  document.getElementById('new-sub-key').value='';document.getElementById('new-sub-emoji').value='';document.getElementById('new-sub-label').value='';
+  renderSubjectsList();buildFilters();render();
+}
+function removeSubject(k){const s=DB.subjects;delete s[k];DB.subjects=s;renderSubjectsList();buildFilters();render();}
+
+function renderGradesList(){
+  const GRADES=getGrades(),c=document.getElementById('grades-list');let html='';
+  Object.entries(GRADES).forEach(([k,v])=>{
+    html+=`<div style="display:flex;align-items:center;gap:.4rem;padding:.2rem 0"><span style="font-weight:700;font-size:.85rem;flex:1">${v}</span><code style="font-size:.72rem;background:#F1F5F9;padding:.1rem .35rem;border-radius:4px;color:#64748B">${k}</code>${DEFAULT_GRADES[k]?'':`<button class="btn-del" style="padding:.15rem .4rem;font-size:.65rem" onclick="removeGrade('${k}')">✕</button>`}</div>`;
+  });c.innerHTML=html;
+}
+function addGrade(){
+  const key=document.getElementById('new-grade-key').value.trim().toLowerCase(),label=document.getElementById('new-grade-label').value.trim();
+  if(!key||!label)return alert('Remplis la clé et le nom.');
+  const g=DB.grades;g[key]=label;DB.grades=g;
+  document.getElementById('new-grade-key').value='';document.getElementById('new-grade-label').value='';
+  renderGradesList();buildFilters();render();populateGradeFilter();
+}
+function removeGrade(k){const g=DB.grades;delete g[k];DB.grades=g;renderGradesList();buildFilters();render();}
+
+function changePassword(){
+  const v=document.getElementById('new-pass').value.trim();if(!v)return alert('Entre un mot de passe.');
+  DB.password=v;document.getElementById('show-pass').textContent=v;document.getElementById('new-pass').value='';alert('✅ Mot de passe changé !');
+}
+
+// ── INIT ──
+buildFilters();render();renderAnnounce();renderAssignments();
 </script>
 </body>
 </html>
